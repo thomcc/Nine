@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -34,30 +35,42 @@ public class Sprites {
       return BLANK; 
     }
   }
-  private static BufferedImage generateDude() {
-    BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-    int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+  private static BufferedImage[] generateDude() {
+    BufferedImage[] imgs = new BufferedImage[DIRS];
+    //BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+    //int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
     for (int d = 0; d < DIRS; d++) {
+      imgs[d] = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_RGB);
+      int[] pixels = ((DataBufferInt) imgs[d].getRaster().getDataBuffer()).getData();
       double dir = d * Math.PI * 2.0 / DIRS;
 
       double dCos = Math.cos(dir);
       double dSin = Math.sin(dir);
       
-      int xoff = SIZE * d;
+      ///int xoff = SIZE * d;
       for (int j = 0; j < SIZE; j++) {
         for (int i = 0; i < SIZE; i++) {
           int xPix = (int) (dCos * (i - 6) + dSin * (j - 6) + 6.5);
           int yPix = (int) (dCos * (j - 6) - dSin * (i - 6) + 6.5);
-          pixels[i + xoff + j * WIDTH] = getColor(xPix, yPix);
+          pixels[i + j * SIZE] = getColor(xPix, yPix);
         }
       }
     }
+    return imgs;
+  }
+  private static BufferedImage getCombined(BufferedImage[] imgs) {
+    BufferedImage img = new BufferedImage(SIZE*DIRS, SIZE, BufferedImage.TYPE_INT_RGB);
+    Graphics g = img.getGraphics();
+    for (int d = 0; d < DIRS; ++d) {
+      g.drawImage(imgs[d], d*SIZE, 0, null);
+    }
+    g.dispose();
     return img;
   }
-
   public static void main(String[] args) {
     int scale = 4;
-    BufferedImage img = generateDude();
+    BufferedImage[] imgs = generateDude();
+    BufferedImage img = getCombined(imgs);
     JOptionPane.showMessageDialog(
         null,
         null,
