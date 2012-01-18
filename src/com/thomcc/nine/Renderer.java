@@ -8,7 +8,7 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-public class Sprites {
+public class Renderer {
   
   private static final int SKIN = 0xFF9993;
   private static final int CLOTHES = 0x888888;
@@ -36,10 +36,8 @@ public class Sprites {
       return BLANK; 
     }
   }
-  private static BufferedImage[] generateDude() {
+  public static BufferedImage[] generateDude() {
     BufferedImage[] imgs = new BufferedImage[DIRS];
-    //BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-    //int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
     for (int d = 0; d < DIRS; d++) {
       imgs[d] = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_RGB);
       int[] pixels = ((DataBufferInt) imgs[d].getRaster().getDataBuffer()).getData();
@@ -47,8 +45,7 @@ public class Sprites {
 
       double dCos = Math.cos(dir);
       double dSin = Math.sin(dir);
-      
-      ///int xoff = SIZE * d;
+
       for (int j = 0; j < SIZE; j++) {
         for (int i = 0; i < SIZE; i++) {
           int xPix = (int) (dCos * (i - 6) + dSin * (j - 6) + 6.5);
