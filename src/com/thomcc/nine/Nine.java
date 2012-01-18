@@ -13,9 +13,11 @@ public class Nine extends Canvas implements Runnable {
   public static final int TICKS_PER_SECOND = 60;
   private BufferedImage _img;
   private boolean _running;
+  private InputHandler _input;
   public Nine() {
     _running = false;
     _img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+    _input = new InputHandler(this);
   }
   public void start() {
     createBufferStrategy(3);
