@@ -39,10 +39,10 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
   }
   public void mousePressed(MouseEvent e) { mouseDown = true; }
   public void mouseReleased(MouseEvent e) { mouseDown = false; }
-  public void mouseMoved(MouseEvent e) { mouseX = e.getX(); mouseY = e.getY(); }
+  public void mouseMoved(MouseEvent e) { mouseX = e.getX()/2; mouseY = e.getY()/2; }
   public void mouseExited(MouseEvent e) { mouseX = -1; mouseY = -1; }
   public void mouseClicked(MouseEvent e) {}
-  public void mouseDragged(MouseEvent e) {}
+  public void mouseDragged(MouseEvent e) { mouseX = e.getX()/2; mouseY = e.getY()/2; }
   public void mouseEntered(MouseEvent e) {}
   public void keyTyped(KeyEvent e) {}
   public void keyPressed(KeyEvent e) { onKey(e, true);}

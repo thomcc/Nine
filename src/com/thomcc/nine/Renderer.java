@@ -1,5 +1,6 @@
 package com.thomcc.nine;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -10,36 +11,54 @@ import javax.swing.JOptionPane;
 
 public class Renderer {
   
-  private static final int SKIN = 0xFF9993;
-  private static final int CLOTHES = 0x888888;
-  private static final int HAIR = 0x8B4513;
-  private static final int BLANK = 0xffffff;
-  //private static final int SIGNAL = 0xff00ff;
+  private static final int SKIN    = 0xffFF9993;
+  private static final int CLOTHES = 0xff888888;
+  private static final int BLANK   = 0x00ffffff;
   
   private static final int DIRS = 16;
   private static final int SIZE = 12;
   private static final int WIDTH = DIRS * SIZE;
   private static final int HEIGHT = SIZE;
   
-  private static boolean insideHead(int x, int y) {
+  private BufferedImage[] _sprites;
+  public BufferedImage image;
+  private int _width, _height;
+  
+  public Renderer(int w, int h) {
+    _width = w;
+    _height = h;
+    image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+    _sprites = generateDude();
+  }
+  
+  public void render(Game game) {
+    Player p = game.getPlayer();
+    int d = p.getDirection();
+    Graphics g = image.getGraphics();
+    g.clearRect(0, 0, _width, _height);
+    g.drawImage(_sprites[d], p.x-6, p.y-6, null);
+    g.dispose();
+  }
+  
+  private boolean insideHead(int x, int y) {
     return x > 4 && x < 8 && y > 4 && y < 8;
   }
-  private static boolean insideBody(int x, int y) {
+  private boolean insideBody(int x, int y) {
     return x > 1 && x < 11 && y > 5 && y < 8;
   }
-  private static int getColor(int x, int y) {
+  private int getColor(int x, int y) {
     if (insideHead(x, y)) {
       return SKIN;
     } else if (insideBody(x, y)) {
       return CLOTHES;
-    } else { 
+    } else {
       return BLANK; 
     }
   }
-  public static BufferedImage[] generateDude() {
+  public BufferedImage[] generateDude() {
     BufferedImage[] imgs = new BufferedImage[DIRS];
     for (int d = 0; d < DIRS; d++) {
-      imgs[d] = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_RGB);
+      imgs[d] = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
       int[] pixels = ((DataBufferInt) imgs[d].getRaster().getDataBuffer()).getData();
       double dir = d * Math.PI * 2.0 / DIRS;
 
@@ -48,15 +67,15 @@ public class Renderer {
 
       for (int j = 0; j < SIZE; j++) {
         for (int i = 0; i < SIZE; i++) {
-          int xPix = (int) (dCos * (i - 6) + dSin * (j - 6) + 6.5);
-          int yPix = (int) (dCos * (j - 6) - dSin * (i - 6) + 6.5);
+          int xPix = (int) (dCos * (i - SIZE/2) + dSin * (j - SIZE/2) + SIZE/2 + 0.5);
+          int yPix = (int) (dCos * (j - SIZE/2) - dSin * (i - SIZE/2) + SIZE/2 + 0.5);
           pixels[i + j * SIZE] = getColor(xPix, yPix);
         }
       }
     }
     return imgs;
   }
-  private static BufferedImage getCombined(BufferedImage[] imgs) {
+  private BufferedImage getCombined(BufferedImage[] imgs) {
     BufferedImage img = new BufferedImage(SIZE*DIRS, SIZE, BufferedImage.TYPE_INT_RGB);
     Graphics g = img.getGraphics();
     for (int d = 0; d < DIRS; ++d) {
@@ -67,8 +86,9 @@ public class Renderer {
   }
   public static void main(String[] args) {
     int scale = 4;
-    BufferedImage[] imgs = generateDude();
-    BufferedImage img = getCombined(imgs);
+    Renderer r = new Renderer(WIDTH, HEIGHT);
+    BufferedImage[] imgs = r.generateDude();
+    BufferedImage img = r.getCombined(imgs);
     JOptionPane.showMessageDialog(
         null,
         null,
