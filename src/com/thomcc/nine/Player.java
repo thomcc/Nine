@@ -1,6 +1,6 @@
 package com.thomcc.nine;
 
-import java.awt.image.BufferedImage;
+
 
 import com.thomcc.nine.level.Level;
 
@@ -8,8 +8,10 @@ public class Player {
   public double dir;
   public int x, y;
   private Level _level;
+  private double _dist;
+  private int _startX, _startY;
   public Player() {
-    x = y = 20;
+    _startX = _startY = x = y = -1;
     dir = 0;
   }
   public void lookAt(int px, int py) {
@@ -27,13 +29,22 @@ public class Player {
     if (u) --dy;
     
     move(dx, dy);
+    
   }
+  
   private void move(int dx, int dy) {
     if (dx == 0 && dy == 0) return;
     // separate to allow sliding along walls
     if (dx != 0 && canMove(dx, 0)) x += dx; 
     if (dy != 0 && canMove(0, dy)) y += dy;
+    updateDistance();
   }
+  private void updateDistance() {
+    double deltax = (this.x / 16.0) - (_startX / 16.0);
+    double deltay = (this.y / 16.0) - (_startY / 16.0);
+    _dist = Math.sqrt(deltax * deltax + deltay * deltay);
+  }
+  
   private boolean canMove(int dx, int dy) {
     int rx = 2;
     int ry = 2;
@@ -42,7 +53,6 @@ public class Player {
     int tt = (y-ry)>>4;
     int rt = (x+rx)>>4;
     int bt = (y+ry)>>4;
-    
     int nlt = (x+dx-rx)>>4;
     int ntt = (y+dy-ry)>>4;
     int nrt = (x+dx+rx)>>4;
@@ -60,7 +70,19 @@ public class Player {
 
     return true;
   }
-  public void setLevel(Level l) {
-    _level = l;
+  public void setLevel(Level l) { 
+    _level = l; 
   }
+  public void setPosition(int x, int y) {
+    if (_startX < 0 && _startY < 0) {
+      _startX = this.x = x;
+      _startY = this.y = y;
+      _dist = 0;
+    } else {
+      this.x = x;
+      this.y = y;
+      updateDistance();
+    }
+  }
+  public double getDistance() { return _dist; }
 }

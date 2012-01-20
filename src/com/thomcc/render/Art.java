@@ -1,6 +1,6 @@
-package com.thomcc.nine;
+package com.thomcc.render;
 
-import java.awt.Graphics;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
@@ -8,8 +8,8 @@ public class Art {
   private static final int SKIN    = 0xffFF9993;
   private static final int CLOTHES = 0xff888888;
   private static final int BLANK   = 0x00ffffff;
-  private static final int DIRS = 16;
-  public static final int SIZE = 12;
+  private static final int DIRS    = 16;
+  public static final int SIZE     = 12;
   
   private static boolean insideHead(int x, int y) {
     return x > 4 && x < 8 && y > 4 && y < 8;
@@ -26,6 +26,7 @@ public class Art {
       return BLANK; 
     }
   }
+  
   public static BufferedImage[] generateDude() {
     BufferedImage[] imgs = new BufferedImage[DIRS];
     for (int d = 0; d < DIRS; d++) {
@@ -43,14 +44,5 @@ public class Art {
       }
     }
     return imgs;
-  }
-  private static BufferedImage getCombined(BufferedImage[] imgs) {
-    BufferedImage img = new BufferedImage(SIZE*DIRS, SIZE, BufferedImage.TYPE_INT_RGB);
-    Graphics g = img.getGraphics();
-    for (int d = 0; d < DIRS; ++d) {
-      g.drawImage(imgs[d], d*SIZE, 0, null);
-    }
-    g.dispose();
-    return img;
   }
 }

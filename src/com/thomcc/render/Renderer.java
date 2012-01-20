@@ -1,15 +1,10 @@
-package com.thomcc.nine;
+package com.thomcc.render;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.util.Random;
 
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-
+import com.thomcc.nine.Game;
+import com.thomcc.nine.Player;
 import com.thomcc.nine.level.*;
 
 public class Renderer {
@@ -39,20 +34,31 @@ public class Renderer {
     Level l = game.getLevel();
     int xo = p.x - _width / 2;
     int yo = p.y - (_height - 8) / 2;
+    
     if (xo < 0) xo = 0;
     if (yo < 0) yo = 0;
-    if (xo > l.width*16 - _width) 
+    
+    if (xo > l.width * 16 - _width) 
       xo = l.width * 16 - _width;
-    if (yo > l.height*16 - _height)
+    
+    if (yo > l.height * 16 - _height)
       yo = l.height * 16 - _height;
     
     setOffset(xo, yo);
+    // TODO: make this not happen here
     game.setOffset(xo, yo);
+    
     renderLevel(game.getLevel(), g);
-    //setOffset(0, 0);
+
     renderPlayer(game.getPlayer(), g);
     
+    renderGui(game, g);
+    
     g.dispose();
+  }
+  private void renderGui(Game game, Graphics g) {
+    g.setColor(Color.BLACK);
+    g.drawString(String.format("%.1f", game.getPlayer().getDistance()), 5, 20);
   }
   private void setOffset(int x, int y) {
     _offX = x; _offY = y;

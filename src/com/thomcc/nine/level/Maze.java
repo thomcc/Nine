@@ -1,20 +1,13 @@
 package com.thomcc.nine.level;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.util.Random;
-import java.util.Stack;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 public class Maze {
   public static final int SOUTH = 1;
   public static final int EAST = 2;
   public static final int WEST = 4;
   public static final int NORTH = 8;
+  private static final int MAX_ROOM_AREA = 100;
   public static int opposite(int dir) {
     switch(dir) {
     case SOUTH: return NORTH;
@@ -27,10 +20,8 @@ public class Maze {
   public static final int HORIZONTAL = 1;
   public static final int VERTICAL = 2;
   
-  private static final int PASSAGE_SIZE = 5;
-  
   private Random _rand;
-  private Stack<Region> _stack;
+  //private Stack<Region> _stack;
   private int _width, _height;
   private int[][] _grid;
   public Maze(int w, int h) {
@@ -39,12 +30,12 @@ public class Maze {
     _height = h;
     _grid = new int[h][w];
     divide(0, 0, w, h, 0);
-  }
+  }/*
   class Region {
     public int w, h, x, y;
     Region(int x, int y, int w, int h) { this.w = w; this.h = h; this.x = x; this.y = y; }
     public boolean bigEnough() { return !(w < 2 || h < 2); }
-  }
+  }*/
   public int[][] getGrid() {
     return mappify(_grid);
   }
@@ -60,7 +51,7 @@ public class Maze {
     }
   }
   private boolean needToStop(int width, int height, int count) {
-    if (width > 20 || height > 20) return false;
+    if (width*height > MAX_ROOM_AREA) return false;
     else if (width < 2 || height < 2) return true;
     else {
       double g = Math.abs(_rand.nextGaussian());
@@ -108,6 +99,8 @@ public class Maze {
     
     divide(nx, ny, w, h, count+1);
   }
+  
+  @SuppressWarnings("unused")
   private static void displayMaze(int[][] grid) {
     System.out.print(" ");
     for (int i = 0; i < grid[0].length * 2 - 1; ++i) 
@@ -131,6 +124,7 @@ public class Maze {
       System.out.println();
     }
   }
+  @SuppressWarnings("unused")
   private static void displayMaze2(int[][] grid) {
     
     for (int i = 0; i < grid[0].length * 2+1; ++i) 
@@ -184,7 +178,7 @@ public class Maze {
       }
     }
     return map;
-  }
+  }/*
   public static void main(String[] args) {
 //    while (true) {
 
@@ -216,7 +210,7 @@ public class Maze {
           new ImageIcon(image.getScaledInstance(image.getWidth() * 3,
               image.getHeight() * 3, Image.SCALE_AREA_AVERAGING)));
 
-    }
+    }*/
  // }
 
 }

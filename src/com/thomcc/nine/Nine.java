@@ -1,11 +1,14 @@
 package com.thomcc.nine;
 import java.awt.*;
 import java.awt.image.*;
-import java.util.Random;
+
 
 import javax.swing.*;
 
+import com.thomcc.render.Renderer;
+
 public class Nine extends Canvas implements Runnable {
+  private static final long serialVersionUID = 988669676528664608L;
   public static final String GAME_NAME = "9";
   public static final int WIDTH = 360;
   public static final int HEIGHT = 240;

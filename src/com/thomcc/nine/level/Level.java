@@ -17,10 +17,24 @@ public class Level {
   }
   public boolean inBounds(int x, int y) {
     return x >= 0 && y >= 0 && x < width && y < height;
-    //return x*scale < width*scale && y*scale < height*scale && x >= 0 && y >= 0;
   }
   public boolean blocks(int tx, int ty) {
     if (!inBounds(tx, ty)) return true;
     return map[ty][tx] != 0;
+  }
+  public void findPlayerLocation(Player p) {
+    Random r = new Random();
+    int x = -1;
+    int y = -1;
+    while (true) {
+      x = r.nextInt(width);
+      y = r.nextInt(height);
+      if (map[y][x] == 0) break; 
+    }
+    p.setPosition(x*16+8, y*16+8);
+  }
+  public void addPlayer(Player p) {
+    p.setLevel(this);
+    findPlayerLocation(p);
   }
 }

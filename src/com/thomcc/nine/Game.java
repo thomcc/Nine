@@ -10,10 +10,12 @@ public class Game {
   public Game(InputHandler ih) {
     offX = 0;
     offY = 0;
-    _player = new Player();
+    
     _ih = ih;
     _level = new Level();
-    _player.setLevel(_level);
+   
+    _player = new Player();
+    _level.addPlayer(_player);
   }
   public void setOffset(int x, int y) {
     offX = x;
