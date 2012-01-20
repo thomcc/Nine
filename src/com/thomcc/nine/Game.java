@@ -12,7 +12,7 @@ public class Game {
     offY = 0;
     
     _ih = ih;
-    _level = new Level();
+    _level = new Level(256, 256);
    
     _player = new Player();
     _level.addPlayer(_player);

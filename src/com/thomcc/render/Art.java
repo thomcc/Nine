@@ -5,24 +5,24 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 public class Art {
-  private static final int SKIN    = 0xffFF9993;
-  private static final int CLOTHES = 0xff888888;
+  private static final int WINGS   = 0xff4e4240;//0xff000bd4;
+  private static final int COCKPIT = 0xffff6249;//0xff0023ff;
   private static final int BLANK   = 0x00ffffff;
   private static final int DIRS    = 16;
   public static final int SIZE     = 12;
   
-  private static boolean insideHead(int x, int y) {
-    return x > 4 && x < 8 && y > 4 && y < 8;
+  private static boolean insideCockpit(int x, int y) {
+    return x > 4 && x < 8 && y > 4 && y < 7;
   }
-  private static boolean insideBody(int x, int y) {
+  private static boolean insideWings(int x, int y) {
     return x > 1 && x < 11 && y > 5 && y < 8;
   }
   private static int getColor(int x, int y) {
-    if (insideHead(x, y)) {
-      return SKIN;
-    } else if (insideBody(x, y)) {
-      return CLOTHES;
-    } else {
+    if (insideCockpit(x, y)) {
+      return COCKPIT;
+    } else if (insideWings(x, y)) {
+      return WINGS;
+    } else { 
       return BLANK; 
     }
   }

@@ -46,13 +46,17 @@ public class Nine extends Canvas implements Runnable {
       long now = System.nanoTime();
       needed += (now - lastLoop) / skipTicks;
       lastLoop = now;
+      boolean render = true;
       while (needed > 0) {
         ++ticks;
         tick();
         --needed;
+        render = true;
       }
-      ++frames;
-      render();
+      if (render) {
+        ++frames;
+        render();
+      }
       try {
         Thread.sleep(2);
       } catch (InterruptedException e) {

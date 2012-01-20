@@ -46,8 +46,8 @@ public class Player {
   }
   
   private boolean canMove(int dx, int dy) {
-    int rx = 2;
-    int ry = 2;
+    int rx = 1;
+    int ry = 1;
     
     int lt = (x-rx)>>4;
     int tt = (y-ry)>>4;

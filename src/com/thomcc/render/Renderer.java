@@ -10,8 +10,8 @@ import com.thomcc.nine.level.*;
 public class Renderer {
   
   
-  private static final Color FLOOR = new Color(0xF5, 0xF5, 0xDC);
-  private static final Color WALL = new Color(0x8B, 0x5A, 0x2B);
+  private static final Color FLOOR = new Color(0xc1,0xc7,0xc6);//0xF5, 0xF5, 0xDC);
+  private static final Color WALL = new Color(0x3a, 0x6d, 0x4f);
   private static final Color FUCK = new Color(0xff, 0x00, 0xff);
   
   private BufferedImage[] _sprites;
@@ -36,6 +36,7 @@ public class Renderer {
     int yo = p.y - (_height - 8) / 2;
     
     if (xo < 0) xo = 0;
+    
     if (yo < 0) yo = 0;
     
     if (xo > l.width * 16 - _width) 
