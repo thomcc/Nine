@@ -1,4 +1,5 @@
 package com.thomcc.nine;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -9,93 +10,83 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import com.thomcc.nine.level.*;
+
 public class Renderer {
   
-  private static final int SKIN    = 0xffFF9993;
-  private static final int CLOTHES = 0xff888888;
-  private static final int BLANK   = 0x00ffffff;
   
-  private static final int DIRS = 16;
-  private static final int SIZE = 12;
-  private static final int WIDTH = DIRS * SIZE;
-  private static final int HEIGHT = SIZE;
+  private static final Color FLOOR = new Color(0xF5, 0xF5, 0xDC);
+  private static final Color WALL = new Color(0x8B, 0x5A, 0x2B);
+  private static final Color FUCK = new Color(0xff, 0x00, 0xff);
   
   private BufferedImage[] _sprites;
   public BufferedImage image;
   private int _width, _height;
-  
+  private int _offX, _offY;
   public Renderer(int w, int h) {
+    _offX = _offY = 0;
     _width = w;
     _height = h;
     image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-    _sprites = generateDude();
+    _sprites = Art.generateDude();
   }
   
   public void render(Game game) {
-    Player p = game.getPlayer();
-    int d = p.getDirection();
+
     Graphics g = image.getGraphics();
     g.clearRect(0, 0, _width, _height);
-    g.drawImage(_sprites[d], p.x-6, p.y-6, null);
+    Player p = game.getPlayer();
+    Level l = game.getLevel();
+    int xo = p.x - _width / 2;
+    int yo = p.y - (_height - 8) / 2;
+    if (xo < 0) xo = 0;
+    if (yo < 0) yo = 0;
+    if (xo > l.width*16 - _width) 
+      xo = l.width * 16 - _width;
+    if (yo > l.height*16 - _height)
+      yo = l.height * 16 - _height;
+    
+    setOffset(xo, yo);
+    game.setOffset(xo, yo);
+    renderLevel(game.getLevel(), g);
+    //setOffset(0, 0);
+    renderPlayer(game.getPlayer(), g);
+    
     g.dispose();
   }
-  
-  private boolean insideHead(int x, int y) {
-    return x > 4 && x < 8 && y > 4 && y < 8;
+  private void setOffset(int x, int y) {
+    _offX = x; _offY = y;
   }
-  private boolean insideBody(int x, int y) {
-    return x > 1 && x < 11 && y > 5 && y < 8;
-  }
-  private int getColor(int x, int y) {
-    if (insideHead(x, y)) {
-      return SKIN;
-    } else if (insideBody(x, y)) {
-      return CLOTHES;
-    } else {
-      return BLANK; 
-    }
-  }
-  public BufferedImage[] generateDude() {
-    BufferedImage[] imgs = new BufferedImage[DIRS];
-    for (int d = 0; d < DIRS; d++) {
-      imgs[d] = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
-      int[] pixels = ((DataBufferInt) imgs[d].getRaster().getDataBuffer()).getData();
-      double dir = d * Math.PI * 2.0 / DIRS;
 
-      double dCos = Math.cos(dir);
-      double dSin = Math.sin(dir);
-
-      for (int j = 0; j < SIZE; j++) {
-        for (int i = 0; i < SIZE; i++) {
-          int xPix = (int) (dCos * (i - SIZE/2) + dSin * (j - SIZE/2) + SIZE/2 + 0.5);
-          int yPix = (int) (dCos * (j - SIZE/2) - dSin * (i - SIZE/2) + SIZE/2 + 0.5);
-          pixels[i + j * SIZE] = getColor(xPix, yPix);
-        }
+  public void renderPlayer(Player p, Graphics g) {
+    int d = p.getDirection();
+    int px = p.x-Art.SIZE/2-_offX;
+    int py = p.y-Art.SIZE/2-_offY;
+    
+    g.drawImage(_sprites[d], px, py, null);
+    
+  }
+  private void renderLevel(Level l, Graphics g) {
+    int[][] map = l.map;
+    int scale = 16;
+    for (int y = 0; y < map.length; ++y) {
+      
+      int yp = y*scale-_offY;   
+      if (yp < -1*scale || yp > _height) continue;
+      
+      for (int x = 0; x < map[0].length; ++x) {
+        
+        int xp = x*scale-_offX;
+        if (xp < -1*scale || xp > _width) continue;
+        
+        int cell = map[y][x];
+        
+        if (cell == 0) g.setColor(FLOOR);
+        else if (cell == 1) g.setColor(WALL);
+        else g.setColor(FUCK);
+        
+        g.fillRect(xp, yp, scale, scale);
       }
     }
-    return imgs;
-  }
-  private BufferedImage getCombined(BufferedImage[] imgs) {
-    BufferedImage img = new BufferedImage(SIZE*DIRS, SIZE, BufferedImage.TYPE_INT_RGB);
-    Graphics g = img.getGraphics();
-    for (int d = 0; d < DIRS; ++d) {
-      g.drawImage(imgs[d], d*SIZE, 0, null);
-    }
-    g.dispose();
-    return img;
-  }
-  public static void main(String[] args) {
-    int scale = 4;
-    Renderer r = new Renderer(WIDTH, HEIGHT);
-    BufferedImage[] imgs = r.generateDude();
-    BufferedImage img = r.getCombined(imgs);
-    JOptionPane.showMessageDialog(
-        null,
-        null,
-        "generateDude",
-        JOptionPane.INFORMATION_MESSAGE,
-        new ImageIcon(img.getScaledInstance(WIDTH * scale, HEIGHT * scale,
-            Image.SCALE_AREA_AVERAGING)));
-
   }
 }
