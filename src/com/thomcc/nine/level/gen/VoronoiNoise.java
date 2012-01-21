@@ -14,10 +14,12 @@ public class VoronoiNoise {
   public final int pts;
   public ArrayList<Point2D.Double> points;
   private Random _random;
-  public static final int DISTANCE_NORMAL = 0;
-  public static final int DISTANCE_SQUARE = 1;
+  
+  public static final int DISTANCE_NORMAL    = 0;
+  public static final int DISTANCE_SQUARE    = 1;
   public static final int DISTANCE_CHEBYCHEV = 2;
   public static final int DISTANCE_MANHATTAN = 3;
+  
   private interface Dist {
     public double calc(Point2D.Double a, Point2D.Double b);
   }

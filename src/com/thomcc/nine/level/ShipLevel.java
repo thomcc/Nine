@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.thomcc.nine.Player;
 import com.thomcc.nine.level.gen.VoronoiLevelGen;
+import com.thomcc.nine.render.Renderer;
 
 public class ShipLevel implements Level{
   public int[][] map;
@@ -27,26 +28,9 @@ public class ShipLevel implements Level{
     return map[y][x] != 0;
   }
   
-  /*
-  public boolean isOpen(int x, int y, int rx, int ry, double d) {
-    double cd = Math.cos(d);
-    double sd = Math.sin(d);
-    int size = 12;
-    for (int i = 0; i < size; ++i) {
-      for (int j = 0; j < size; ++j) {
-        int xPix = (int) (cd*(i-size/2) + sd*(j-size/2) + x+0.5);
-        int yPix = (int) (cd*(j-size/2) - sd*(i-size/2) + y+0.5);
-        
-      }
-    }
-    return false;
-  }
-  */
-  
   public void findPlayerLocation(Player p) {
     Random r = new Random();
-    int x = -1;
-    int y = -1;
+    int x = -1; int y = -1;
     while (true) {
       x = r.nextInt(width);
       y = r.nextInt(height);
@@ -62,4 +46,9 @@ public class ShipLevel implements Level{
   }
   public int getWidth() { return width; }
   public int getHeight() { return height; }
+  @Override
+  public void render(Renderer r) {
+    // TODO Auto-generated method stub
+    
+  }
 }

@@ -30,12 +30,7 @@ public class Maze {
     _height = h;
     _grid = new int[h][w];
     divide(0, 0, w, h, 0);
-  }/*
-  class Region {
-    public int w, h, x, y;
-    Region(int x, int y, int w, int h) { this.w = w; this.h = h; this.x = x; this.y = y; }
-    public boolean bigEnough() { return !(w < 2 || h < 2); }
-  }*/
+  }
   public int[][] getGrid() {
     return mappify(_grid);
   }

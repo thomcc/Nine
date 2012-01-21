@@ -5,7 +5,7 @@ import java.awt.image.*;
 
 import javax.swing.*;
 
-import com.thomcc.render.Renderer;
+import com.thomcc.nine.render.Renderer;
 
 public class Nine extends Canvas implements Runnable {
   private static final long serialVersionUID = 988669676528664608L;
