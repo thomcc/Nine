@@ -8,7 +8,7 @@ import com.thomcc.nine.level.gen.VoronoiLevelGen;
 public class ShipLevel implements Level{
   public int[][] map;
   public final int width, height;
-  public ShipLevel() { this(700, 700, 200); }
+  public ShipLevel() { this(700, 700, 100); }
   public ShipLevel(int width, int height, int points) {
     this.width = width; this.height = height;
     long now = System.nanoTime();

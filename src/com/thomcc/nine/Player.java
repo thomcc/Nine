@@ -109,6 +109,7 @@ public class Player {
     }
     return true;
   }
+  /*
   private boolean canMove(int dx, int dy) {
     int rx = 1;
     int ry = 1;
@@ -133,7 +134,7 @@ public class Player {
       }
     }
     return true;
-  }
+  }*/
   
   public void setPosition(int x, int y) {
     if (_startX < 0 && _startY < 0) {
