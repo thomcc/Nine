@@ -32,8 +32,8 @@ public class Renderer {
     g.clearRect(0, 0, _width, _height);
     Player p = game.getPlayer();
     Level l = game.getLevel();
-    int xo = p.x - _width / 2;
-    int yo = p.y - (_height - 8) / 2;
+    int xo = p.getX() - _width / 2;
+    int yo = p.getY() - (_height - 8) / 2;
     
     if (xo < 0) xo = 0;
     
@@ -67,8 +67,8 @@ public class Renderer {
 
   public void renderPlayer(Player p, Graphics g) {
     int d = p.getDirection();
-    int px = p.x-Art.SIZE/2-_offX;
-    int py = p.y-Art.SIZE/2-_offY;
+    int px = p.getX()-Art.SIZE/2-_offX;
+    int py = p.getY()-Art.SIZE/2-_offY;
     
     g.drawImage(_sprites[d], px, py, null);
     

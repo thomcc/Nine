@@ -1,0 +1,13 @@
+* TODO look into level generation types
+  - Ridged multifractal (is this just absed perlin noise?)
+  - voronoi?
+  - [[http://www.neilblevins.com/cg_education/procedural_noise/procedural_noise.html][this link may be useful]]
+  - "Worley Voronoi F2-F1, Manhattan and Chebychev Distance Metrics"
+  - "Real Name: Worley Voronoi F4, Chebychev Distance Metric, w. Values Mapped
+Filter Forge (pshop plugin)
+Blocks
+Formula: F4
+Roughness: 64, Contrast: 0
+Details: 0
+Profile: Flat""
+

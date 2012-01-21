@@ -1,12 +1,14 @@
 package com.thomcc.nine;
 
 
-
+//NOTE TO SELF
+//TODO
+// RIDGED MULTIFRACTAL
 import com.thomcc.nine.level.Level;
 
 public class Player {
   public double dir;
-  public int x, y;
+  public double x, y;
   private Level _level;
   private double _dist;
   private int _startX, _startY;
@@ -35,13 +37,13 @@ public class Player {
     if (l) _px -= 1.3;
     if (u) _py -= 1.3;
     if (i % 60 == 0) {
-      System.out.format("_px: %s, _py: %s\n", _px, _py);
+      //System.out.format("_px: %s, _py: %s\n", _px, _py);
     }
     updatePosition();
     _px *= 0.98;
     _py *= 0.98;
-    if (Math.abs(_px) < 0.000000001) _px = 0;
-    if (Math.abs(_py) < 0.000000001) _py = 0;
+    if (Math.abs(_px) < 0.001) _px = 0;
+    if (Math.abs(_py) < 0.001) _py = 0;
     if (Math.abs(_px) > MOMENTUM_MAX) _px = MOMENTUM_MAX * Math.signum(_px);
     if (Math.abs(_py) > MOMENTUM_MAX) _py = MOMENTUM_MAX * Math.signum(_py);
     
@@ -52,7 +54,8 @@ public class Player {
     else if (_py > 0) --_py;
     else if (_py > MOMENTUM_MAX) _py = MOMENTUM_MAX; */
     if(i++ % 60 == 0) {
-      
+      //System.out.format("_startX: %s _startY: %s\n", _startX, _startY);
+      //System.out.format("x: %s y: %s\n", x, y);
     }
     updateDistance();
   }
@@ -104,15 +107,16 @@ public class Player {
   private boolean canMove(int dx, int dy) {
     int rx = 1;
     int ry = 1;
-    
-    int lt = (x-rx)>>4;
-    int tt = (y-ry)>>4;
-    int rt = (x+rx)>>4;
-    int bt = (y+ry)>>4;
-    int nlt = (x+dx-rx)>>4;
-    int ntt = (y+dy-ry)>>4;
-    int nrt = (x+dx+rx)>>4;
-    int nbt = (y+dy+ry)>>4;
+    int xx = (int)x;
+    int yy = (int)y;
+    int lt = (xx-rx)>>4;
+    int tt = (yy-ry)>>4;
+    int rt = (xx+rx)>>4;
+    int bt = (yy+ry)>>4;
+    int nlt = (xx+dx-rx)>>4;
+    int ntt = (yy+dy-ry)>>4;
+    int nrt = (xx+dx+rx)>>4;
+    int nbt = (yy+dy+ry)>>4;
     
     for (int x0 = nlt; x0 <= nrt; ++x0) {
       for (int y0 = ntt; y0 <= nbt; ++y0) {
@@ -131,8 +135,10 @@ public class Player {
   }
   public void setPosition(int x, int y) {
     if (_startX < 0 && _startY < 0) {
-      _startX = this.x = x;
-      _startY = this.y = y;
+      _startX = x;
+      this.x = x;
+      _startY = y;
+      this.y = y;
       _dist = 0;
     } else {
       this.x = x;
@@ -140,5 +146,7 @@ public class Player {
       updateDistance();
     }
   }
+  public int getX() { return (int)x; }
+  public int getY() { return (int)y; }
   public double getDistance() { return _dist; }
 }
