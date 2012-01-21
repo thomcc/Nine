@@ -18,20 +18,14 @@ public class VoronoiNoise {
   public static final int DISTANCE_SQUARE = 1;
   public static final int DISTANCE_CHEBYCHEV = 2;
   public static final int DISTANCE_MANHATTAN = 3;
-  interface Dist {
+  private interface Dist {
     public double calc(Point2D.Double a, Point2D.Double b);
   }
   private final Dist dNormal;
   private final Dist dSquare;
   private final Dist dChebychev;
   private final Dist dManhattan;
-  private static final double dWrap(double a, double b, int clamp) {
-    double d = Math.abs(a-b);
-    if (d > clamp/2) {
-      if (a < b) return a + clamp-b;
-      else return b + clamp-a;
-    } else return d;
-  }
+  
   public int w, h;
   public VoronoiNoise(int width, int height, int pts) {
     this.pts = pts;
@@ -57,6 +51,7 @@ public class VoronoiNoise {
         double x = dWrap(a.x, b.x, w); double y = dWrap(a.y, b.y, h);
         return Math.sqrt(x*x+y*y); }};
   }
+  
   public Point2D.Double nearest(Point2D.Double p, Dist d) {
     Point2D.Double min = points.get(0);
     double mindist = d.calc(p, min);
@@ -66,6 +61,7 @@ public class VoronoiNoise {
     }
     return min;
   }
+  
   public Point2D.Double[] nearest2(Point2D.Double p, Dist d) {
     Point2D.Double min1 = nearest(p, d);
     Point2D.Double min2 = points.get(0) == min1 ? points.get(1) : points.get(0);
@@ -77,6 +73,7 @@ public class VoronoiNoise {
     }
     return new Point2D.Double[] { min1, min2 };
   }
+  
   public Point2D.Double[] nearestN(final Point2D.Double p, final Dist d, int n) {
     Collections.sort(points, new Comparator<Point2D.Double>() {
       public int compare(Point2D.Double p1, Point2D.Double p2) {
@@ -88,9 +85,11 @@ public class VoronoiNoise {
     
     return pts;
   }
+  
   public double[][] calculate(int distanceMetric) {
     return calculate(distanceMetric, 2);
   }
+  
   public double[][] calculate(int distanceMetric, int neighbors) {
     Dist d;
     switch (distanceMetric) {
@@ -102,7 +101,7 @@ public class VoronoiNoise {
     }
     if (neighbors <= 0) throw new IllegalArgumentException("invalid number of neighbors");
     switch (neighbors) { // optimize the common cases
-    case 1: return calc(d);
+    case 1: return calc1(d);
     case 2: return calc2(d);
 //    case 3: return calc3(d);
 //    case 4: return calc4(d);
@@ -110,7 +109,7 @@ public class VoronoiNoise {
     }
     throw new IllegalArgumentException("unimplemented"); 
   }
-  public double[][] calc(Dist dist) {
+  public double[][] calc1(Dist dist) {
     double[][] ary = new double[h][w];
     double maxd = -1;
     for (int y = 0; y < h; ++y) {
@@ -148,56 +147,56 @@ public class VoronoiNoise {
         ary[y][x] /= maxd;
       }
     }
-    //System.out.println(maxd);
+
     return ary;
   }
   
+  private static final double dWrap(double a, double b, int clamp) {
+    double d = Math.abs(a-b);
+    if (d > clamp/2) {
+      if (a < b) return a + clamp-b;
+      else return b + clamp-a;
+    } else return d;
+  }
+  
+  
   public static void main(String args[]) {
-    int width = 700;
-    int height = 700;
-    int points = 200;
-    //double[][] grid = vn.calc2(vn.dManhattan);
+    int width = 2000;
+    int height = 2000;
+    int points = 500;
+
     long now = System.nanoTime();
     double[][] grid = new VoronoiNoise(width, height, points).calculate(DISTANCE_CHEBYCHEV);
     long later = System.nanoTime();
     long t = later-now;
     long millis = t/1000000;
-    System.out.format("Voronoi calculated in %s nanoseconds, %s milliseconds\n", t, millis);
+    System.out.format("Voronoi calculated in %.1f seconds. (%s nanoseconds, %s milliseconds)\n", (double)t/1e9, t, millis);
+    System.out.format("\tWidth: %s, Height: %s, Points: %s\n", width, height, points);
     BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     int[] pix = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
     for (int y = 0; y < width; ++y) {
       for (int x = 0; x < height; ++x) {
-        
-        //int v = (int) (255.0 * grid[y][x]);
-        
-        //if (v < 0) v = 0;
-        //if (v > 255) v = 255;
-        
-       // v = v < 20 ? 0 : 255;
-        double cell = grid[y][x];
-        int v;
-        if (cell < 0.1) {
-          v = 0;
-        } else if (cell < 0.25) {
-          v = 63;
-        } else if (cell < 0.5) {
-          v = 127;
-        } else if (cell < 0.75) {
-          v = 191;
-        } else {//if (cell < 0.9) {
-          v = 255;
-        } 
+        double cell = grid[y][x];        
+        int v = (int) (255.0 * grid[y][x]);
+
+        if (cell < 0.1) v = 0;
+        else if (cell < 0.25) v = 63;
+        else if (cell < 0.50) v = 127;
+        else if (cell < 0.75) v = 191;
+        else v = 255;
+         
         int c = v << 16 | v << 8 | v;
         pix[x + y*width] = c;
       }
     }
+    
     JOptionPane.showMessageDialog(
         null,
         null,
         "vnoise",
         JOptionPane.YES_NO_OPTION,
-        new ImageIcon(img.getScaledInstance(img.getWidth() * 1,
-            img.getHeight() * 1, Image.SCALE_AREA_AVERAGING)));
+        new ImageIcon(img.getScaledInstance(img.getWidth(),
+            img.getHeight(), Image.SCALE_AREA_AVERAGING)));
 
   }
 }

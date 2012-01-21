@@ -4,7 +4,8 @@ package com.thomcc.nine;
 //NOTE TO SELF
 //TODO
 // RIDGED MULTIFRACTAL
-import com.thomcc.nine.level.Level;
+import com.thomcc.nine.level.*;
+
 
 public class Player {
   public double dir;
@@ -37,7 +38,7 @@ public class Player {
     if (l) _px -= 1.3;
     if (u) _py -= 1.3;
     if (i % 60 == 0) {
-      //System.out.format("_px: %s, _py: %s\n", _px, _py);
+      System.out.format("_px: %s, _py: %s\n", _px, _py);
     }
     updatePosition();
     _px *= 0.98;
@@ -46,16 +47,8 @@ public class Player {
     if (Math.abs(_py) < 0.001) _py = 0;
     if (Math.abs(_px) > MOMENTUM_MAX) _px = MOMENTUM_MAX * Math.signum(_px);
     if (Math.abs(_py) > MOMENTUM_MAX) _py = MOMENTUM_MAX * Math.signum(_py);
-    
-/*    if (_px < 0) ++_px;
-    else if (_px > 0) --_px;
-    else if (_px > MOMENTUM_MAX) _px = MOMENTUM_MAX;
-    if (_py < 0) ++_py;
-    else if (_py > 0) --_py;
-    else if (_py > MOMENTUM_MAX) _py = MOMENTUM_MAX; */
     if(i++ % 60 == 0) {
-      //System.out.format("_startX: %s _startY: %s\n", _startX, _startY);
-      //System.out.format("x: %s y: %s\n", x, y);
+      
     }
     updateDistance();
   }
@@ -66,29 +59,18 @@ public class Player {
       int dy = (_py < 0) ? -1 : 1;
       int t = (int)Math.abs(_py);
       for (int iy = 0; iy < t; ++iy) {
-        if (canMove(0, dy)) {
-          y += dy;
-        }
-        else {
-          _py *= -0.3;
-          break;
-        }
-      }      
+        if (canMove2(0, dy)) y += dy;
+        else { _py *= -0.3; break; }
+      }
     }
     if (_px != 0) {
       int dx = (_px < 0) ? -1 : 1;
       int t = (int)Math.abs(_px);
       for (int ix = 0; ix < t; ix++) {
-        if (canMove(dx,0)) {
-          //System.out.println("moving x");
-          x += dx;
-        } else {
-          _px *= -0.3;
-          break;
-        }
+        if (canMove2(dx,0)) x += dx;
+        else { _px *= -0.3; break; }
       }
     }
-    
   }
   /*
   private void move(int dx, int dy) {
@@ -103,7 +85,30 @@ public class Player {
     double deltay = (this.y / 16.0) - (_startY / 16.0);
     _dist = Math.sqrt(deltax * deltax + deltay * deltay);
   }
-  
+  private boolean canMove2(int dx, int dy) {
+    int rx = 1;
+    int ry = 1;
+    int xx = (int)x;
+    int yy = (int)y;
+    int lt = (xx-rx);
+    int tt = (yy-ry);
+    int rt = (xx+rx);
+    int bt = (yy+ry);
+    int nlt = (xx+dx-rx);
+    int ntt = (yy+dy-ry);
+    int nrt = (xx+dx+rx);
+    int nbt = (yy+dy+ry);  
+    for (int x0 = nlt; x0 <= nrt; ++x0) {
+      for (int y0 = ntt; y0 <= nbt; ++y0) {
+        if (x0 >= lt && x0 <= rt && y0 >= tt && y0 <= bt)
+          continue;
+        if (_level.blocks(x0, y0)) {
+          return false;
+        } 
+      }
+    }
+    return true;
+  }
   private boolean canMove(int dx, int dy) {
     int rx = 1;
     int ry = 1;
@@ -127,12 +132,9 @@ public class Player {
         } 
       }
     }
-
     return true;
   }
-  public void setLevel(Level l) { 
-    _level = l; 
-  }
+  
   public void setPosition(int x, int y) {
     if (_startX < 0 && _startY < 0) {
       _startX = x;
@@ -148,5 +150,6 @@ public class Player {
   }
   public int getX() { return (int)x; }
   public int getY() { return (int)y; }
+  public void setLevel(Level l) { _level = l; }
   public double getDistance() { return _dist; }
 }

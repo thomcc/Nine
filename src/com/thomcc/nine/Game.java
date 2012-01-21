@@ -1,6 +1,7 @@
 package com.thomcc.nine;
 
-import com.thomcc.nine.level.Level;
+import com.thomcc.nine.level.*;
+
 
 public class Game {
   private Player _player;
@@ -12,7 +13,7 @@ public class Game {
     offX = 0;
     offY = 0;
     _ih = ih;
-    _level = new Level(256, 256);
+    _level = new ShipLevel();
    
     _player = new Player();
     _level.addPlayer(_player);
