@@ -10,8 +10,10 @@ public class Player {
   private Level _level;
   private double _dist;
   private int _startX, _startY;
-  private int _px, _py; // momentum
+  private double _px, _py; // momentum
+  //private double _lx, _ly; // real location
   private static final int MOMENTUM_MAX = 6;
+  
   public Player() {
     _startX = _startY = -1;
     x = y = -1;
@@ -28,20 +30,27 @@ public class Player {
   public void tick(boolean u, boolean d, boolean l, boolean r) {
     //int dx = 0, dy = 0;
     
-    if (d) _py += 2;
-    if (r) _px += 2;
-    if (l) _px -= 2;
-    if (u) _py -= 2;
+    if (d) _py += 1.3;
+    if (r) _px += 1.3;
+    if (l) _px -= 1.3;
+    if (u) _py -= 1.3;
     if (i % 60 == 0) {
       System.out.format("_px: %s, _py: %s\n", _px, _py);
     }
     updatePosition();
-    if (_px < 0) ++_px;
+    _px *= 0.98;
+    _py *= 0.98;
+    if (Math.abs(_px) < 0.000000001) _px = 0;
+    if (Math.abs(_py) < 0.000000001) _py = 0;
+    if (Math.abs(_px) > MOMENTUM_MAX) _px = MOMENTUM_MAX * Math.signum(_px);
+    if (Math.abs(_py) > MOMENTUM_MAX) _py = MOMENTUM_MAX * Math.signum(_py);
+    
+/*    if (_px < 0) ++_px;
     else if (_px > 0) --_px;
     else if (_px > MOMENTUM_MAX) _px = MOMENTUM_MAX;
     if (_py < 0) ++_py;
     else if (_py > 0) --_py;
-    else if (_py > MOMENTUM_MAX) _py = MOMENTUM_MAX;
+    else if (_py > MOMENTUM_MAX) _py = MOMENTUM_MAX; */
     if(i++ % 60 == 0) {
       
     }
@@ -52,26 +61,26 @@ public class Player {
     if (_px == 0 && _py == 0) return;
     if (_py != 0) {
       int dy = (_py < 0) ? -1 : 1;
-      int t = Math.abs(_py);
+      int t = (int)Math.abs(_py);
       for (int iy = 0; iy < t; ++iy) {
         if (canMove(0, dy)) {
           y += dy;
         }
         else {
-          _py = 0;
+          _py *= -0.3;
           break;
         }
       }      
     }
     if (_px != 0) {
       int dx = (_px < 0) ? -1 : 1;
-      int t = Math.abs(_px);
+      int t = (int)Math.abs(_px);
       for (int ix = 0; ix < t; ix++) {
         if (canMove(dx,0)) {
           //System.out.println("moving x");
           x += dx;
         } else {
-          _px = 0;
+          _px *= -0.3;
           break;
         }
       }
