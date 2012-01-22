@@ -10,5 +10,5 @@ public interface Level {
   public int getWidth();
   public int getHeight();
   public void render(Renderer r);
-  
+  public int[][] getMinimap(int w, int h);
 }

@@ -1,4 +1,5 @@
 package com.thomcc.nine.render;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -29,8 +30,8 @@ public class Renderer {
   
   public void render(Game game) {
 
-    Graphics _g = image.getGraphics();
-    _g.clearRect(0, 0, _width, _height);
+    Graphics g = image.getGraphics();
+    g.clearRect(0, 0, _width, _height);
     
     Player p = game.getPlayer();
     Level l = game.getLevel();
@@ -44,10 +45,35 @@ public class Renderer {
     
     l.render(this);
     p.render(this);
+    
+    renderMinimap(l, g);
     //renderPlayer(p, _g);
     
-    _g.dispose();
+    g.dispose();
     
+  }
+  private void renderMinimap(Level l, Graphics g) {
+    
+    int mmw = 70; int mmh = 70;
+    int mmxoff = _width-20-mmw;
+    int mmyoff = 20;
+    int[][] m = l.getMinimap(mmw, mmh);
+    BufferedImage mmImg = new BufferedImage(mmw, mmh, BufferedImage.TYPE_INT_RGB);
+    int[] pix = ((DataBufferInt)mmImg.getRaster().getDataBuffer()).getData();
+    for (int y = 0; y < mmh; ++y) {
+      for (int x = 0; x < mmw; ++x) {
+        int pt = m[y][x];
+        switch (pt) {
+        case 0: pix[x+y*mmw] = FLOOR; break;
+        case 1: pix[x+y*mmw] = WALL; break;
+        case 2: pix[x+y*mmw] = Art.WINGS; break;
+        case 3: pix[x+y*mmw] = Art.COCKPIT; break;
+        }
+      }
+    }
+    g.setColor(Color.BLACK);
+    g.drawRect(mmxoff-1, mmyoff-1, mmw+1, mmh+1);
+    g.drawImage(mmImg, mmxoff, mmyoff, null);
   }
   public void renderShipLevel(ShipLevel l) {
     int[][] map = l.map;

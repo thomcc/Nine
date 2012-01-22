@@ -19,4 +19,5 @@ public class VoronoiLevelGen implements LevelGen {
     
     return level;
   }
+  
 }
