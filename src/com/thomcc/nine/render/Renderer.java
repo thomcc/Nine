@@ -1,5 +1,4 @@
 package com.thomcc.nine.render;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -45,8 +44,6 @@ public class Renderer {
     
     renderPlayer(p, _g);
     
-    renderGui(game, _g);
-    
     _g.dispose();
     
   }
@@ -63,10 +60,6 @@ public class Renderer {
         pix[x+y*_width] = map[yy % l.height][xx % l.width] == 0 ? FLOOR : WALL;
       }
     }
-  }
-  private void renderGui(Game game, Graphics g) {
-    g.setColor(Color.BLACK);
-    g.drawString(String.format("%.1f", game.getPlayer().getDistance()), 5, 20);
   }
   public void renderPlayer(Player p, Graphics g) {
     int d = p.getDirection();

@@ -11,7 +11,6 @@ public class Player {
   public double dir;
   public double x, y;
   private Level _level;
-  private double _dist;
   private int _startX, _startY;
   private double _px, _py; // momentum
   private static final int MOMENTUM_MAX = 6;
@@ -30,14 +29,13 @@ public class Player {
     return (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
   }
   public void tick(boolean u, boolean d, boolean l, boolean r) {
-    //int dx = 0, dy = 0;
     
     if (d) _py += 1.3;
     if (r) _px += 1.3;
     if (l) _px -= 1.3;
     if (u) _py -= 1.3;
     
-    if (i % 60 == 0) {
+    if (i++ % 60 == 0) {
       System.out.format("_px: %s, _py: %s\n", _px, _py);
     }
     
@@ -51,8 +49,6 @@ public class Player {
     if (Math.abs(_px) > MOMENTUM_MAX) _px = MOMENTUM_MAX * Math.signum(_px);
     if (Math.abs(_py) > MOMENTUM_MAX) _py = MOMENTUM_MAX * Math.signum(_py);
     
-    if(i++ % 60 == 0) { }
-    updateDistance();
   }
   private int i = 0;
   public void updatePosition() {
@@ -73,11 +69,6 @@ public class Player {
         else { _px *= -0.3; break; }
       }
     }
-  }
-  private void updateDistance() {
-    double deltax = (this.x / 16.0) - (_startX / 16.0);
-    double deltay = (this.y / 16.0) - (_startY / 16.0);
-    _dist = Math.sqrt(deltax * deltax + deltay * deltay);
   }
   private boolean canMove(int dx, int dy) {
     int rx = 1;
@@ -109,15 +100,12 @@ public class Player {
       this.x = x;
       _startY = y;
       this.y = y;
-      _dist = 0;
     } else {
       this.x = x;
       this.y = y;
-      updateDistance();
     }
   }
   public int getX() { return (int)x; }
   public int getY() { return (int)y; }
   public void setLevel(Level l) { _level = l; }
-  public double getDistance() { return _dist; }
 }
