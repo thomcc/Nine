@@ -43,9 +43,7 @@ public class Player {
     if (l) _px -= 1.3;
     if (u) _py -= 1.3;
     
-    if (i++ % 60 == 0) {
-      System.out.format("_px: %s, _py: %s\n", _px, _py);
-    }
+    if (i++ % 60 == 0) {}
     
     updatePosition();
     
@@ -112,9 +110,10 @@ public class Player {
   }
   public void render(Renderer r) {
     int d = (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
-    
     r.renderPlayer((int)x, (int)y, d);
   }
+
+  
   public int getX() { return (int)x; }
   public int getY() { return (int)y; }
   public void setLevel(Level l) { _level = l; }

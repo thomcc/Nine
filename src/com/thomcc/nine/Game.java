@@ -8,7 +8,7 @@ public class Game {
   private Level _level;
   private InputHandler _ih;
   public int offX, offY;
-  
+  private long _ticks;
   public Game(InputHandler ih) {
     offX = 0;
     offY = 0;
@@ -21,6 +21,7 @@ public class Game {
   
   public void setOffset(int x, int y) { offX = x; offY = y; }
   public void tick() {
+    ++_ticks;
     _player.tick(_ih.up, _ih.down, _ih.left, _ih.right);
     int mx = _ih.mouseX;
     int my = _ih.mouseY;
@@ -29,6 +30,7 @@ public class Game {
     _player.lookAt(mx, my);
   }
   public Player getPlayer() { return _player; }
+  public long getTicks() { return _ticks; }
   public void setPlayer(Player p) { _player = p; }
   public Level getLevel() { return _level; }
 }

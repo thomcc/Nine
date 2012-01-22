@@ -47,37 +47,37 @@ public class Renderer {
     p.render(this);
     
     renderMinimap(l, g);
-    //renderPlayer(p, _g);
     
     g.dispose();
     
   }
   private void renderMinimap(Level l, Graphics g) {
     
-    int mmw = 70; int mmh = 70;
-    int mmxoff = _width-20-mmw;
-    int mmyoff = 20;
-    int[][] m = l.getMinimap(mmw, mmh);
-    BufferedImage mmImg = new BufferedImage(mmw, mmh, BufferedImage.TYPE_INT_RGB);
+    int mmW = 70; int mmH = 70;
+    int mmXoff = _width-20-mmW;
+    int mmYoff = 20;
+    int[][] m = l.getMinimap(mmW, mmH);
+    BufferedImage mmImg = new BufferedImage(mmW, mmH, BufferedImage.TYPE_INT_RGB);
     int[] pix = ((DataBufferInt)mmImg.getRaster().getDataBuffer()).getData();
-    for (int y = 0; y < mmh; ++y) {
-      for (int x = 0; x < mmw; ++x) {
+    
+    for (int y = 0; y < mmH; ++y) {
+      for (int x = 0; x < mmW; ++x) {
         int pt = m[y][x];
         switch (pt) {
-        case 0: pix[x+y*mmw] = FLOOR; break;
-        case 1: pix[x+y*mmw] = WALL; break;
-        case 2: pix[x+y*mmw] = Art.WINGS; break;
-        case 3: pix[x+y*mmw] = Art.COCKPIT; break;
+        case 0: pix[x+y*mmW] = FLOOR; break;
+        case 1: pix[x+y*mmW] = WALL; break;
+        case 2: pix[x+y*mmW] = Art.WINGS; break;
+        case 3: pix[x+y*mmW] = Art.COCKPIT; break;
         }
       }
     }
     g.setColor(Color.BLACK);
-    g.drawRect(mmxoff-1, mmyoff-1, mmw+1, mmh+1);
-    g.drawImage(mmImg, mmxoff, mmyoff, null);
+    g.drawRect(mmXoff-1, mmYoff-1, mmW+1, mmH+1);
+    g.drawImage(mmImg, mmXoff, mmYoff, null);
   }
+  
   public void renderShipLevel(ShipLevel l) {
     int[][] map = l.map;
-    //int[] pix = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
     
     for (int y = 0; y < _height; ++y) {
       for (int x = 0; x < _width; ++x) {
@@ -89,19 +89,21 @@ public class Renderer {
       }
     }
   }
+  
   public void renderPlayer(int x, int y, int dir) {
     y -= Player.SIZE/2+_offY;
     x -= Player.SIZE/2+_offX;
     image.getGraphics().drawImage(_sprites[dir], x, y, null);
   }
+  
   public void renderPlayer(Player p, Graphics g) {
     int d = p.getDirection();
     int px = p.getX()-Player.SIZE/2-_offX;
     int py = p.getY()-Player.SIZE/2-_offY;
     
     g.drawImage(_sprites[d], px, py, null);
-    
   }
+  
   public Graphics getGraphics() { return image.getGraphics(); }
   private void setOffset(int x, int y) { _offX = x; _offY = y; }
 }
