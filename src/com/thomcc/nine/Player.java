@@ -59,7 +59,7 @@ public class Player {
       int dy = (_py < 0) ? -1 : 1;
       int t = (int)Math.abs(_py);
       for (int iy = 0; iy < t; ++iy) {
-        if (canMove2(0, dy)) y += dy;
+        if (canMove(0, dy)) y += dy;
         else { _py *= -0.3; break; }
       }
     }
@@ -67,25 +67,17 @@ public class Player {
       int dx = (_px < 0) ? -1 : 1;
       int t = (int)Math.abs(_px);
       for (int ix = 0; ix < t; ix++) {
-        if (canMove2(dx,0)) x += dx;
+        if (canMove(dx,0)) x += dx;
         else { _px *= -0.3; break; }
       }
     }
   }
-  /*
-  private void move(int dx, int dy) {
-    if (dx == 0 && dy == 0) return;
-    // separate to allow sliding along walls
-    if (dx != 0 && canMove(dx, 0)) x += dx; 
-    if (dy != 0 && canMove(0, dy)) y += dy;
-    updateDistance();
-  }*/
   private void updateDistance() {
     double deltax = (this.x / 16.0) - (_startX / 16.0);
     double deltay = (this.y / 16.0) - (_startY / 16.0);
     _dist = Math.sqrt(deltax * deltax + deltay * deltay);
   }
-  private boolean canMove2(int dx, int dy) {
+  private boolean canMove(int dx, int dy) {
     int rx = 1;
     int ry = 1;
     int xx = (int)x;
@@ -109,33 +101,6 @@ public class Player {
     }
     return true;
   }
-  /*
-  private boolean canMove(int dx, int dy) {
-    int rx = 1;
-    int ry = 1;
-    int xx = (int)x;
-    int yy = (int)y;
-    int lt = (xx-rx)>>4;
-    int tt = (yy-ry)>>4;
-    int rt = (xx+rx)>>4;
-    int bt = (yy+ry)>>4;
-    int nlt = (xx+dx-rx)>>4;
-    int ntt = (yy+dy-ry)>>4;
-    int nrt = (xx+dx+rx)>>4;
-    int nbt = (yy+dy+ry)>>4;
-    
-    for (int x0 = nlt; x0 <= nrt; ++x0) {
-      for (int y0 = ntt; y0 <= nbt; ++y0) {
-        if (x0 >= lt && x0 <= rt && y0 >= tt && y0 <= bt)
-          continue;
-        if (_level.blocks(x0, y0)) {
-          return false;
-        } 
-      }
-    }
-    return true;
-  }*/
-  
   public void setPosition(int x, int y) {
     if (_startX < 0 && _startY < 0) {
       _startX = x;

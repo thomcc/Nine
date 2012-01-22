@@ -3,6 +3,7 @@ package com.thomcc.nine.level;
 import java.util.Random;
 
 import com.thomcc.nine.Player;
+import com.thomcc.nine.render.Renderer;
 
 public class MazeLevel implements Level {
   public int[][] map;
@@ -38,4 +39,7 @@ public class MazeLevel implements Level {
   }
   public int getWidth() { return 16*width; }
   public int getHeight() { return 16*height; }
+  public void render(Renderer r) {
+    r.renderMazeLevel(this);
+  }
 }

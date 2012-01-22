@@ -46,9 +46,7 @@ public class ShipLevel implements Level{
   }
   public int getWidth() { return width; }
   public int getHeight() { return height; }
-  @Override
   public void render(Renderer r) {
-    // TODO Auto-generated method stub
-    
+    r.renderShipLevel(this);
   }
 }

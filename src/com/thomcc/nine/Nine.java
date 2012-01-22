@@ -33,7 +33,6 @@ public class Nine extends Canvas implements Runnable {
   public void stop() { 
     _running = false;
   }
-  @Override
   public void run() {
     long lastPrint = System.currentTimeMillis();
     long lastLoop = System.nanoTime();
