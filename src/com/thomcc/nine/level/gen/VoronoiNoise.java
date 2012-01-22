@@ -1,25 +1,23 @@
 package com.thomcc.nine.level.gen;
-import java.awt.Image;
+//import java.awt.Image;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
+//import java.awt.image.BufferedImage;
+//import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+//import javax.swing.ImageIcon;
+//import javax.swing.JOptionPane;
 
 public class VoronoiNoise {
   public final int pts;
   public ArrayList<Point2D.Double> points;
   private Random _random;
-  
-  public static final int DISTANCE_NORMAL    = 0;
-  public static final int DISTANCE_SQUARE    = 1;
+  public static final int DISTANCE_NORMAL = 0;
+  public static final int DISTANCE_SQUARE = 1;
   public static final int DISTANCE_CHEBYCHEV = 2;
   public static final int DISTANCE_MANHATTAN = 3;
-  
   private interface Dist {
     public double calc(Point2D.Double a, Point2D.Double b);
   }
@@ -161,11 +159,11 @@ public class VoronoiNoise {
     } else return d;
   }
   
-  
+  /*
   public static void main(String args[]) {
-    int width = 2000;
-    int height = 2000;
-    int points = 500;
+    int width = 700;
+    int height = 700;
+    int points = 200;
 
     long now = System.nanoTime();
     double[][] grid = new VoronoiNoise(width, height, points).calculate(DISTANCE_CHEBYCHEV);
@@ -200,5 +198,5 @@ public class VoronoiNoise {
         new ImageIcon(img.getScaledInstance(img.getWidth(),
             img.getHeight(), Image.SCALE_AREA_AVERAGING)));
 
-  }
+  }*/
 }

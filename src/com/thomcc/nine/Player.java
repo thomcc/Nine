@@ -14,7 +14,6 @@ public class Player {
   private double _dist;
   private int _startX, _startY;
   private double _px, _py; // momentum
-  //private double _lx, _ly; // real location
   private static final int MOMENTUM_MAX = 6;
   
   public Player() {
