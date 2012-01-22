@@ -12,22 +12,24 @@ public class Renderer {
   private static final int WALL = 0x3a6d4f;
   
   private BufferedImage[] _sprites;
+  private int[] _pix;
   public BufferedImage image;
   private int _width, _height;
   private int _offX, _offY;
-  private Graphics _g;
+  //private Graphics _g;
   public Renderer(int w, int h) {
     _offX = _offY = 0;
     _width = w;
     _height = h;
     image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-    _g = image.getGraphics();
+    _pix = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+    //_g = image.getGraphics();
     _sprites = Art.generateDude();
   }
   
   public void render(Game game) {
 
-    _g = image.getGraphics();
+    Graphics _g = image.getGraphics();
     _g.clearRect(0, 0, _width, _height);
     
     Player p = game.getPlayer();
@@ -41,15 +43,15 @@ public class Renderer {
     game.setOffset(xo, yo);
     
     l.render(this);
-    
-    renderPlayer(p, _g);
+    p.render(this);
+    //renderPlayer(p, _g);
     
     _g.dispose();
     
   }
   public void renderShipLevel(ShipLevel l) {
     int[][] map = l.map;
-    int[] pix = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+    //int[] pix = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
     
     for (int y = 0; y < _height; ++y) {
       for (int x = 0; x < _width; ++x) {
@@ -57,14 +59,19 @@ public class Renderer {
         int yy = _offY + y;
         while (xx < 0) xx += l.width;
         while (yy < 0) yy += l.height;
-        pix[x+y*_width] = map[yy % l.height][xx % l.width] == 0 ? FLOOR : WALL;
+        _pix[x+y*_width] = map[yy % l.height][xx % l.width] == 0 ? FLOOR : WALL;
       }
     }
   }
+  public void renderPlayer(int x, int y, int dir) {
+    y -= Player.SIZE/2+_offY;
+    x -= Player.SIZE/2+_offX;
+    image.getGraphics().drawImage(_sprites[dir], x, y, null);
+  }
   public void renderPlayer(Player p, Graphics g) {
     int d = p.getDirection();
-    int px = p.getX()-Art.SIZE/2-_offX;
-    int py = p.getY()-Art.SIZE/2-_offY;
+    int px = p.getX()-Player.SIZE/2-_offX;
+    int py = p.getY()-Player.SIZE/2-_offY;
     
     g.drawImage(_sprites[d], px, py, null);
     

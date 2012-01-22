@@ -20,26 +20,26 @@ public class ShipLevel implements Level{
     System.out.format("Voronoi calculated in %.1f seconds. (%s nanoseconds, %s milliseconds)\n", (double)t/1e9, t, millis);
     System.out.format("\tWidth: %s, Height: %s, Points: %s\n", width, height, points);
   }
-  public boolean inBounds(int x, int y) {
-    return true;//return x >= 0 && y >= 0;// && x < width && y < height;
-  }
   public boolean blocks(int x, int y) {
-    if (!inBounds(x, y)) return true;
-    
     while (x < 0) x += width;
     while (y < 0) y += height;
     
     return map[y % width][x % height] != 0;
   }
-  
+  public int get(int x, int y) {
+    while (x < 0) x += width;
+    while (y < 0) y += height;
+    return map[y][x];
+  }
   public void findPlayerLocation(Player p) {
     Random r = new Random();
     int x = -1; int y = -1;
     while (true) {
       x = r.nextInt(width);
       y = r.nextInt(height);
-      if (map[y  ][x] == 0 && map[y][x-2] == 0 && map[y][x+2] == 0 &&
-          map[y-2][x] == 0 && map[y+2][x] == 0) break; 
+      if (get(x, y) == 0 && 
+          get(x-p.rx, y-p.ry) == 0 && get(x-p.rx, y+p.ry) == 0 && 
+          get(x+p.rx, y-p.ry) == 0 && get(x+p.rx, y+p.ry) == 0) break;
     }
     p.setPosition(x, y);
   }

@@ -5,15 +5,23 @@ package com.thomcc.nine;
 //TODO
 // RIDGED MULTIFRACTAL
 import com.thomcc.nine.level.*;
+import com.thomcc.nine.render.Renderer;
 
 
 public class Player {
-  public double dir;
-  public double x, y;
+  
+  public final int rx = 1;
+  public final int ry = 1;
+  public static final int SIZE = 12;
+  
   private Level _level;
   private int _startX, _startY;
+  
   private double _px, _py; // momentum
   private static final int MOMENTUM_MAX = 6;
+  
+  public double x, y;
+  public double dir;
   
   public Player() {
     _startX = _startY = -1;
@@ -71,8 +79,6 @@ public class Player {
     }
   }
   private boolean canMove(int dx, int dy) {
-    int rx = 1;
-    int ry = 1;
     int xx = (int)x;
     int yy = (int)y;
     int lt = (xx-rx);
@@ -82,14 +88,13 @@ public class Player {
     int nlt = (xx+dx-rx);
     int ntt = (yy+dy-ry);
     int nrt = (xx+dx+rx);
-    int nbt = (yy+dy+ry);  
+    int nbt = (yy+dy+ry);
     for (int x0 = nlt; x0 <= nrt; ++x0) {
       for (int y0 = ntt; y0 <= nbt; ++y0) {
-        if (x0 >= lt && x0 <= rt && y0 >= tt && y0 <= bt)
+        if (x0 >= lt && x0 <= rt && y0 >= tt && y0 <= bt) 
           continue;
-        if (_level.blocks(x0, y0)) {
+        else if (_level.blocks(x0, y0)) 
           return false;
-        } 
       }
     }
     return true;
@@ -104,6 +109,11 @@ public class Player {
       this.x = x;
       this.y = y;
     }
+  }
+  public void render(Renderer r) {
+    int d = (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
+    
+    r.renderPlayer((int)x, (int)y, d);
   }
   public int getX() { return (int)x; }
   public int getY() { return (int)y; }
