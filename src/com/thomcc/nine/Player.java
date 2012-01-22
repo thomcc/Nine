@@ -64,7 +64,16 @@ public class Player {
       int t = (int)Math.abs(_py);
       for (int iy = 0; iy < t; ++iy) {
         if (canMove(0, dy)) y += dy;
-        else { _py *= -0.3; break; }
+        else if (canMove(1, dy)) {
+          _px += Math.abs(_py/3);
+          _py /= 3;
+        } else if (canMove(-1, dy)) {
+          _px -= Math.abs(_py/3);
+          _py /= 3;
+        } else { 
+          _py /= -3d; 
+          break; 
+        }
       }
     }
     if (_px != 0) {
@@ -72,7 +81,16 @@ public class Player {
       int t = (int)Math.abs(_px);
       for (int ix = 0; ix < t; ix++) {
         if (canMove(dx,0)) x += dx;
-        else { _px *= -0.3; break; }
+        else if (canMove(dx, 1)) {
+          _py += Math.abs(_px/3d);
+          _px /= 3d;
+        } else if (canMove(dx, -1)) {
+          _py -= Math.abs(_px/3d);
+          _px /= 3d;
+        } else { 
+          _px /= -3d;
+          break; 
+        }
       }
     }
   }

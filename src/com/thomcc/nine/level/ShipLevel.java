@@ -71,7 +71,7 @@ public class ShipLevel implements Level{
     
     for (int y = 0; y < h; ++y)
       for (int x = 0; x < w; ++x)
-        _cachedmm[y][x] = map[x*xs][y*ys];
+        _cachedmm[y][x] = map[y*ys][x*xs];
     
   }
   

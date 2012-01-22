@@ -66,11 +66,20 @@ public class Renderer {
         switch (pt) {
         case 0: pix[x+y*mmW] = FLOOR; break;
         case 1: pix[x+y*mmW] = WALL; break;
-        case 2: pix[x+y*mmW] = Art.WINGS; break;
-        case 3: pix[x+y*mmW] = Art.COCKPIT; break;
         }
       }
     }
+    int lw = l.getWidth();
+    int lh = l.getHeight();
+    int xx = l.getPlayer().getX()+1;
+    int yy = l.getPlayer().getY()+1;
+    while (xx < 0) xx += lw;
+    while (yy < 0) yy += lh;
+    yy %= lh;
+    xx %= lw;
+    yy /= lh/mmH;
+    xx /= lw/mmW;
+    pix[xx+yy*mmW] = 0;
     g.setColor(Color.BLACK);
     g.drawRect(mmXoff-1, mmYoff-1, mmW+1, mmH+1);
     g.drawImage(mmImg, mmXoff, mmYoff, null);
@@ -78,7 +87,7 @@ public class Renderer {
   
   public void renderShipLevel(ShipLevel l) {
     int[][] map = l.map;
-    
+
     for (int y = 0; y < _height; ++y) {
       for (int x = 0; x < _width; ++x) {
         int xx = _offX + x;
@@ -88,8 +97,9 @@ public class Renderer {
         _pix[x+y*_width] = map[yy % l.height][xx % l.width] == 0 ? FLOOR : WALL;
       }
     }
+    
+    
   }
-  
   public void renderPlayer(int x, int y, int dir) {
     y -= Player.SIZE/2+_offY;
     x -= Player.SIZE/2+_offX;
