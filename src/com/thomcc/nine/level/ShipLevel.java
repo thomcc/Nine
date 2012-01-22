@@ -21,11 +21,15 @@ public class ShipLevel implements Level{
     System.out.format("\tWidth: %s, Height: %s, Points: %s\n", width, height, points);
   }
   public boolean inBounds(int x, int y) {
-    return x >= 0 && y >= 0 && x < width && y < height;
+    return true;//return x >= 0 && y >= 0;// && x < width && y < height;
   }
   public boolean blocks(int x, int y) {
     if (!inBounds(x, y)) return true;
-    return map[y][x] != 0;
+    
+    while (x < 0) x += width;
+    while (y < 0) y += height;
+    
+    return map[y % width][x % height] != 0;
   }
   
   public void findPlayerLocation(Player p) {

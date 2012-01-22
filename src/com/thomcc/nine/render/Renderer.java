@@ -44,11 +44,11 @@ public class Renderer {
     int xo = p.getX()-_width/2;
     int yo = p.getY()-_height/2;
     
-    if (xo < 0) xo = 0;
-    if (yo < 0) yo = 0;
+   // if (xo < 0) xo = 0;
+   // if (yo < 0) yo = 0;
     
-    if (xo > l.getWidth() - _width) xo = l.getWidth() - _width;
-    if (yo > l.getHeight() - _height) yo = l.getHeight() - _height; 
+   // if (xo > l.getWidth() - _width) xo = l.getWidth() - _width;
+   // if (yo > l.getHeight() - _height) yo = l.getHeight() - _height; 
     
     setOffset(xo, yo);
 
@@ -66,9 +66,16 @@ public class Renderer {
   public void renderShipLevel(ShipLevel l) {
     int[][] map = l.map;
     int[] pix = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
-    for (int y = 0; y < _height; ++y) 
-      for (int x = 0; x < _width; ++x) 
-        pix[x+y*_width] = map[_offY+y][_offX+x] == 0 ? FLOOR : WALL;
+    
+    for (int y = 0; y < _height; ++y) {
+      for (int x = 0; x < _width; ++x) {
+        int xx = _offX + x;
+        int yy = _offY + y;
+        while (xx < 0) xx += l.width;
+        while (yy < 0) yy += l.height;
+        pix[x+y*_width] = map[yy % l.height][xx % l.width] == 0 ? FLOOR : WALL;
+      }
+    }
   }
   
   private void renderGui(Game game, Graphics g) {

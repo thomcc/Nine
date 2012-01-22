@@ -37,19 +37,22 @@ public class Player {
     if (r) _px += 1.3;
     if (l) _px -= 1.3;
     if (u) _py -= 1.3;
+    
     if (i % 60 == 0) {
       System.out.format("_px: %s, _py: %s\n", _px, _py);
     }
+    
     updatePosition();
+    
     _px *= 0.98;
     _py *= 0.98;
+    
     if (Math.abs(_px) < 0.001) _px = 0;
     if (Math.abs(_py) < 0.001) _py = 0;
     if (Math.abs(_px) > MOMENTUM_MAX) _px = MOMENTUM_MAX * Math.signum(_px);
     if (Math.abs(_py) > MOMENTUM_MAX) _py = MOMENTUM_MAX * Math.signum(_py);
-    if(i++ % 60 == 0) {
-      
-    }
+    
+    if(i++ % 60 == 0) { }
     updateDistance();
   }
   private int i = 0;

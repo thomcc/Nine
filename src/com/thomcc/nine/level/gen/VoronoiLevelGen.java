@@ -11,7 +11,7 @@ public class VoronoiLevelGen implements LevelGen {
     
     double[][] noise = v.calculate(VoronoiNoise.DISTANCE_CHEBYCHEV);
     
-    int level[][] = new int[height][width];
+    int[][] level = new int[height][width];
     
     for (int y = 0; y < height; ++y)
       for (int x = 0; x < width; ++x) 
