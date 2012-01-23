@@ -110,20 +110,23 @@ public class Renderer {
     int lw = l.width;
     int lh = l.height;
     for (int y = 0; y < _height; ++y) {
+      int yp = _offY + y;
+      int yy = _offY/4 + y;
       
-      int yy = _offY + y;
-      int yp = yy;
       while (yp < 0) yp += lh;
       yp %= lh;
       if (Game.fancyGraphics) {
+        //yy /= 4;
         while (yy < 0) yy += _patH;
         yy %= _patH;
       }
       int[] cellrow = map[yp]; 
       for (int x = 0; x < _width; ++x) {
 
-        int xx = _offX + x;
-        int xp = xx;
+        int xp = _offX + x;
+        int xx = _offX/4 + x;
+//        int xx = _offX + x;
+//        int xp = xx;
         while (xp < 0) xp += lw;
         xp %= lw;
         
@@ -134,7 +137,9 @@ public class Renderer {
         if (cell == 2) col = WALL_INNER;
         else if (cell == 1) col = WALL_OUTER;
         else if (Game.fancyGraphics) {
+         // xx /= 4;
           while (xx < 0) xx += _patW;
+          
           if (_floorPattern[yy][xx % _patW]) col = DFLOOR;
           else col = FLOOR;
         } else col = FLOOR;
