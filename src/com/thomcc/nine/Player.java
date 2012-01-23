@@ -22,13 +22,14 @@ public class Player {
   private static final int MOMENTUM_MAX = 4;
   public double x, y;
   public double dir;
-  
+  private int _controlMode;
   public Player() {
     _startX = _startY = -1;
     x = y = -1;
     _px = 0;
     _py = 0;
     dir = 0;
+    _controlMode = -1;
   }
   public void lookAt(int px, int py) {
     dir = Math.atan2(py - y, px - x);
@@ -36,12 +37,21 @@ public class Player {
   public int getDirection() {
     return (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
   }
+  public void setControlMode(int cm) {
+    _controlMode = cm;
+  }
   public void tick(boolean u, boolean d, boolean l, boolean r) {
-    
-    if (d) _py += 1.0;
-    if (r) _px += 1.0;
-    if (l) _px -= 1.0;
-    if (u) _py -= 1.0;
+    if (_controlMode == Game.CONTROL_MODE_MOUSE) {
+      if (u) {
+        _px += Math.cos(dir);
+        _py += Math.sin(dir);
+      }
+    } else {
+      if (d) _py += 1.0;
+      if (r) _px += 1.0;
+      if (l) _px -= 1.0;
+      if (u) _py -= 1.0;
+    }
     
     if (i++ % 60 == 0) {}
     

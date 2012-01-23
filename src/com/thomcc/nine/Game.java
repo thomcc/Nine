@@ -8,14 +8,18 @@ public class Game {
   private Level _level;
   private InputHandler _ih;
   public int offX, offY;
+  public int controlMode;
+  public static final int CONTROL_MODE_KEYBOARD = 1;
+  public static final int CONTROL_MODE_MOUSE = 2;
   private long _ticks;
   public Game(InputHandler ih) {
     offX = 0;
     offY = 0;
     _ih = ih;
     _level = new ShipLevel();
-   
+    controlMode = CONTROL_MODE_KEYBOARD;
     _player = new Player();
+    _player.setControlMode(controlMode);
     _level.addPlayer(_player);
   }
   
@@ -28,6 +32,10 @@ public class Game {
     mx += offX;
     my += offY;
     _player.lookAt(mx, my);
+  }
+  public void setControlMode(int cm) {
+    controlMode = cm;
+    _player.setControlMode(cm);
   }
   public Player getPlayer() { return _player; }
   public long getTicks() { return _ticks; }
