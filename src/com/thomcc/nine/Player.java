@@ -18,8 +18,8 @@ public class Player {
   private int _startX, _startY;
   
   private double _px, _py; // momentum
-  private static final int MOMENTUM_MAX = 6;
-  
+  //private static final int MOMENTUM_MAX = 6;
+  private static final int MOMENTUM_MAX = 4;
   public double x, y;
   public double dir;
   
@@ -38,23 +38,30 @@ public class Player {
   }
   public void tick(boolean u, boolean d, boolean l, boolean r) {
     
-    if (d) _py += 1.3;
-    if (r) _px += 1.3;
-    if (l) _px -= 1.3;
-    if (u) _py -= 1.3;
+    if (d) _py += 1.0;
+    if (r) _px += 1.0;
+    if (l) _px -= 1.0;
+    if (u) _py -= 1.0;
     
     if (i++ % 60 == 0) {}
     
     updatePosition();
     
-    _px *= 0.98;
-    _py *= 0.98;
+    _px *= 0.94;
+    _py *= 0.94;
     
     if (Math.abs(_px) < 0.001) _px = 0;
     if (Math.abs(_py) < 0.001) _py = 0;
     if (Math.abs(_px) > MOMENTUM_MAX) _px = MOMENTUM_MAX * Math.signum(_px);
     if (Math.abs(_py) > MOMENTUM_MAX) _py = MOMENTUM_MAX * Math.signum(_py);
-    
+    double mag = Math.hypot(_px, _py);
+    if (mag > MOMENTUM_MAX) {
+      double angle = Math.atan2(_py, _px);
+      double ca = Math.cos(angle);
+      double sa = Math.sin(angle);
+      _px = MOMENTUM_MAX * ca;
+      _py = MOMENTUM_MAX * sa;
+    }
   }
   private int i = 0;
   public void updatePosition() {
