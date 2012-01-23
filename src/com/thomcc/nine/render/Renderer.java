@@ -71,8 +71,8 @@ public class Renderer {
     }
     int lw = l.getWidth();
     int lh = l.getHeight();
-    int xx = l.getPlayer().getX()+1;
-    int yy = l.getPlayer().getY()+1;
+    int xx = l.getPlayer().getX();//+1;
+    int yy = l.getPlayer().getY();//+1;
     while (xx < 0) xx += lw;
     while (yy < 0) yy += lh;
     yy %= lh;
