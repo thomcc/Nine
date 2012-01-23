@@ -63,8 +63,8 @@ public class Player {
     
     updatePosition();
     
-    _px *= 0.94;
-    _py *= 0.94;
+    _px *= 0.90;
+    _py *= 0.90;
     
     if (Math.abs(_px) < 0.001) _px = 0;
     if (Math.abs(_py) < 0.001) _py = 0;
