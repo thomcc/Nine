@@ -10,22 +10,28 @@ public class Art {
   public static final int WINGS   = 0xff4e4240;//0xff000bd4;
   public static final int COCKPIT = 0xffff6249;//0xff0023ff;
   private static final int BLANK   = 0x00ffffff;
+  private static final int W = WINGS;
+  private static final int _ = BLANK;
+  private static final int C = COCKPIT; 
   private static final int DIRS    = 16;
+  private static final int[][] ship = new int[][] {
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, W, _, _, _, C, C, C, _, _, _, W },
+    { _, W, W, W, W, C, C, C, W, W, W, W },
+    { _, _, W, W, W, W, W, W, W, W, W, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ }
+  };
   
-  private static boolean insideCockpit(int x, int y) {
-    return x > 4 && x < 8 && y > 4 && y < 7;
-  }
-  private static boolean insideWings(int x, int y) {
-    return x > 1 && x < 11 && y > 5 && y < 8;
-  }
   private static int getColor(int x, int y) {
-    if (insideCockpit(x, y)) {
-      return COCKPIT;
-    } else if (insideWings(x, y)) {
-      return WINGS;
-    } else { 
-      return BLANK; 
-    }
+    if (x<0 || y<0 || x>11 || y>11) return BLANK;
+    else return ship[y][x];
   }
   
   public static BufferedImage[] generateDude() {
