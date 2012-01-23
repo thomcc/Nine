@@ -2,7 +2,7 @@ package com.thomcc.nine.level;
 
 import java.util.Random;
 
-import com.thomcc.nine.Player;
+import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.gen.VoronoiLevelGen;
 import com.thomcc.nine.render.Renderer;
 

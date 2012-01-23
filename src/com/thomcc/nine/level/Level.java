@@ -1,6 +1,6 @@
 package com.thomcc.nine.level;
 
-import com.thomcc.nine.Player;
+import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.render.Renderer;
 
 public interface Level {

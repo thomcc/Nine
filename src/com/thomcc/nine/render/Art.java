@@ -4,7 +4,7 @@ package com.thomcc.nine.render;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
-import com.thomcc.nine.Player;
+import com.thomcc.nine.entity.Player;
 
 public class Art {
   public static final int WINGS   = 0xff4e4240;//0xff000bd4;

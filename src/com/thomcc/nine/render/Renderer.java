@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 import com.thomcc.nine.Game;
-import com.thomcc.nine.Player;
+import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
 import com.thomcc.nine.level.gen.VoronoiNoise;
 
@@ -66,7 +66,6 @@ public class Renderer {
     p.render(this);
     
     renderMinimap(l, g);
-    //g.drawString(game.controlMode == Game.CONTROL_MODE_KEYBOARD ? "K" : "M", 20, 20);
     g.dispose();
     
   }
