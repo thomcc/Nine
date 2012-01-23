@@ -1,6 +1,9 @@
 package com.thomcc.nine.level.gen;
 //import java.awt.Image;
+import java.awt.Image;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 //import java.awt.image.BufferedImage;
 //import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
@@ -9,6 +12,9 @@ import java.util.Comparator;
 import java.util.Random;
 //import javax.swing.ImageIcon;
 //import javax.swing.JOptionPane;
+
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 public class VoronoiNoise {
   public final int pts;
@@ -159,14 +165,14 @@ public class VoronoiNoise {
     } else return d;
   }
   
-  /*
+  
   public static void main(String args[]) {
-    int width = 700;
-    int height = 700;
-    int points = 200;
+    int width = 300;
+    int height = 300;
+    int points = 60;
 
     long now = System.nanoTime();
-    double[][] grid = new VoronoiNoise(width, height, points).calculate(DISTANCE_CHEBYCHEV);
+    double[][] grid = new VoronoiNoise(width, height, points).calculate(DISTANCE_NORMAL);
     long later = System.nanoTime();
     long t = later-now;
     long millis = t/1000000;
@@ -180,9 +186,9 @@ public class VoronoiNoise {
         int v = (int) (255.0 * grid[y][x]);
 
         if (cell < 0.1) v = 0;
-        else if (cell < 0.25) v = 63;
-        else if (cell < 0.50) v = 127;
-        else if (cell < 0.75) v = 191;
+        else if (cell < 0.05) v = 0;
+        //else if (cell < 0.50) v = 127;
+       // else if (cell < 0.75) v = 191;
         else v = 255;
          
         int c = v << 16 | v << 8 | v;
@@ -198,5 +204,5 @@ public class VoronoiNoise {
         new ImageIcon(img.getScaledInstance(img.getWidth(),
             img.getHeight(), Image.SCALE_AREA_AVERAGING)));
 
-  }*/
+  }
 }

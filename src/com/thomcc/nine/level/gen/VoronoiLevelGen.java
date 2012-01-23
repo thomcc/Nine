@@ -13,9 +13,15 @@ public class VoronoiLevelGen implements LevelGen {
     
     int[][] level = new int[height][width];
     
-    for (int y = 0; y < height; ++y)
-      for (int x = 0; x < width; ++x) 
-        level[y][x] = noise[y][x] > 0.20 ? 1 : 0;
+    for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
+        double cell = noise[y][x];
+        if (cell < 0.20) level[y][x] = 0;
+        else if (cell < 0.50) level[y][x] = 1;
+        else level[y][x] = 2;
+//        level[y][x] = noise[y][x] > 0.20 ? 1 : 0;
+      }
+    }
     
     return level;
   }

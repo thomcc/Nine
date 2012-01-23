@@ -11,6 +11,7 @@ public class Game {
   public int controlMode;
   public static final int CONTROL_MODE_KEYBOARD = 1;
   public static final int CONTROL_MODE_MOUSE = 2;
+  public static boolean fancyGraphics = true;
   private long _ticks;
   public Game(InputHandler ih) {
     offX = 0;
