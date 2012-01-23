@@ -5,7 +5,7 @@ import java.awt.event.*;
 public class InputHandler implements KeyListener, MouseListener, MouseMotionListener {
   public int mouseX, mouseY;
   public boolean mouseDown;
-  public boolean up, down, left, right;
+  public boolean up, down, left, right, debug;
   public InputHandler(Nine game) {
     mouseDown = up = down = left = right = false;
     mouseX = mouseY = -1;
@@ -34,6 +34,9 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     case KeyEvent.VK_D:
     case KeyEvent.VK_NUMPAD6:
       right = pressed;
+      break;
+    case KeyEvent.VK_ESCAPE:
+      debug = pressed;
       break;
     }
   }

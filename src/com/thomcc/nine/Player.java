@@ -23,15 +23,19 @@ public class Player {
   public double x, y;
   public double dir;
   private int _controlMode;
+  private int _eyeX, _eyeY;
   public Player() {
     _startX = _startY = -1;
     x = y = -1;
+    _eyeX = _eyeY = -1;
     _px = 0;
     _py = 0;
     dir = 0;
     _controlMode = -1;
   }
   public void lookAt(int px, int py) {
+    _eyeX = px;
+    _eyeY = py;
     dir = Math.atan2(py - y, px - x);
   }
   public int getDirection() {
@@ -40,11 +44,13 @@ public class Player {
   public void setControlMode(int cm) {
     _controlMode = cm;
   }
-  public void tick(boolean u, boolean d, boolean l, boolean r) {
+  public void tick(boolean u, boolean d, boolean l, boolean r, boolean click) {
     if (_controlMode == Game.CONTROL_MODE_MOUSE) {
-      if (u) {
-        _px += Math.cos(dir);
-        _py += Math.sin(dir);
+      if (click) {
+        double dist = Math.hypot(_eyeX-x, _eyeY-y);
+        //System.out.println(dist);
+        _px += Math.cos(dir)*dist/200;
+        _py += Math.sin(dir)*dist/200;
       }
     } else {
       if (d) _py += 1.0;

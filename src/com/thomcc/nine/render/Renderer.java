@@ -47,7 +47,7 @@ public class Renderer {
     p.render(this);
     
     renderMinimap(l, g);
-    
+    //g.drawString(game.controlMode == Game.CONTROL_MODE_KEYBOARD ? "K" : "M", 20, 20);
     g.dispose();
     
   }

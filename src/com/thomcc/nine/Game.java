@@ -26,7 +26,14 @@ public class Game {
   public void setOffset(int x, int y) { offX = x; offY = y; }
   public void tick() {
     ++_ticks;
-    _player.tick(_ih.up, _ih.down, _ih.left, _ih.right);
+    /*if (_ih.debug) {
+      if (controlMode == CONTROL_MODE_KEYBOARD) {
+        setControlMode(CONTROL_MODE_MOUSE);
+      } else {
+        setControlMode(CONTROL_MODE_KEYBOARD);
+      }
+    }*/
+    _player.tick(_ih.up, _ih.down, _ih.left, _ih.right, _ih.mouseDown);
     int mx = _ih.mouseX;
     int my = _ih.mouseY;
     mx += offX;
