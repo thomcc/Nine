@@ -21,11 +21,11 @@ public class Bullet extends Entity {
     _py = Math.sin(dir)*speed;
     this.owner = owner;
     _time = 0;
-    _life = 60;
+    _life = 200+random.nextInt(100);
     _maxSpeed = 1000;
     _friction = 1;
     _collisions = 0;
-    _maxCollisions = 6;
+    _maxCollisions = 10;
   }
   
   protected void collision(boolean ycol, int d) {
