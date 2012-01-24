@@ -12,7 +12,6 @@ public class Player extends Entity {
   public int health;
   private int _maxHealth, _regenHealthRate;
   private int _fireCount, _maxFireCount, _reAmmoRate;
-  //private Game _game;
   private int _fireRate;
   private boolean _canFire = true;
   public Player(Input i, Game g) {
@@ -28,14 +27,13 @@ public class Player extends Entity {
     _reAmmoRate = 10;
     _fireCount = _maxFireCount;
     _fireRate = 5;
-    //_game = g;
   }
   public void setLevel(Level l) {
     super.setLevel(l);
     l.findPlayerLocation(this);
   }
   private void updateStats(long ticks) { // if this gets above 5 i should write a "Stat" class
-    if (ticks % _reAmmoRate == 0 && _fireCount < _maxFireCount) { ++_fireCount; }
+    if (ticks % _reAmmoRate == 0 && _fireCount < _maxFireCount && !_i.mouseDown) { ++_fireCount; }
     if (ticks % _regenHealthRate == 0 && health < _maxHealth) { ++health; }
     if (ticks % _fireRate == 0) { _canFire = true; }
   }
@@ -65,11 +63,9 @@ public class Player extends Entity {
     _px += cd*damage;
     _py += sd*damage;
   }
-  
   public void render(Renderer r) {
     int d = (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
     r.render(0, (int)x, (int)y, d);
-    //r.renderPlayer((int)x, (int)y, d);
   }
   public int getFireCount() {
     return _fireCount;

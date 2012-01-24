@@ -1,9 +1,13 @@
 
-* TODO refactor Art class to be more general.
-* TODO fix bullet collision bug with diagonal walls.
 * TODO menus, HUD, meters, etc.
+* TODO Enemies
 
-
+* DONE refactor Art class to be more general.
+CLOSED: [2012-01-24 Tue 17:37]
+- State "DONE"       from "TODO"       [2012-01-24 Tue 17:37]
+* DONE fix bullet collision bug with diagonal walls.
+CLOSED: [2012-01-24 Tue 17:37]
+- State "DONE"       from "TODO"       [2012-01-24 Tue 17:37]
 * DONE look into level generation types
 CLOSED: [2012-01-24 Tue 01:00]
 - State "DONE"       from "TODO"       [2012-01-24 Tue 01:00]

@@ -20,9 +20,7 @@ public class Art {
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ }
   };
-  private static final int[] enemyColors = {
-    0xff262626, 0xff649f42 
-  };
+  private static final int[] enemyColors = { 0xff262626, 0xff649f42 };
   private static final int[][] enemyTemplate = new int[][] {
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },

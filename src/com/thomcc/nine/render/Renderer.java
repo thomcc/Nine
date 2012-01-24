@@ -116,49 +116,43 @@ public class Renderer {
     int lw = l.width;
     int lh = l.height;
     for (int y = 0; y < _height; ++y) {
-      int yp = _offY + y;
-      int yy = _offY/4 + y;
+      int yp = _offY + y;   // yp is the coordinate on the levels map
+      int yy = _offY/4 + y; // yy is the coordinate on the background map 
       while (yp < 0) yp += lh;
       yp %= lh;
-      if (Game.fancyGraphics) {
-        //yy /= 4;
+//      if (Game.fancyGraphics) {
         while (yy < 0) yy += _patH;
         yy %= _patH;
-      }
+//      }
       int[] cellrow = map[yp]; 
       for (int x = 0; x < _width; ++x) {
         int xp = _offX + x;
         int xx = _offX/4 + x;
         while (xp < 0) xp += lw;
         xp %= lw;
-        
         int cell = cellrow[xp];
-        
-        int col;
-        
+        int col = FLOOR;
         if (cell == 2) col = WALL_INNER;
         else if (cell == 1) col = WALL_OUTER;
-        else if (Game.fancyGraphics) {
-         // xx /= 4;
+        // otherwise, render from the background pattern
+        else /*if (Game.fancyGraphics)*/ {
           while (xx < 0) xx += _patW;
           xx %= _patW;
           if (_floorPattern[yy][xx]) col = DFLOOR;
           else col = FLOOR;
-        } else col = FLOOR;
+        }
         _pix[x+y*_width] = col;
       }
     }
-    
-    
   }
-  public void render(int sidx, int x, int y, int dir) {
-    render(sprites[sidx], x, y, dir);
-  }
+  
   public void render(Sprite s, int x, int y, int dir) {
-    y -= _offY+s.height/2;
-    x -= _offX+s.width/2;
+    y -= _offY+s.size/2;
+    x -= _offX+s.size/2;
     _g.drawImage(s.get(dir), x, y, null);
   }
+  
+  public void render(int sidx, int x, int y, int dir) { render(sprites[sidx], x, y, dir); }
   public Graphics getGraphics() { return image.getGraphics(); }
   private void setOffset(int x, int y) { _offX = x; _offY = y; }
 }
