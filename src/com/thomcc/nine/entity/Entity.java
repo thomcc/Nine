@@ -63,34 +63,34 @@ public class Entity {
   public void hurt(Entity cause, int damage, double dir) {
   }
   protected void collision() {}
-  protected void collision(boolean ycol, int dx, int dy) {
+  protected void collision(boolean ycol, double dx, double dy) {
     if (!_canSlide) { bounce(dx, dy); return; }
     if (ycol) {
-      switch (dx) {
+      switch ((int)dx) {
       case +1:
-        _px += Math.abs(_py/3);
-        _py /= 3;
+        _px += Math.abs(_py*_collisionFriction);
+        _py *= _collisionFriction;
         break;
       case -1:
-        _px -= Math.abs(_py/3);
-        _py /= 3;
+        _px -= Math.abs(_py*_collisionFriction);
+        _py *= _collisionFriction;
         break;
       case 0:
-        _py /= 3;
+        _py *= _collisionFriction;
         break;
       }
     } else {
-      switch (dy) {
+      switch ((int)dy) {
       case +1:
-        _py += Math.abs(_px/3);
-        _px /= 3;
+        _py += Math.abs(_px*_collisionFriction);
+        _px *= _collisionFriction;
         break;
       case -1:
-        _py -= Math.abs(_px/3);
-        _px /= 3;
+        _py -= Math.abs(_px*_collisionFriction);
+        _px *= _collisionFriction;
         break;
       case 0:
-        _px /= 3;
+        _px *= _collisionFriction;
         break;
       }
     }
@@ -117,7 +117,6 @@ public class Entity {
     double fmag = Math.hypot(fy, fx);
     _px = fx*pmag/fmag;
     _py = fy*pmag/fmag;
-    //double angle = Math.atan2(dy, dx);
   }
   public void updatePosition() {
     if (_px == 0 && _py == 0) return;
