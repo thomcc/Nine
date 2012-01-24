@@ -21,8 +21,6 @@ public class Renderer {
   }
   private static final int WALL_OUTER = 0x222222;
   private static final int WALL_INNER = 0x2D81C3;//0x3a6d4f;
-  private BufferedImage _bullet;
-  private BufferedImage[] _sprites;
   private int[] _pix;
   public BufferedImage image;
   private int _width, _height;
@@ -31,6 +29,7 @@ public class Renderer {
   private int _patW, _patH;
   private boolean[][] _floorPattern;
   public Color textColor = new Color(255, 255, 230);
+  public final Sprite[] sprites;
   public Renderer(int w, int h) {
     _offX = _offY = 0;
     _width = w;
@@ -41,10 +40,10 @@ public class Renderer {
     Graphics2D g2 = (Graphics2D)_g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-    _sprites = Art.generateDude();
-    _bullet = Art.generateBullet();
-    _patW = 300;
-    _patH = 300;
+    Art a = new Art();
+    sprites = a.sprites;
+    _patW = _patH = 300;
+    
     
     double[][] floorPat = new VoronoiNoise(_patW, _patH, 60).calculate(VoronoiNoise.DISTANCE_NORMAL);
 
@@ -106,7 +105,7 @@ public class Renderer {
     xx %= lw;
     yy /= lh/mmH;
     xx /= lw/mmW;
-    pix[xx+yy*mmW] = Art.COCKPIT;
+    pix[xx+yy*mmW] = Art.PLAYERCOLOR;
     _g.setColor(Color.BLACK);
     _g.drawRect(mmXoff-1, mmYoff-1, mmW+1, mmH+1);
     _g.drawImage(mmImg, mmXoff, mmYoff, null);
@@ -119,7 +118,6 @@ public class Renderer {
     for (int y = 0; y < _height; ++y) {
       int yp = _offY + y;
       int yy = _offY/4 + y;
-      
       while (yp < 0) yp += lh;
       yp %= lh;
       if (Game.fancyGraphics) {
@@ -129,10 +127,8 @@ public class Renderer {
       }
       int[] cellrow = map[yp]; 
       for (int x = 0; x < _width; ++x) {
-
         int xp = _offX + x;
         int xx = _offX/4 + x;
-        
         while (xp < 0) xp += lw;
         xp %= lw;
         
@@ -155,24 +151,14 @@ public class Renderer {
     
     
   }
-  public void renderPlayer(int x, int y, int dir) {
-    y -= Player.SIZE/2+_offY;
-    x -= Player.SIZE/2+_offX;
-    _g.drawImage(_sprites[dir], x, y, null);
+  public void render(int sidx, int x, int y, int dir) {
+    render(sprites[sidx], x, y, dir);
   }
-  public void renderBullet(int x, int y) {
-    y -= 2 + _offY;
-    x -= 2 + _offX;
-    image.getGraphics().drawImage(_bullet, x, y, null);
+  public void render(Sprite s, int x, int y, int dir) {
+    y -= _offY+s.height/2;
+    x -= _offX+s.width/2;
+    _g.drawImage(s.get(dir), x, y, null);
   }
-  public void renderPlayer(Player p, Graphics g) {
-    int d = p.getDirection();
-    int px = p.getX()-Player.SIZE/2-_offX;
-    int py = p.getY()-Player.SIZE/2-_offY;
-    
-    g.drawImage(_sprites[d], px, py, null);
-  }
-  
   public Graphics getGraphics() { return image.getGraphics(); }
   private void setOffset(int x, int y) { _offX = x; _offY = y; }
 }

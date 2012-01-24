@@ -1,75 +1,57 @@
 package com.thomcc.nine.render;
 
-
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-
-import com.thomcc.nine.entity.Player;
-
-public class Art { // TODO Generalize this 
-  public static final int WINGS = 0xff4e4240;//0xff000bd4;
-  public static final int COCKPIT = 0xffff6249;//0xff0023ff;
-  private static final int BLANK = 0x00ffffff;
-  private static final int BULLET = 0xff282b35;
-  private static final int BINNER = 0xff82333b;
-  private static final int B = BINNER;
-  private static final int O = BULLET;
-  private static final int W = WINGS;
-  private static final int _ = BLANK;
-  private static final int C = COCKPIT; 
-  private static final int DIRS    = 16;
-  private static final int[][] ship = new int[][] {
+public class Art {
+  public static final int PLAYERCOLOR = 0xffff6249;//0xff0023ff;
+  private static final int _ = 0;
+  private static final int A = 1;
+  private static final int B = 2;
+  private static final int[] playerColors = { 0xffff6249, 0xff4e4240 };
+  private static final int[][] playerTemplate = new int[][] {
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
-    { _, W, _, _, _, C, C, C, _, _, _, W },
-    { _, W, W, W, W, C, C, C, W, W, W, W },
-    { _, _, W, W, W, W, W, W, W, W, W, _ },
+    { _, B, _, _, _, A, A, A, _, _, _, B },
+    { _, B, B, B, B, A, A, A, B, B, B, B },
+    { _, _, B, B, B, B, B, B, B, B, B, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ }
   };
-  private static final int[][] bullet = new int[][] {
-    { _, O, O, _ },
-    { O, B, B, O },
-    { O, B, B, O },
-    { _, O, O, _ }
+  private static final int[] enemyColors = {
+    0xff262626, 0xff649f42 
+  };
+  private static final int[][] enemyTemplate = new int[][] {
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, A, _, _, _, A, _, _, _ },
+    { _, _, _, A, A, _, _, _, A, A, _, _ },
+    { _, _, _, A, _, _, A, _, _, A, _, _ },
+    { _, _, _, A, _, B, B, B, _, A, _, _ },
+    { _, _, _, A, A, B, B, B, A, A, _, _ },
+    { _, _, _, A, A, B, B, B, A, A, _, _ },
+    { _, _, _, _, A, A, A, A, A, _, _, _ },
+    { _, _, _, _, _, A, A, A, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ }
   };
   
-  private static int getColor(int x, int y) {
-    if (x<0 || y<0 || x>11 || y>11) return BLANK;
-    else return ship[y][x];
-  }
   
-  public static BufferedImage[] generateDude() {
-    BufferedImage[] imgs = new BufferedImage[DIRS];
-    for (int d = 0; d < DIRS; d++) {
-      imgs[d] = new BufferedImage(Player.SIZE, Player.SIZE, BufferedImage.TYPE_INT_ARGB);
-      int[] pixels = ((DataBufferInt) imgs[d].getRaster().getDataBuffer()).getData();
-      double dir = d * Math.PI * 2.0 / DIRS;
-      double cd = Math.cos(dir);
-      double sd = Math.sin(dir);
-      for (int j = 0; j < Player.SIZE; j++) {
-        for (int i = 0; i < Player.SIZE; i++) {
-          int xPix = (int) (cd * (i - Player.SIZE/2) + sd * (j - Player.SIZE/2) + Player.SIZE/2 + 0.5);
-          int yPix = (int) (cd * (j - Player.SIZE/2) - sd * (i - Player.SIZE/2) + Player.SIZE/2 + 0.5);
-          pixels[i + j * Player.SIZE] = getColor(xPix, yPix);
-        }
-      }
-    }
-    return imgs;
-  }
-  public static BufferedImage generateBullet() {
-    BufferedImage img = new BufferedImage(4, 4, BufferedImage.TYPE_INT_ARGB); 
-    int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
-    for (int j = 0; j < 4; ++j) {
-      for (int i = 0; i < 4; ++i) {
-        pixels[i+j*4] = bullet[j][i];
-      }
-    }
-    return img;
+  private static final int[] bulletColors = { 0xff282b35, 0xff82333b };
+  private static final int[][] bulletTemplate = new int[][] {
+    { _, A, A, _ },
+    { A, B, B, A },
+    { A, B, B, A },
+    { _, A, A, _ }
+  };
+  public final Sprite[] sprites;
+  public Art() {
+    sprites = new Sprite[] {
+        new Sprite(playerTemplate, 16, playerColors),
+        new Sprite(bulletTemplate, 1, bulletColors),
+        new Sprite(enemyTemplate, 16, enemyColors)
+    };
   }
 }

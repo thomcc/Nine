@@ -68,7 +68,8 @@ public class Player extends Entity {
   
   public void render(Renderer r) {
     int d = (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
-    r.renderPlayer((int)x, (int)y, d);
+    r.render(0, (int)x, (int)y, d);
+    //r.renderPlayer((int)x, (int)y, d);
   }
   public int getFireCount() {
     return _fireCount;

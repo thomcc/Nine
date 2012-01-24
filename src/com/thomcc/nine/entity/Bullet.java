@@ -52,7 +52,7 @@ public class Bullet extends Entity {
     }
   }
   public void render(Renderer r) {
-    r.renderBullet((int)x, (int)y);
+    r.render(1, (int)x, (int)y, 0);
   }
   
   
