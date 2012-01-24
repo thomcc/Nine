@@ -1,4 +1,12 @@
-* TODO look into level generation types
+
+* TODO refactor Art class to be more general.
+* TODO fix bullet collision bug with diagonal walls.
+* TODO menus, HUD, meters, etc.
+
+
+* DONE look into level generation types
+CLOSED: [2012-01-24 Tue 01:00]
+- State "DONE"       from "TODO"       [2012-01-24 Tue 01:00]
   - Ridged multifractal (is this just absed perlin noise?)
   - voronoi?
   - [[http://www.neilblevins.com/cg_education/procedural_noise/procedural_noise.html][this link may be useful]]
@@ -10,4 +18,3 @@ Formula: F4
 Roughness: 64, Contrast: 0
 Details: 0
 Profile: Flat""
-

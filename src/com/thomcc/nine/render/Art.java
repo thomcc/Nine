@@ -6,7 +6,7 @@ import java.awt.image.DataBufferInt;
 
 import com.thomcc.nine.entity.Player;
 
-public class Art {
+public class Art { // TODO Generalize this 
   public static final int WINGS = 0xff4e4240;//0xff000bd4;
   public static final int COCKPIT = 0xffff6249;//0xff0023ff;
   private static final int BLANK = 0x00ffffff;
