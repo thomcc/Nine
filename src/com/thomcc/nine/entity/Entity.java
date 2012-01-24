@@ -16,9 +16,10 @@ public class Entity {
   protected double _eyeX = -1, _eyeY = -1;
   public boolean removed = false;
   public double dir = 0;
+  protected boolean _canSlide = false;
   protected double _maxSpeed;
   protected double _friction;
-  
+  protected double _collisionFriction;
   public int getDirection() {
     return (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
   }
@@ -62,9 +63,10 @@ public class Entity {
   public void hurt(Entity cause, int damage, double dir) {
   }
   protected void collision() {}
-  protected void collision(boolean ycol, int d) {
+  protected void collision(boolean ycol, int dx, int dy) {
+    if (!_canSlide) { bounce(dx, dy); return; }
     if (ycol) {
-      switch (d) {
+      switch (dx) {
       case +1:
         _px += Math.abs(_py/3);
         _py /= 3;
@@ -78,7 +80,7 @@ public class Entity {
         break;
       }
     } else {
-      switch (d) {
+      switch (dy) {
       case +1:
         _py += Math.abs(_px/3);
         _px /= 3;
@@ -93,6 +95,30 @@ public class Entity {
       }
     }
   }
+  protected void bounce(double dx, double dy) {
+    if (dx == 0) {
+      _py *= -_collisionFriction;
+      return;
+    } else if (dy == 0) {
+      _px *= -_collisionFriction;
+      return;
+    }
+    double mag = Math.hypot(dx, dy);
+    dx /= mag;
+    dy /= mag;
+    double nx = -dy;
+    double ny = dx;
+    double pmag = Math.hypot(_px, _py);
+    double npx = _px/pmag;
+    double npy = _py/pmag;
+    pmag *= _collisionFriction;
+    double fx = nx * 2 + npx;
+    double fy = ny * 2 + npy;
+    double fmag = Math.hypot(fy, fx);
+    _px = fx*pmag/fmag;
+    _py = fy*pmag/fmag;
+    //double angle = Math.atan2(dy, dx);
+  }
   public void updatePosition() {
     if (_px == 0 && _py == 0) return;
     
@@ -106,11 +132,14 @@ public class Entity {
         if (canMove(0, dy)) {
           y += dy;
         } else if (canMove(1, dy)) {
-          collision(true, 1); break;
+          collision(true, 1, dy); 
+          break;
         } else if (canMove(-1, dy)) {
-          collision(true, -1); break;
-        } else { 
-          collision(true, 0); break; 
+          collision(true, -1, dy); 
+          break;
+        } else {
+          collision(true, 0, dy); 
+          break; 
         }
       }
     }
@@ -122,11 +151,14 @@ public class Entity {
         if (canMove(dx,0)) {
           x += dx;
         } else if (canMove(dx, 1)) {
-          collision(false, 1); break;
+          collision(false, dx, 1); 
+          break;
         } else if (canMove(dx, -1)) {
-          collision(false, -1); break;
+          collision(false, dx, -1); 
+          break;
         } else { 
-          collision(false, 0); break; 
+          collision(false, dx, 0); 
+          break; 
         }
       }
     }

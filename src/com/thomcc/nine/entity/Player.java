@@ -18,7 +18,8 @@ public class Player extends Entity {
     _maxHealth = 50;
     health = _maxHealth;
     _regenHealthRate = 40;
-    
+    _collisionFriction = 1;
+    _canSlide = true;
     _friction = 0.9;
     _maxSpeed = 4.0;
     _maxFireCount = 20;
