@@ -7,33 +7,29 @@ import com.thomcc.nine.level.*;
 public class Game {
   private Player _player;
   private Level _level;
-  private InputHandler _ih;
+  private Input _ih;
   public int offX, offY;
   public static boolean fancyGraphics = true;
   private long _ticks;
   
-  public Game(InputHandler ih) {
+  public Game(Input ih) {
     offX = 0;
     offY = 0;
     _ih = ih;
     _level = new ShipLevel();
-    _player = new Player();
-    _level.addPlayer(_player);
+    _player = new Player(_ih);
+    _level.add(_player);
   }
   
   public void setOffset(int x, int y) { 
     offX = x; 
-    offY = y; 
+    offY = y;
   }
-  
   public void tick() {
     ++_ticks;
-    _player.tick(_ih.up, _ih.down, _ih.left, _ih.right, _ih.mouseDown);
-    int mx = _ih.mouseX;
-    int my = _ih.mouseY;
-    mx += offX;
-    my += offY;
-    _player.lookAt(mx, my);
+    //_player.tick();
+    _level.tick();
+    _player.lookAt(_ih.mouseX+offX, _ih.mouseY+offY);
   }
   
   public Player getPlayer() { 

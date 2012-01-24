@@ -7,9 +7,13 @@ import java.awt.image.DataBufferInt;
 import com.thomcc.nine.entity.Player;
 
 public class Art {
-  public static final int WINGS   = 0xff4e4240;//0xff000bd4;
+  public static final int WINGS = 0xff4e4240;//0xff000bd4;
   public static final int COCKPIT = 0xffff6249;//0xff0023ff;
-  private static final int BLANK   = 0x00ffffff;
+  private static final int BLANK = 0x00ffffff;
+  private static final int BULLET = 0xff282b35;
+  private static final int BINNER = 0xff82333b;
+  private static final int B = BINNER;
+  private static final int O = BULLET;
   private static final int W = WINGS;
   private static final int _ = BLANK;
   private static final int C = COCKPIT; 
@@ -27,6 +31,12 @@ public class Art {
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ }
+  };
+  private static final int[][] bullet = new int[][] {
+    { _, O, O, _ },
+    { O, B, B, O },
+    { O, B, B, O },
+    { _, O, O, _ }
   };
   
   private static int getColor(int x, int y) {
@@ -51,5 +61,15 @@ public class Art {
       }
     }
     return imgs;
+  }
+  public static BufferedImage generateBullet() {
+    BufferedImage img = new BufferedImage(4, 4, BufferedImage.TYPE_INT_ARGB); 
+    int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+    for (int j = 0; j < 4; ++j) {
+      for (int i = 0; i < 4; ++i) {
+        pixels[i+j*4] = bullet[j][i];
+      }
+    }
+    return img;
   }
 }

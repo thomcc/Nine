@@ -19,7 +19,7 @@ public class Renderer {
   }
   private static final int WALL_OUTER = 0x222222;
   private static final int WALL_INNER = 0x2D81C3;//0x3a6d4f;
-  
+  private BufferedImage _bullet;
   private BufferedImage[] _sprites;
   private int[] _pix;
   public BufferedImage image;
@@ -36,9 +36,12 @@ public class Renderer {
     _pix = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
     //_g = image.getGraphics();
     _sprites = Art.generateDude();
-    double[][] floorPat = new VoronoiNoise(300, 300, 60).calculate(VoronoiNoise.DISTANCE_NORMAL);
+    _bullet = Art.generateBullet();
     _patW = 300;
     _patH = 300;
+    
+    double[][] floorPat = new VoronoiNoise(_patW, _patH, 60).calculate(VoronoiNoise.DISTANCE_NORMAL);
+
     _floorPattern = new boolean[_patH][_patW];
     for (int y = 0; y < _patH; ++y) 
       for (int x = 0; x < _patW; ++x) 
@@ -63,7 +66,8 @@ public class Renderer {
     game.setOffset(xo, yo);
     
     l.render(this);
-    p.render(this);
+    //renderBullet(p.getBoundedX(),)
+    //p.render(this);
     
     renderMinimap(l, g);
     g.dispose();
@@ -124,8 +128,7 @@ public class Renderer {
 
         int xp = _offX + x;
         int xx = _offX/4 + x;
-//        int xx = _offX + x;
-//        int xp = xx;
+        
         while (xp < 0) xp += lw;
         xp %= lw;
         
@@ -138,8 +141,8 @@ public class Renderer {
         else if (Game.fancyGraphics) {
          // xx /= 4;
           while (xx < 0) xx += _patW;
-          
-          if (_floorPattern[yy][xx % _patW]) col = DFLOOR;
+          xx %= _patW;
+          if (_floorPattern[yy][xx]) col = DFLOOR;
           else col = FLOOR;
         } else col = FLOOR;
         _pix[x+y*_width] = col;
@@ -153,7 +156,11 @@ public class Renderer {
     x -= Player.SIZE/2+_offX;
     image.getGraphics().drawImage(_sprites[dir], x, y, null);
   }
-  
+  public void renderBullet(int x, int y) {
+    y -= 2 + _offY;
+    x -= 2 + _offX;
+    image.getGraphics().drawImage(_bullet, x, y, null);
+  }
   public void renderPlayer(Player p, Graphics g) {
     int d = p.getDirection();
     int px = p.getX()-Player.SIZE/2-_offX;

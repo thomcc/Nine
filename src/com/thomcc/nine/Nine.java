@@ -16,12 +16,12 @@ public class Nine extends Canvas implements Runnable {
   public static final int TICKS_PER_SECOND = 60;
   private boolean _running;
   private Renderer _renderer;
-  private InputHandler _input;
+  private Input _input;
   private Game _game;
   public Nine() {
     _running = false;
     _renderer = new Renderer(WIDTH, HEIGHT);
-    _input = new InputHandler(this);
+    _input = new Input(this);
     _game = new Game(_input);
   }
   public void start() {

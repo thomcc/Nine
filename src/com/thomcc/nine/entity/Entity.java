@@ -3,31 +3,32 @@ package com.thomcc.nine.entity;
 import java.util.Random;
 
 import com.thomcc.nine.level.Level;
+import com.thomcc.nine.render.Renderer;
 
 public class Entity {
   
   protected final Random random = new Random();
-  
   protected Level _level;
-  
   public double x = 0, y = 0;
-  
   public int rx = 1, ry = 1;
-
   protected int _startX = -1, _startY = -1;
-  
   protected double _px = 0, _py = 0;
-  
   protected double _eyeX = -1, _eyeY = -1;
-  
+  public boolean removed = false;
   public double dir = 0;
-  
   protected double _maxSpeed;
-  
   protected double _friction;
   
   public int getDirection() {
     return (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
+  }
+  public void render(Renderer r) {}
+  public void remove() {
+    removed = true;
+  }
+  public void tick() {
+    updatePosition();
+    reduceSpeed();
   }
   
   public void lookAt(int px, int py) {
@@ -58,6 +59,9 @@ public class Entity {
     }
   
   }
+  public void hurt(Entity cause, int damage, double dir) {
+  }
+  protected void collision() {}
   public void updatePosition() {
     if (_px == 0 && _py == 0) return;
     
@@ -72,12 +76,15 @@ public class Entity {
           y += dy;
         } else if (canMove(1, dy)) {
           _px += Math.abs(_py/3);
+          collision();
           _py /= 3;
         } else if (canMove(-1, dy)) {
           _px -= Math.abs(_py/3);
+          collision();
           _py /= 3;
         } else { 
           _py /= -3d; 
+          collision();
           break; 
         }
       }
@@ -91,17 +98,22 @@ public class Entity {
           x += dx;
         } else if (canMove(dx, 1)) {
           _py += Math.abs(_px/3d);
+          collision();
           _px /= 3d;
         } else if (canMove(dx, -1)) {
           _py -= Math.abs(_px/3d);
+          collision();
           _px /= 3d;
         } else { 
           _px /= -3d;
+          collision();
           break; 
         }
       }
     }
   }
+  
+  
   
   private boolean canMove(int dx, int dy) {
     int xx = (int)x;
@@ -132,9 +144,28 @@ public class Entity {
   public int getY() { 
     return (int)y; 
   }
-  
+  public int getBoundedX() {
+    int xx = (int) x;
+    if (_level != null) {
+      while (xx < 0) xx += _level.getWidth();
+      xx %= _level.getWidth();
+    }
+    return xx;
+  }
+  public boolean intersects(int x0, int y0, int x1, int y1) {
+    return !(x + rx < x0 || y + ry < y0 || x - rx > x1 || y - ry > y1);
+  }
+  public int getBoundedY() {
+    int yy = (int) y;
+    if (_level != null) {
+      while (yy < 0) yy += _level.getHeight();
+      yy %= _level.getHeight();
+    }
+    return yy;
+  }
   public void setLevel(Level l) { 
-    _level = l; 
+    _level = l;
+    
   }
 
   public void setPosition(int x, int y) {

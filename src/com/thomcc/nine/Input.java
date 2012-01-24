@@ -2,17 +2,19 @@ package com.thomcc.nine;
 
 import java.awt.event.*;
 
-public class InputHandler implements KeyListener, MouseListener, MouseMotionListener {
+public class Input implements KeyListener, MouseListener, MouseMotionListener {
   public int mouseX, mouseY;
   public boolean mouseDown;
   public boolean up, down, left, right, debug;
-  public InputHandler(Nine game) {
+  
+  public Input(Nine game) {
     mouseDown = up = down = left = right = false;
     mouseX = mouseY = -1;
     game.addMouseListener(this);
     game.addMouseMotionListener(this);
     game.addKeyListener(this);
   }
+  
   private void onKey(KeyEvent e, boolean pressed) {
     switch (e.getKeyCode()) {
     case KeyEvent.VK_UP:
@@ -40,15 +42,15 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
       break;
     }
   }
+  public void setMouse(int x, int y) { mouseX = x/2; mouseY = y/2; }
   public void mousePressed(MouseEvent e) { mouseDown = true; }
   public void mouseReleased(MouseEvent e) { mouseDown = false; }
-  public void mouseMoved(MouseEvent e) { mouseX = e.getX()/2; mouseY = e.getY()/2; }
+  public void mouseMoved(MouseEvent e) { setMouse(e.getX(), e.getY()); }
   public void mouseExited(MouseEvent e) { mouseX = -1; mouseY = -1; }
   public void mouseClicked(MouseEvent e) {}
-  public void mouseDragged(MouseEvent e) { mouseX = e.getX()/2; mouseY = e.getY()/2; }
   public void mouseEntered(MouseEvent e) {}
   public void keyTyped(KeyEvent e) {}
-  public void keyPressed(KeyEvent e) { onKey(e, true);}
-  public void keyReleased(KeyEvent e) { onKey(e, false);}
-  
+  public void mouseDragged(MouseEvent e) { setMouse(e.getX(), e.getY()); }
+  public void keyPressed(KeyEvent e) { onKey(e, true); }
+  public void keyReleased(KeyEvent e) { onKey(e, false); }
 }
