@@ -10,34 +10,32 @@ public class Player extends Entity {
   public static final int SIZE = 12;
   public Input _i;
   public int health;
-  private int _maxHealth, _regenRate;
+  private int _maxHealth, _regenHealthRate;
   private int _fireCount, _maxFireCount, _reAmmoRate;
-  private Game _game;
+  //private Game _game;
   public Player(Input i, Game g) {
     _i = i;
     _maxHealth = 50;
     health = _maxHealth;
-    _regenRate = 40;
+    _regenHealthRate = 40;
     
     _friction = 0.9;
     _maxSpeed = 4.0;
     _maxFireCount = 20;
     _reAmmoRate = 10;
     _fireCount = _maxFireCount;
-    _game = g;
+    //_game = g;
   }
   public void setLevel(Level l) {
     super.setLevel(l);
     l.findPlayerLocation(this);
   }
-  
-  public void tick() {
-    if (_game.getTicks() % _reAmmoRate == 0 && _fireCount < _maxFireCount) {
-      ++_fireCount;
-    }
-    if (_game.getTicks() % _regenRate == 0 && health < _maxHealth) {
-      ++health;
-    }
+  private void updateStats(long ticks) { // if this gets above 5 i should write a "Stat" class
+    if (ticks % _reAmmoRate == 0 && _fireCount < _maxFireCount) { ++_fireCount; }
+    if (ticks % _regenHealthRate == 0 && health < _maxHealth) { ++health; } 
+  }
+  public void tick(long ticks) {
+    updateStats(ticks);    
     
     if (_i.down) _py += 1.0;
     if (_i.right) _px += 1.0;
@@ -46,7 +44,7 @@ public class Player extends Entity {
     if (_i.mouseDown) fire();
     
     
-    super.tick();
+    super.tick(ticks);
   }
   public void fire() {
     //System.out.println("firing!");

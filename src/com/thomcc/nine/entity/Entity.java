@@ -26,7 +26,7 @@ public class Entity {
   public void remove() {
     removed = true;
   }
-  public void tick() {
+  public void tick(long ticks) {
     updatePosition();
     reduceSpeed();
   }

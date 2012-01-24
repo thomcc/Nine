@@ -145,12 +145,12 @@ public class ShipLevel implements Level{
     }
     return res;
   }
-  public void tick() {
+  public void tick(long ticks) {
     for (int i = 0; i < _entities.size(); ++i) {
       Entity e = _entities.get(i);
       int tx = e.getBoundedX() >> 4;
       int ty = e.getBoundedY() >> 4;
-      e.tick();
+      e.tick(ticks);
       int ntx = e.getBoundedX() >> 4;
       int nty = e.getBoundedY() >> 4;
       

@@ -27,9 +27,8 @@ public class Game {
   }
   
   public void tick() {
-    ++_ticks;
     //_player.tick();
-    _level.tick();
+    _level.tick(_ticks++);
     _player.lookAt(_ih.mouseX+offX, _ih.mouseY+offY);
   }
   

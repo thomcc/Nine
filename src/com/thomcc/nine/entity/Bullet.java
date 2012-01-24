@@ -30,7 +30,7 @@ public class Bullet extends Entity {
   
   protected void collision(boolean ycol, int d) {
     if (_collisions++ > _maxCollisions) { remove(); return; }
-    if (ycol) {
+    if (ycol) { // FIXME this should NOT MAKE THE BULLETS SLIDE ALONG WALLS
       switch (d) {
       case +1: _px += Math.abs(_py/2); break;
       case -1: _px -= Math.abs(_py/2);  break;
@@ -46,7 +46,7 @@ public class Bullet extends Entity {
     
     
   }
-  public void tick() {
+  public void tick(long ticks) {
     if (++_time >= _life) { remove(); return; }
     updatePosition();
     int x0 = getX();//getBoundedX();
