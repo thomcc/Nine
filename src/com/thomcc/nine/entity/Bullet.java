@@ -25,18 +25,29 @@ public class Bullet extends Entity {
     _maxSpeed = 1000;
     _friction = 1;
     _collisions = 0;
-    _maxCollisions = 2;
+    _maxCollisions = 6;
   }
   
-  protected void collision() {
-    if (_collisions++ > _maxCollisions) remove();
+  protected void collision(boolean ycol, int d) {
+    if (_collisions++ > _maxCollisions) { remove(); return; }
+    if (ycol) {
+      switch (d) {
+      case +1: _px += Math.abs(_py/2); break;
+      case -1: _px -= Math.abs(_py/2);  break;
+      case  0: _py *= -1; break;
+      }
+    } else {
+      switch (d) {
+      case +1: _py += Math.abs(_px/2); break;
+      case -1: _py -= Math.abs(_px/2); break;
+      case  0: _px *= -1; break;
+      }
+    }
+    
+    
   }
   public void tick() {
-    ++_time;
-    if (_time >= _life) {
-      remove();
-      return;
-    }
+    if (++_time >= _life) { remove(); return; }
     updatePosition();
     int x0 = getX();//getBoundedX();
     int y0 = getY();//getBoundedY();

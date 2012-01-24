@@ -17,7 +17,7 @@ public class Game {
     offY = 0;
     _ih = ih;
     _level = new ShipLevel();
-    _player = new Player(_ih);
+    _player = new Player(_ih, this);
     _level.add(_player);
   }
   
@@ -25,6 +25,7 @@ public class Game {
     offX = x; 
     offY = y;
   }
+  
   public void tick() {
     ++_ticks;
     //_player.tick();

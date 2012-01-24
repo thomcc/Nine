@@ -62,30 +62,55 @@ public class Entity {
   public void hurt(Entity cause, int damage, double dir) {
   }
   protected void collision() {}
+  protected void collision(boolean ycol, int d) {
+    if (ycol) {
+      switch (d) {
+      case +1:
+        _px += Math.abs(_py/3);
+        _py /= 3;
+        break;
+      case -1:
+        _px -= Math.abs(_py/3);
+        _py /= 3;
+        break;
+      case 0:
+        _py /= 3;
+        break;
+      }
+    } else {
+      switch (d) {
+      case +1:
+        _py += Math.abs(_px/3);
+        _px /= 3;
+        break;
+      case -1:
+        _py -= Math.abs(_px/3);
+        _px /= 3;
+        break;
+      case 0:
+        _px /= 3;
+        break;
+      }
+    }
+  }
   public void updatePosition() {
     if (_px == 0 && _py == 0) return;
     
     if (_py != 0) {
       
       int dy = (_py < 0) ? -1 : 1;
-      
+
       int t = (int)Math.abs(_py);
       
       for (int iy = 0; iy < t; ++iy) {
         if (canMove(0, dy)) {
           y += dy;
         } else if (canMove(1, dy)) {
-          _px += Math.abs(_py/3);
-          collision();
-          _py /= 3;
+          collision(true, 1); break;
         } else if (canMove(-1, dy)) {
-          _px -= Math.abs(_py/3);
-          collision();
-          _py /= 3;
+          collision(true, -1); break;
         } else { 
-          _py /= -3d; 
-          collision();
-          break; 
+          collision(true, 0); break; 
         }
       }
     }
@@ -97,17 +122,11 @@ public class Entity {
         if (canMove(dx,0)) {
           x += dx;
         } else if (canMove(dx, 1)) {
-          _py += Math.abs(_px/3d);
-          collision();
-          _px /= 3d;
+          collision(false, 1); break;
         } else if (canMove(dx, -1)) {
-          _py -= Math.abs(_px/3d);
-          collision();
-          _px /= 3d;
+          collision(false, -1); break;
         } else { 
-          _px /= -3d;
-          collision();
-          break; 
+          collision(false, 0); break; 
         }
       }
     }

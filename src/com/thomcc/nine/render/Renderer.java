@@ -1,6 +1,8 @@
 package com.thomcc.nine.render;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
@@ -25,16 +27,20 @@ public class Renderer {
   public BufferedImage image;
   private int _width, _height;
   private int _offX, _offY;
-  //private Graphics _g;
+  private Graphics _g;
   private int _patW, _patH;
   private boolean[][] _floorPattern;
+  public Color textColor = new Color(255, 255, 230);
   public Renderer(int w, int h) {
     _offX = _offY = 0;
     _width = w;
     _height = h;
     image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
     _pix = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
-    //_g = image.getGraphics();
+    _g = image.getGraphics();
+    Graphics2D g2 = (Graphics2D)_g;
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+    g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
     _sprites = Art.generateDude();
     _bullet = Art.generateBullet();
     _patW = 300;
@@ -52,9 +58,7 @@ public class Renderer {
   
   public void render(Game game) {
 
-    Graphics g = image.getGraphics();
-    g.clearRect(0, 0, _width, _height);
-    
+    _g.clearRect(0, 0, _width, _height);
     Player p = game.getPlayer();
     Level l = game.getLevel();
     
@@ -66,14 +70,14 @@ public class Renderer {
     game.setOffset(xo, yo);
     
     l.render(this);
-    //renderBullet(p.getBoundedX(),)
-    //p.render(this);
     
-    renderMinimap(l, g);
-    g.dispose();
+    renderMinimap(l);
+    _g.setColor(textColor);
+    _g.drawString("Bullets: "+p.getFireCount(), 20, 20);
+    _g.drawString("Health: "+p.health, 20, 35);
     
   }
-  private void renderMinimap(Level l, Graphics g) {
+  private void renderMinimap(Level l) {
     
     int mmW = 70; int mmH = 70;
     int mmXoff = _width-20-mmW;
@@ -103,9 +107,9 @@ public class Renderer {
     yy /= lh/mmH;
     xx /= lw/mmW;
     pix[xx+yy*mmW] = Art.COCKPIT;
-    g.setColor(Color.BLACK);
-    g.drawRect(mmXoff-1, mmYoff-1, mmW+1, mmH+1);
-    g.drawImage(mmImg, mmXoff, mmYoff, null);
+    _g.setColor(Color.BLACK);
+    _g.drawRect(mmXoff-1, mmYoff-1, mmW+1, mmH+1);
+    _g.drawImage(mmImg, mmXoff, mmYoff, null);
   }
   
   public void renderShipLevel(ShipLevel l) {
@@ -154,7 +158,7 @@ public class Renderer {
   public void renderPlayer(int x, int y, int dir) {
     y -= Player.SIZE/2+_offY;
     x -= Player.SIZE/2+_offX;
-    image.getGraphics().drawImage(_sprites[dir], x, y, null);
+    _g.drawImage(_sprites[dir], x, y, null);
   }
   public void renderBullet(int x, int y) {
     y -= 2 + _offY;

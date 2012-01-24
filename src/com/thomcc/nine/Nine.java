@@ -70,6 +70,7 @@ public class Nine extends Canvas implements Runnable {
     }
   }
   private void render() {
+    
     BufferStrategy bs = getBufferStrategy();
     Graphics g = bs.getDrawGraphics();
     g.clearRect(0, 0, getWidth(), getHeight());
