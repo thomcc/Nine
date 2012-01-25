@@ -94,7 +94,7 @@ public class Renderer {
       for (int x = 0; x < mmW; ++x) 
         switch (m[y][x]) {
         case 0: pix[x+y*mmW] = FLOOR; break;
-        case 1: pix[x+y*mmW] = WALL_OUTER; break;
+        case -1: case 1: pix[x+y*mmW] = WALL_OUTER; break;
         case 2: pix[x+y*mmW] = WALL_INNER; break;
         }
     for (Entity e : l.getEntities()) {
@@ -139,6 +139,7 @@ public class Renderer {
         // if it's a wall draw it as a wall
         if (cell == 2) col = WALL_INNER;
         else if (cell == 1) col = WALL_OUTER;
+        else if (cell == -1) col = WALL_OUTER;
         // otherwise, render from the background pattern
         else /*if (Game.fancyGraphics)*/ {
           while (xx < 0) xx += _patW;
@@ -181,6 +182,15 @@ public class Renderer {
     Player p = g.getPlayer();
     int xo = p.getX()-_width/2;
     int yo = p.getY()-_height/2;
+    Level l = g.getLevel();
+    int xmin = 0;//_width/2;
+    int xmax = l.getWidth()-_width;
+    int ymin = 0;//_height/2;
+    int ymax = l.getHeight()-_height;
+    if (xo < xmin) xo = xmin;
+    else if (xo > xmax) xo = xmax;
+    if (yo < ymin) yo = ymin;
+    else if (yo > ymax) yo = ymax;
     setOffset(xo, yo);
     g.setOffset(xo, yo);
   }
