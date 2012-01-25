@@ -54,6 +54,8 @@ public class Enemy extends Entity {
       e.hurt(this, _health, dir);
     }
   }
+  public boolean appearsOnMinimap() { return true; }
+  public int getColor() { return 0xff649f42; }
   public void render(Renderer r) {
     int d = (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
     //r.render(2, getBoundedX(), getBoundedY(), d);

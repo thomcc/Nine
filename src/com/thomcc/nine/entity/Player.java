@@ -28,6 +28,8 @@ public class Player extends Entity {
     _fireCount = _maxFireCount;
     _fireRate = 10;
   }
+  public boolean appearsOnMinimap() { return true; }
+  public int getColor() { return 0xffff6249; }
   public void setLevel(Level l) {
     super.setLevel(l);
     l.findPlayerLocation(this);

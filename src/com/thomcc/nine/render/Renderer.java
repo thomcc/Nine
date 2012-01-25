@@ -8,7 +8,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.thomcc.nine.Game;
-import com.thomcc.nine.entity.Enemy;
 import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
@@ -22,6 +21,7 @@ public class Renderer {
   public static final int CHAR_HEIGHT = 12;
   public static final int CHARS_PER_ROW = 43;
 
+  private static final Color MENU_COLOR = new Color(0xcc, 0xcc, 0xcc);
   private static final int FLOOR = 0x616786;
   private static final int DFLOOR = 0x575d79;
   private static final int WALL_OUTER = 0x222222;
@@ -82,8 +82,8 @@ public class Renderer {
     _g.clearRect(0, 0, _width, _height);
     game.render(this);
   }
+  
   public void renderMinimap(Level l) {
-    
     int mmW = 60; int mmH = 60;
     int mmXoff = _width-20-mmW;
     int mmYoff = 20;
@@ -98,12 +98,8 @@ public class Renderer {
         case 2: pix[x+y*mmW] = WALL_INNER; break;
         }
     for (Entity e : l.getEntities()) {
-      int col;
-      if (e instanceof Player) {
-        col = Art.PLAYERCOLOR;
-      } else if (e instanceof Enemy) {
-        col = Art.ENEMYCOLOR;
-      } else continue;
+      if (!e.appearsOnMinimap()) continue;
+      int col = e.getColor();
       int x = e.getBoundedX();
       int y = e.getBoundedY();
       x /= l.getHeight()/mmH;
@@ -115,7 +111,7 @@ public class Renderer {
     _g.drawImage(mmImg, mmXoff, mmYoff, null);
   }
   
-  public void render(ShipLevel l) { //FIXME i don't render entities on tthe other side of the divide.
+  public void render(ShipLevel l) {
     int[][] map = l.map;
     int lw = l.width;
     int lh = l.height;
@@ -158,8 +154,6 @@ public class Renderer {
     _g.drawImage(s.get(dir), x, y, null);
   }
   private void renderFontChar(int px, int py, int xf, int yf, int col) {
-    //px -= _offX;
-    //py -= _offY;
     int offset = xf * CHAR_WIDTH + yf * CHAR_HEIGHT * _fontImg.getWidth();
     for (int y = 0; y < CHAR_HEIGHT; ++y) {
       if (y + py < 0 || y + py >= _height) continue;
@@ -169,23 +163,22 @@ public class Renderer {
       }
     }
   }
+  
   public void renderString(String str, int x, int y, int color) { 
     for (int i = 0; i < str.length(); ++i) {
       int ix = CHARS.indexOf(str.charAt(i));
       if (ix >= 0) renderFontChar(x+i*CHAR_WIDTH, y, ix % CHARS_PER_ROW, ix / CHARS_PER_ROW, color);
     }
   }
-  public void renderString(String str, int x, int y) { renderString(str, x, y, 0xffffdd); }
-  public void render(int s_idx, int x, int y, int dir) { render(sprites[s_idx], x, y, dir); }
-  public Graphics getGraphics() { return image.getGraphics(); }
+
   public void centerAroundPlayer(Game g) {
     Player p = g.getPlayer();
     int xo = p.getX()-_width/2;
     int yo = p.getY()-_height/2;
     Level l = g.getLevel();
-    int xmin = 0;//_width/2;
+    int xmin = 0;
     int xmax = l.getWidth()-_width;
-    int ymin = 0;//_height/2;
+    int ymin = 0;
     int ymax = l.getHeight()-_height;
     if (xo < xmin) xo = xmin;
     else if (xo > xmax) xo = xmax;
@@ -194,11 +187,8 @@ public class Renderer {
     setOffset(xo, yo);
     g.setOffset(xo, yo);
   }
-  private void setOffset(int x, int y) { _offX = x; _offY = y; }
-  private static final Color menuColor = new Color(0xcc, 0xcc, 0xcc);
+  
   public void renderFocusRequest() {
-    
-    
     String rstr = "Click to resume!";
     int rstrw = "Click to resume!".length()*CHAR_WIDTH;
     int rstrh = CHAR_HEIGHT;
@@ -206,10 +196,16 @@ public class Renderer {
     int mhei = rstrh+40;
     int mx = (_width-mwid)/2;
     int my = (_height-mhei)/2;
-    _g.setColor(menuColor);
+    _g.setColor(MENU_COLOR);
     _g.fillRoundRect(mx, my, mwid, mhei, 10, 10);
-    _g.setColor(menuColor.brighter());
+    _g.setColor(MENU_COLOR.brighter());
     _g.drawRoundRect(mx, my, mwid, mhei, 10, 10);
     renderString(rstr,mx+30, my+20, 0);
   }
+  public int getViewportWidth() { return _width; }
+  public int getViewportHeight() { return _height; }
+  private void setOffset(int x, int y) { _offX = x; _offY = y; }
+  public void renderString(String str, int x, int y) { renderString(str, x, y, 0xffffdd); }
+  public void render(int s_idx, int x, int y, int dir) { render(sprites[s_idx], x, y, dir); }
+  public Graphics getGraphics() { return image.getGraphics(); }
 }

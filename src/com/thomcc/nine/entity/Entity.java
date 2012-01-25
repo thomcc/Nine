@@ -21,18 +21,11 @@ public class Entity {
   protected double _maxSpeed;
   protected double _friction;
   protected double _collisionFriction;
-  public int getDirection() {
-    return (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
-  }
-  public void render(Renderer r) {}
-  public void remove() {
-    removed = true;
-  }
+  
   public void tick(long ticks) {
     updatePosition();
     reduceSpeed();
   }
-  
   public void lookAt(int px, int py) {
     _eyeX = px;
     _eyeY = py;
@@ -61,9 +54,6 @@ public class Entity {
     }
   
   }
-  public void hurt(Entity cause, int damage, double dir) {
-  }
-  protected void collision() {}
   protected void collision(boolean ycol, double dx, double dy) {
     if (!_canSlide) { bounce(dx, dy); return; }
     if (ycol) {
@@ -176,12 +166,6 @@ public class Entity {
     while (y < lh) y += lh;
     if (y > lh) y %= lh;
   }
-  protected void touched(Entity e) {
-    
-  }
-  public boolean blocks(Entity e) {
-    return false;
-  }
   
   
   private boolean canMove(int dx, int dy) {
@@ -206,13 +190,6 @@ public class Entity {
     return true;
   }
   
-  public int getX() { 
-    return (int)x;
-  }
-  
-  public int getY() { 
-    return (int)y; 
-  }
   public int getBoundedX() {
     int xx = (int) x;
     if (_level != null) {
@@ -232,10 +209,7 @@ public class Entity {
     }
     return yy;
   }
-  public void setLevel(Level l) { 
-    _level = l;
-    
-  }
+  
 
   public void setPosition(int x, int y) {
     if (_startX < 0 && _startY < 0) {
@@ -248,4 +222,17 @@ public class Entity {
       this.y = y;
     }
   }
+
+  public void remove() { removed = true; }
+  public void hurt(Entity cause, int damage, double dir) {}
+  protected void collision() {}
+  public int getX() { return (int)x; }
+  public int getY() { return (int)y; }
+  public int getDirection() { return (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15); }
+  public void setLevel(Level l) { _level = l; }
+  protected void touched(Entity e) {}
+  public boolean blocks(Entity e) { return false; }
+  public boolean appearsOnMinimap() { return false; }
+  public int getColor() { return 0; }
+  public void render(Renderer r) {}
 }
