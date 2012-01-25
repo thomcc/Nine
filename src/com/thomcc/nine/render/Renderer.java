@@ -5,6 +5,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import com.thomcc.nine.Game;
 import com.thomcc.nine.entity.Player;
@@ -12,47 +15,72 @@ import com.thomcc.nine.level.*;
 import com.thomcc.nine.level.gen.VoronoiNoise;
 
 public class Renderer {
+  public static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()[]<>/"+
+                                     "abcdefghijklmnopqrstuvwxyz.,?!:;_`'\"@#$%^&\\"+
+                                     " *+-=~{}|";
+  public static final int CHAR_WIDTH = 6;
+  public static final int CHAR_HEIGHT = 12;
+  public static final int CHARS_PER_ROW = 43;
+
   private static final int FLOOR = 0x616786;
-  private static final int DFLOOR;// = new Color(FLOOR).darker().getRGB();
-  static { 
-    float[] hsvf = new float[]{ 0, 0, 0 }; 
-    Color.RGBtoHSB(0x61, 0x67, 0x86, hsvf);
-    DFLOOR = Color.HSBtoRGB(hsvf[0], hsvf[1], hsvf[2]*0.9f);
-  }
+  private static final int DFLOOR = 0x575d79;
   private static final int WALL_OUTER = 0x222222;
-  private static final int WALL_INNER = 0x2D81C3;//0x3a6d4f;
+  private static final int WALL_INNER = 0x2D81C3;
+  
   private int[] _pix;
+  
   public BufferedImage image;
+  
   private int _width, _height;
-  private int _offX, _offY;
+  private int _offX = 0, _offY = 0;
   private Graphics _g;
   private int _patW, _patH;
   private boolean[][] _floorPattern;
   public Color textColor = new Color(255, 255, 230);
   public final Sprite[] sprites;
+  private BufferedImage _fontImg;
+  private int[] _fontPix;
   public Renderer(int w, int h) {
-    _offX = _offY = 0;
+    
     _width = w;
     _height = h;
+    
     image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+    
     _pix = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+    
     _g = image.getGraphics();
+    
     Graphics2D g2 = (Graphics2D)_g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+    
+    
+    try { 
+      _fontImg = ImageIO.read(Renderer.class.getResourceAsStream("/font.png")); 
+    } catch (IOException e) { 
+      throw new RuntimeException(e); 
+    }
+    _fontPix = _fontImg.getRGB(0, 0, _fontImg.getWidth(), _fontImg.getHeight(), null, 0, _fontImg.getWidth());
+    
     Art a = new Art();
+    
     sprites = a.sprites;
+    
     _patW = _patH = 300;
     
-    
-    double[][] floorPat = new VoronoiNoise(_patW, _patH, 60).calculate(VoronoiNoise.DISTANCE_NORMAL);
-
     _floorPattern = new boolean[_patH][_patW];
+    
+    generateFloorPattern();
+    
+  }
+  
+  private void generateFloorPattern() {
+    double[][] floorPat = new VoronoiNoise(_patW, _patH, 60).calculate(VoronoiNoise.DISTANCE_NORMAL);
     for (int y = 0; y < _patH; ++y) 
       for (int x = 0; x < _patW; ++x) 
         if (floorPat[y][x] < 0.05) _floorPattern[y][x] = true;
         else _floorPattern[y][x] = false;
-    
   }
   
   public void render(Game game) {
@@ -71,10 +99,12 @@ public class Renderer {
     l.render(this);
     
     renderMinimap(l);
-    _g.setColor(textColor);
-    _g.drawString("Bullets: "+p.getFireCount(), 20, 20);
-    _g.drawString("Health: "+p.health, 20, 35);
+    renderGui(p);
     
+  }
+  private void renderGui(Player p) {
+    renderString("Bullets: "+p.getFireCount(), 6, 6);
+    renderString("Health: "+p.health, 6, 6+CHAR_HEIGHT);
   }
   private void renderMinimap(Level l) {
     
@@ -84,17 +114,13 @@ public class Renderer {
     int[][] m = l.getMinimap(mmW, mmH);
     BufferedImage mmImg = new BufferedImage(mmW, mmH, BufferedImage.TYPE_INT_RGB);
     int[] pix = ((DataBufferInt)mmImg.getRaster().getDataBuffer()).getData();
-    
-    for (int y = 0; y < mmH; ++y) {
-      for (int x = 0; x < mmW; ++x) {
-        int pt = m[y][x];
-        switch (pt) {
+    for (int y = 0; y < mmH; ++y)
+      for (int x = 0; x < mmW; ++x) 
+        switch (m[y][x]) {
         case 0: pix[x+y*mmW] = FLOOR; break;
         case 1: pix[x+y*mmW] = WALL_OUTER; break;
         case 2: pix[x+y*mmW] = WALL_INNER; break;
         }
-      }
-    }
     int lw = l.getWidth();
     int lh = l.getHeight();
     int xx = l.getPlayer().getX();//+1;
@@ -111,7 +137,7 @@ public class Renderer {
     _g.drawImage(mmImg, mmXoff, mmYoff, null);
   }
   
-  public void renderShipLevel(ShipLevel l) {
+  public void render(ShipLevel l) {
     int[][] map = l.map;
     int lw = l.width;
     int lh = l.height;
@@ -132,6 +158,7 @@ public class Renderer {
         xp %= lw;
         int cell = cellrow[xp];
         int col = FLOOR;
+        // if it's a wall draw it as a wall
         if (cell == 2) col = WALL_INNER;
         else if (cell == 1) col = WALL_OUTER;
         // otherwise, render from the background pattern
@@ -151,8 +178,26 @@ public class Renderer {
     x -= _offX+s.size/2;
     _g.drawImage(s.get(dir), x, y, null);
   }
-  
-  public void render(int sidx, int x, int y, int dir) { render(sprites[sidx], x, y, dir); }
+  private void renderFontChar(int px, int py, int xf, int yf, int col) {
+    //px -= _offX;
+    //py -= _offY;
+    int offset = xf * CHAR_WIDTH + yf * CHAR_HEIGHT * _fontImg.getWidth();
+    for (int y = 0; y < CHAR_HEIGHT; ++y) {
+      if (y + py < 0 || y + py >= _height) continue;
+      for (int x = 0; x < CHAR_WIDTH; ++x) {
+        if (x + px < 0 || x + px >= _width || _fontPix[x+y*_fontImg.getWidth()+offset] > 0) continue;
+        _pix[(x + px) + (y + py)*_width] = col;
+      }
+    }
+  }
+  public void renderString(String str, int x, int y, int color) { 
+    for (int i = 0; i < str.length(); ++i) {
+      int ix = CHARS.indexOf(str.charAt(i));
+      if (ix >= 0) renderFontChar(x+i*CHAR_WIDTH, y, ix % CHARS_PER_ROW, ix / CHARS_PER_ROW, color);
+    }
+  }
+  public void renderString(String str, int x, int y) { renderString(str, x, y, 0xffffdd); }
+  public void render(int s_idx, int x, int y, int dir) { render(sprites[s_idx], x, y, dir); }
   public Graphics getGraphics() { return image.getGraphics(); }
   private void setOffset(int x, int y) { _offX = x; _offY = y; }
 }

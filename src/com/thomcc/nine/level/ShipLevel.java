@@ -164,7 +164,7 @@ public class ShipLevel implements Level{
     }
   }
   public void render(Renderer r) {
-    r.renderShipLevel(this);
+    r.render(this);
     for (Entity e : _entities) {
       e.render(r);
     }

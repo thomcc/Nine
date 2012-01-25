@@ -11,14 +11,32 @@ CLOSED: [2012-01-24 Tue 17:37]
 * DONE look into level generation types
 CLOSED: [2012-01-24 Tue 01:00]
 - State "DONE"       from "TODO"       [2012-01-24 Tue 01:00]
-  - Ridged multifractal (is this just absed perlin noise?)
-  - voronoi?
   - [[http://www.neilblevins.com/cg_education/procedural_noise/procedural_noise.html][this link may be useful]]
-  - "Worley Voronoi F2-F1, Manhattan and Chebychev Distance Metrics"
-  - "Real Name: Worley Voronoi F4, Chebychev Distance Metric, w. Values Mapped
-Filter Forge (pshop plugin)
-Blocks
-Formula: F4
-Roughness: 64, Contrast: 0
-Details: 0
-Profile: Flat""
+
+* Consider using this for menus: 
+  private static final int[][] menuCorners = new int[][] {
+    { _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, 1, 1, 1, 1 },
+    { _, _, _, _, 1, 1, 2, 2, 2, 2 },
+    { _, _, _, 1, 2, 2, 1, 1, 1, 1 },
+    { _, _, 1, 2, 1, 1, 3, 3, 3, 3 },
+    { _, _, 1, 2, 1, 3, 3, 3, 3, 3 },
+    { _, 1, 2, 1, 3, 3, 3, 3, 3, 3 },
+    { _, 1, 2, 1, 3, 3, 3, 3, 3, 3 },
+    { _, 1, 2, 1, 3, 3, 3, 3, 3, 3 },
+    { _, 1, 2, 1, 3, 3, 3, 3, 3, 3 }
+  };
+  private static final int[][] menuEdges = new int[][] {
+    { _, _, _, _, _, _, _, _, _, _ },
+    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
+    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+    { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }
+  };
+  
+  

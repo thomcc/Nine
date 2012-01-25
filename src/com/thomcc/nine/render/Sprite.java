@@ -9,6 +9,30 @@ public class Sprite {
   public final int[][] template;
   public final int[] colors;
   public final int size;
+  public Sprite(int[][] img) {
+    int max = -1;
+    for (int i = 0; i < img.length*img[0].length; ++i)
+      if (img[i/img.length][i%img.length] > max) 
+        max = img[i/img.length][i%img.length];
+    int c = 255/max;
+    
+    int[] cols = new int[max];
+    for (int i = 0, cc = c; i < max; ++i, cc += c) 
+      cols[i] = 0xff << 24 | cc << 16 | cc << 8 | cc;
+    
+    this.dirs = 1;
+    this.colors = cols;
+    template = img;
+    size = img.length;
+    for (int i = 0; i < size; ++i)
+      if (img[i].length != size)
+        throw new IllegalArgumentException("template image must be square!");
+    images = new BufferedImage[dirs];
+    initializeImages();
+  }
+  public Sprite(int[][] img, int[] colors) {
+    this(img, 1, colors);
+  }
   public Sprite(int[][] img, int dirs, int[] colors) {
     this.dirs = dirs;
     this.colors = colors;
@@ -31,7 +55,7 @@ public class Sprite {
     if (c == 0) {
       return 0;
     } else {
-      return colors[c-1];
+      return colors[c];
     }
   }
   private void initializeImages() {
