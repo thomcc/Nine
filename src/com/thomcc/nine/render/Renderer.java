@@ -195,4 +195,21 @@ public class Renderer {
     g.setOffset(xo, yo);
   }
   private void setOffset(int x, int y) { _offX = x; _offY = y; }
+  private static final Color menuColor = new Color(0xcc, 0xcc, 0xcc);
+  public void renderFocusRequest() {
+    
+    
+    String rstr = "Click to resume!";
+    int rstrw = "Click to resume!".length()*CHAR_WIDTH;
+    int rstrh = CHAR_HEIGHT;
+    int mwid = rstrw+60;
+    int mhei = rstrh+40;
+    int mx = (_width-mwid)/2;
+    int my = (_height-mhei)/2;
+    _g.setColor(menuColor);
+    _g.fillRoundRect(mx, my, mwid, mhei, 10, 10);
+    _g.setColor(menuColor.brighter());
+    _g.drawRoundRect(mx, my, mwid, mhei, 10, 10);
+    renderString(rstr,mx+30, my+20, 0);
+  }
 }

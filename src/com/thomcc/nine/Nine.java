@@ -40,7 +40,6 @@ public class Nine extends Canvas implements Runnable {
     int ticks = 0;
     int frames = 0;
     double needed = 0;
-
     while (_running) {
       long now = System.nanoTime();
       needed += (now - lastLoop) / skipTicks;
@@ -76,13 +75,17 @@ public class Nine extends Canvas implements Runnable {
     g.clearRect(0, 0, getWidth(), getHeight());
     
     _renderer.render(_game);
-    
+    if (!hasFocus()) _renderer.renderFocusRequest();
     g.drawImage(_renderer.image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
     g.dispose();
     bs.show();
   }
   private void tick() {
-    _game.tick();
+    if (!hasFocus()) {
+      _input.releaseAll();
+    } else {
+      _game.tick();
+    }
   }
   public static void main(String[] args) {
     Nine game = new Nine();

@@ -16,6 +16,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener {
     game.addKeyListener(this);
   }
   
+  
   private void onKey(KeyEvent e, boolean pressed) {
     switch (e.getKeyCode()) {
     case KeyEvent.VK_UP:
@@ -43,15 +44,16 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener {
     case KeyEvent.VK_CONTROL: mod_ctrl = pressed; break;
     }
   }
-  public void setMouse(int x, int y) { mouseX = x/2; mouseY = y/2; }
+  public void onMouse(int x, int y) { mouseX = x/2; mouseY = y/2; }
+  public void releaseAll() { mouseDown = up = down = left = right = fire = select = mod_ctrl = mod_shift = mod_alt = false; }
   public void mousePressed(MouseEvent e) { mouseDown = true; }
   public void mouseReleased(MouseEvent e) { mouseDown = false; }
-  public void mouseMoved(MouseEvent e) { setMouse(e.getX(), e.getY()); }
+  public void mouseMoved(MouseEvent e) { onMouse(e.getX(), e.getY()); }
   public void mouseExited(MouseEvent e) { mouseX = -1; mouseY = -1; }
   public void mouseClicked(MouseEvent e) {}
   public void mouseEntered(MouseEvent e) {}
   public void keyTyped(KeyEvent e) {}
-  public void mouseDragged(MouseEvent e) { setMouse(e.getX(), e.getY()); }
+  public void mouseDragged(MouseEvent e) { onMouse(e.getX(), e.getY()); }
   public void keyPressed(KeyEvent e) { onKey(e, true); }
   public void keyReleased(KeyEvent e) { onKey(e, false); }
 }
