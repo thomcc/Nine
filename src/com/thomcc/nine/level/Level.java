@@ -15,6 +15,7 @@ public interface Level {
   public void render(Renderer r);
   public ArrayList<Entity> getEntities(int x0, int y0, int x1, int y1);
   public void findPlayerLocation(Player p);
+  public int enemiesRemaining();
   public int[][] getMinimap(int w, int h);
   public void tick(long ticks);
   public Player getPlayer();

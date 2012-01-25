@@ -5,10 +5,10 @@ import java.awt.event.*;
 public class Input implements KeyListener, MouseListener, MouseMotionListener {
   public int mouseX, mouseY;
   public boolean mouseDown;
-  public boolean up, down, left, right, debug, select;
+  public boolean up, down, left, right, debug, select, fire;
   
   public Input(Nine game) {
-    mouseDown = up = down = left = right = false;
+    mouseDown = up = down = left = right = fire = select = false;
     mouseX = mouseY = -1;
     game.addMouseListener(this);
     game.addMouseMotionListener(this);
@@ -38,6 +38,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener {
       right = pressed;
       break;
     case KeyEvent.VK_SPACE:
+      fire = pressed;
     case KeyEvent.VK_ENTER:
     case KeyEvent.VK_NUMPAD0:
       select = pressed;

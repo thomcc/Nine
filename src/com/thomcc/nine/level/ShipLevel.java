@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import java.util.Random;
 
+import com.thomcc.nine.entity.Enemy;
 import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.gen.VoronoiLevelGen;
@@ -17,6 +18,7 @@ public class ShipLevel implements Level{
   private int[][] _cachedmm;
   private int _cmmw = -1, _cmmh = -1;
   private ArrayList<Entity>[] _entLookup;
+  private int _enemiesRemaining;
   public ShipLevel() { this(700, 700, 100); }
   
 
@@ -32,12 +34,15 @@ public class ShipLevel implements Level{
     System.out.format("Voronoi calculated in %.1f seconds. (%s nanoseconds, %s milliseconds)\n", (double)t/1e9, t, millis);
     System.out.format("\tWidth: %s, Height: %s, Points: %s\n", width, height, points);
     _entities = new ArrayList<Entity>();
-    
+    _enemiesRemaining = 0;
     _entLookup = new ArrayList[width * height / 64];
     for (int i = 0; i < _entLookup.length; ++i) {
       _entLookup[i] = new ArrayList<Entity>();
     }
-    
+    for (int i = 0; i < 50; ++i) {
+      findLocationAndAdd(new Enemy());
+      ++_enemiesRemaining;
+    }
   }
   
   public boolean blocks(int x, int y) {
@@ -96,7 +101,20 @@ public class ShipLevel implements Level{
   public int getHeight() { return height; }
   
   public Player getPlayer() { return _player; }
-  
+  public void findLocationAndAdd(Entity e) {
+    Random r = new Random();
+    int x = -1; int y = -1;
+    while (true) {
+      x = r.nextInt(width);
+      y = r.nextInt(height);
+      if (get(x, y) == 0 && 
+          get(x-e.rx, y-e.ry) == 0 && get(x-e.rx, y+e.ry) == 0 && 
+          get(x+e.rx, y-e.ry) == 0 && get(x+e.rx, y+e.ry) == 0) 
+        break;
+    }
+    e.setPosition(x, y);
+    add(e);
+  }
   public void add(Entity e) {
     if (e instanceof Player) {
       _player = (Player) e;
@@ -113,8 +131,11 @@ public class ShipLevel implements Level{
   }
   private void removeEntity(int i, int j, Entity e) {
     _entLookup[i+j*(width>>4)].remove(e);
+    
   }
-
+  public int enemiesRemaining() {
+    return _enemiesRemaining;
+  }
 
   public void remove(Entity e) {
     e.removed = true;
@@ -156,7 +177,9 @@ public class ShipLevel implements Level{
       
       if (e.removed) {
         _entities.remove(i--);
+        
         removeEntity(ntx, nty, e);
+        if (e instanceof Enemy) --_enemiesRemaining;
       } else if (tx != ntx || ty != nty) {
         removeEntity(tx, ty, e);
         insertEntity(ntx, nty, e);
@@ -168,8 +191,6 @@ public class ShipLevel implements Level{
     for (Entity e : _entities) {
       e.render(r);
     }
-    r.renderMinimap(this);
-    
   }
 
 }

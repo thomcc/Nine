@@ -43,6 +43,7 @@ public class Bullet extends Entity {
     int y1 = getY();
     if (x0 == x1 && y0 == y1 && !_collided) { remove(); return; }
     ArrayList<Entity> toHit = _level.getEntities(x1, y1, x1, y1);
+    //System.out.println(toHit);
     for (Entity e : toHit) {
       if (!(e instanceof Bullet)) {
         e.hurt(owner, 2, dir+Math.PI);

@@ -8,7 +8,7 @@ public class Menu {
   public Game g;
   
   private int _selected = 0;
-  private int _lastMX = -1, _lastMY = -1;
+//  private int _lastMX = -1, _lastMY = -1;
   
   private static final String[] options = { "Start", "How to play" };
   
