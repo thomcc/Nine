@@ -24,9 +24,9 @@ public class Player extends Entity {
     _friction = 0.9;
     _maxSpeed = 4.0;
     _maxFireCount = 20;
-    _reAmmoRate = 10;
+    _reAmmoRate = 20;
     _fireCount = _maxFireCount;
-    _fireRate = 5;
+    _fireRate = 10;
   }
   public void setLevel(Level l) {
     super.setLevel(l);

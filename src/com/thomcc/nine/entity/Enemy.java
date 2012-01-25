@@ -49,7 +49,11 @@ public class Enemy extends Entity {
     _px += cd*damage;
     _py += sd*damage;
   }
-  
+  protected void touched(Entity e) {
+    if (e instanceof Player) {
+      e.hurt(this, _health, dir);
+    }
+  }
   public void render(Renderer r) {
     int d = (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
     r.render(2, (int)x, (int)y, d);

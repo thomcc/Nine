@@ -1,5 +1,6 @@
 package com.thomcc.nine.entity;
 
+import java.util.List;
 import java.util.Random;
 
 import com.thomcc.nine.level.Level;
@@ -120,7 +121,7 @@ public class Entity {
   }
   public void updatePosition() {
     if (_px == 0 && _py == 0) return;
-    
+    //int lastx = getBoundedX(), lasty = getBoundedY();
     if (_py != 0) {
       
       int dy = (_py < 0) ? -1 : 1;
@@ -161,8 +162,22 @@ public class Entity {
         }
       }
     }
+    int xx = getBoundedX();
+    int yy = getBoundedY();
+    //List<Entity> lastinside = _level.getEntities(lastx-rx, lasty-ry, lastx+rx, lasty+ry);
+    List<Entity> nowinside = _level.getEntities(xx-rx,yy-ry,xx+rx,yy+ry);
+    for (Entity e : nowinside)
+      if (e == this) continue;
+      else e.touched(this);
+    
+    
   }
-  
+  protected void touched(Entity e) {
+    
+  }
+  public boolean blocks(Entity e) {
+    return false;
+  }
   
   
   private boolean canMove(int dx, int dy) {
