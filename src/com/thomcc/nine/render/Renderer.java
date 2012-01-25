@@ -1,8 +1,6 @@
 package com.thomcc.nine.render;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.IOException;
@@ -51,11 +49,6 @@ public class Renderer {
     
     _g = image.getGraphics();
     
-    Graphics2D g2 = (Graphics2D)_g;
-    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-    g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-    
-    
     try { 
       _fontImg = ImageIO.read(Renderer.class.getResourceAsStream("/font.png")); 
     } catch (IOException e) { 
@@ -84,29 +77,10 @@ public class Renderer {
   }
   
   public void render(Game game) {
-
     _g.clearRect(0, 0, _width, _height);
-    Player p = game.getPlayer();
-    Level l = game.getLevel();
-    
-    int xo = p.getX()-_width/2;
-    int yo = p.getY()-_height/2;
-    
-    setOffset(xo, yo);
-
-    game.setOffset(xo, yo);
-    
-    l.render(this);
-    
-    renderMinimap(l);
-    renderGui(p);
-    
+    game.render(this);
   }
-  private void renderGui(Player p) {
-    renderString("Bullets: "+p.getFireCount(), 6, 6);
-    renderString("Health: "+p.health, 6, 6+CHAR_HEIGHT);
-  }
-  private void renderMinimap(Level l) {
+  public void renderMinimap(Level l) {
     
     int mmW = 70; int mmH = 70;
     int mmXoff = _width-20-mmW;
@@ -199,5 +173,12 @@ public class Renderer {
   public void renderString(String str, int x, int y) { renderString(str, x, y, 0xffffdd); }
   public void render(int s_idx, int x, int y, int dir) { render(sprites[s_idx], x, y, dir); }
   public Graphics getGraphics() { return image.getGraphics(); }
+  public void centerAroundPlayer(Game g) {
+    Player p = g.getPlayer();
+    int xo = p.getX()-_width/2;
+    int yo = p.getY()-_height/2;
+    setOffset(xo, yo);
+    g.setOffset(xo, yo);
+  }
   private void setOffset(int x, int y) { _offX = x; _offY = y; }
 }

@@ -168,6 +168,7 @@ public class ShipLevel implements Level{
     for (Entity e : _entities) {
       e.render(r);
     }
+    r.renderMinimap(this);
     
   }
 
