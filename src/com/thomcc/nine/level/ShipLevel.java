@@ -19,7 +19,7 @@ public class ShipLevel implements Level{
   private int _cmmw = -1, _cmmh = -1;
   private ArrayList<Entity>[] _entLookup;
   private int _enemiesRemaining;
-  public ShipLevel() { this(700, 700, 100); }
+  public ShipLevel() { this(900, 900, 100); }
   
 
   @SuppressWarnings("unchecked")
@@ -141,6 +141,7 @@ public class ShipLevel implements Level{
     e.removed = true;
     _entities.remove(e);
   }
+  public ArrayList<Entity> getEntities() { return _entities; }
   public ArrayList<Entity> getEntities(int x0, int y0, int x1, int y1) {
     ArrayList<Entity> res = new ArrayList<Entity>();
     int xt0 = (x0 >> 4) - 1;

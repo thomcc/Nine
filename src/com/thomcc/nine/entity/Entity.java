@@ -169,8 +169,12 @@ public class Entity {
     for (Entity e : nowinside)
       if (e == this) continue;
       else e.touched(this);
-    
-    
+    double lw = _level.getWidth();
+    double lh = _level.getHeight();
+    while (x < lw) x += lw;
+    if (x > lw) x %= lw;
+    while (y < lh) y += lh;
+    if (y > lh) y %= lh;
   }
   protected void touched(Entity e) {
     

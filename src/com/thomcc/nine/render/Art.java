@@ -3,6 +3,7 @@ package com.thomcc.nine.render;
 
 public class Art {
   public static final int PLAYERCOLOR = 0xffff6249;//0xff0023ff;
+  public static final int ENEMYCOLOR = 0xff649f42;
   private static final int _ = 0;
   private static final int A = 1;
   private static final int B = 2;

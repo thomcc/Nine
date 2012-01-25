@@ -5,10 +5,10 @@ import com.thomcc.nine.render.Renderer;
 public class Enemy extends Entity {
   private int _health;
   public Enemy() {
-    _health = 2;
+    _health = 1;
     _collisionFriction = 0.3;
     _canSlide = true;
-    _friction = 0.9;
+    _friction = 0.98;
     _maxSpeed = 4.0;
     rx = ry = 3;
     _moveInterval = 40 + random.nextInt(40);
@@ -56,6 +56,7 @@ public class Enemy extends Entity {
   }
   public void render(Renderer r) {
     int d = (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
+    //r.render(2, getBoundedX(), getBoundedY(), d);
     r.render(2, (int)x, (int)y, d);
   }
 }

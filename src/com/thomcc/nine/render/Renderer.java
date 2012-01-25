@@ -8,6 +8,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.thomcc.nine.Game;
+import com.thomcc.nine.entity.Enemy;
+import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
 import com.thomcc.nine.level.gen.VoronoiNoise;
@@ -82,7 +84,7 @@ public class Renderer {
   }
   public void renderMinimap(Level l) {
     
-    int mmW = 70; int mmH = 70;
+    int mmW = 60; int mmH = 60;
     int mmXoff = _width-20-mmW;
     int mmYoff = 20;
     int[][] m = l.getMinimap(mmW, mmH);
@@ -95,29 +97,31 @@ public class Renderer {
         case 1: pix[x+y*mmW] = WALL_OUTER; break;
         case 2: pix[x+y*mmW] = WALL_INNER; break;
         }
-    int lw = l.getWidth();
-    int lh = l.getHeight();
-    int xx = l.getPlayer().getX();//+1;
-    int yy = l.getPlayer().getY();//+1;
-    while (xx < 0) xx += lw;
-    while (yy < 0) yy += lh;
-    yy %= lh;
-    xx %= lw;
-    yy /= lh/mmH;
-    xx /= lw/mmW;
-    pix[xx+yy*mmW] = Art.PLAYERCOLOR;
+    for (Entity e : l.getEntities()) {
+      int col;
+      if (e instanceof Player) {
+        col = Art.PLAYERCOLOR;
+      } else if (e instanceof Enemy) {
+        col = Art.ENEMYCOLOR;
+      } else continue;
+      int x = e.getBoundedX();
+      int y = e.getBoundedY();
+      x /= l.getHeight()/mmH;
+      y /= l.getWidth()/mmW;
+      pix[x+y*mmW] = col;
+    }
     _g.setColor(Color.BLACK);
     _g.drawRect(mmXoff-1, mmYoff-1, mmW+1, mmH+1);
     _g.drawImage(mmImg, mmXoff, mmYoff, null);
   }
   
-  public void render(ShipLevel l) {
+  public void render(ShipLevel l) { //FIXME i don't render entities on tthe other side of the divide.
     int[][] map = l.map;
     int lw = l.width;
     int lh = l.height;
     for (int y = 0; y < _height; ++y) {
       int yp = _offY + y;   // yp is the coordinate on the levels map
-      int yy = _offY/4 + y; // yy is the coordinate on the background map 
+      int yy = _offY/3 + y; // yy is the coordinate on the background map 
       while (yp < 0) yp += lh;
       yp %= lh;
 //      if (Game.fancyGraphics) {
@@ -127,7 +131,7 @@ public class Renderer {
       int[] cellrow = map[yp]; 
       for (int x = 0; x < _width; ++x) {
         int xp = _offX + x;
-        int xx = _offX/4 + x;
+        int xx = _offX/3 + x;
         while (xp < 0) xp += lw;
         xp %= lw;
         int cell = cellrow[xp];

@@ -26,7 +26,7 @@ public class Bullet extends Entity {
     _friction = 1;
     _collisionFriction = 1;
     _collisions = 0;
-    _maxCollisions = 10;
+    _maxCollisions = 20;
   }
   protected void collision(boolean ycol, double dx, double dy) {
     _collided = true;
@@ -42,7 +42,7 @@ public class Bullet extends Entity {
     int x1 = getX();
     int y1 = getY();
     if (x0 == x1 && y0 == y1 && !_collided) { remove(); return; }
-    ArrayList<Entity> toHit = _level.getEntities(x1, y1, x1, y1);
+    ArrayList<Entity> toHit = _level.getEntities(x1-rx, y1-ry, x1+rx, y1+ry);
     //System.out.println(toHit);
     for (Entity e : toHit) {
       if (!(e instanceof Bullet)) {
