@@ -2,12 +2,11 @@ package com.thomcc.nine.entity;
 
 import com.thomcc.nine.render.Renderer;
 
-public class Enemy extends Entity {
+public class Enemy extends Mobile {
   private int _health;
   public Enemy() {
     _health = 1;
     _collisionFriction = 0.3;
-    _canSlide = true;
     _friction = 0.98;
     _maxSpeed = 4.0;
     rx = ry = 3;
@@ -38,16 +37,6 @@ public class Enemy extends Entity {
       _py += dy*4;
     }
     super.tick(ticks);
-  }
-  public void hurt(Entity cause, int damage, double dir) {
-    if (--_health <= 0) { 
-      remove();
-      return; 
-    }
-    double cd = Math.cos(dir);
-    double sd = Math.sin(dir);
-    _px += cd*damage;
-    _py += sd*damage;
   }
   protected void touched(Entity e) {
     if (e instanceof Player) {

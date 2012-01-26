@@ -14,22 +14,18 @@ public class Entity {
   public int rx = 1, ry = 1;
   protected int _startX = -1, _startY = -1;
   protected double _px = 0, _py = 0;
-  protected double _eyeX = -1, _eyeY = -1;
   public boolean removed = false;
   public double dir = 0;
-  protected boolean _canSlide = false;
+  protected boolean _canMove;
   protected double _maxSpeed;
   protected double _friction;
   protected double _collisionFriction;
   
   public void tick(long ticks) {
-    updatePosition();
-    reduceSpeed();
-  }
-  public void lookAt(int px, int py) {
-    _eyeX = px;
-    _eyeY = py;
-    dir = Math.atan2(py - y, px - x);
+    if (_canMove) {
+      updatePosition();
+      reduceSpeed();
+    }
   }
   
   public void reduceSpeed() {
@@ -55,38 +51,6 @@ public class Entity {
   
   }
   protected void collision(boolean ycol, double dx, double dy) {
-    if (!_canSlide) { bounce(dx, dy); return; }
-    if (ycol) {
-      switch ((int)dx) {
-      case +1:
-        _px += Math.abs(_py*_collisionFriction);
-        _py *= _collisionFriction;
-        break;
-      case -1:
-        _px -= Math.abs(_py*_collisionFriction);
-        _py *= _collisionFriction;
-        break;
-      case 0:
-        _py *= _collisionFriction;
-        break;
-      }
-    } else {
-      switch ((int)dy) {
-      case +1:
-        _py += Math.abs(_px*_collisionFriction);
-        _px *= _collisionFriction;
-        break;
-      case -1:
-        _py -= Math.abs(_px*_collisionFriction);
-        _px *= _collisionFriction;
-        break;
-      case 0:
-        _px *= _collisionFriction;
-        break;
-      }
-    }
-  }
-  protected void bounce(double dx, double dy) {
     if (dx == 0) {
       _py *= -_collisionFriction;
       return;
@@ -111,7 +75,7 @@ public class Entity {
   }
   public void updatePosition() {
     if (_px == 0 && _py == 0) return;
-    //int lastx = getBoundedX(), lasty = getBoundedY();
+
     if (_py != 0) {
       
       int dy = (_py < 0) ? -1 : 1;
@@ -222,7 +186,7 @@ public class Entity {
       this.y = y;
     }
   }
-
+  
   public void remove() { removed = true; }
   public void hurt(Entity cause, int damage, double dir) {}
   protected void collision() {}

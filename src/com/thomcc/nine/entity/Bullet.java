@@ -1,7 +1,6 @@
 package com.thomcc.nine.entity;
 
-import java.util.ArrayList;
-
+import java.util.List;
 import com.thomcc.nine.render.Renderer;
 
 public class Bullet extends Entity {
@@ -42,7 +41,7 @@ public class Bullet extends Entity {
     int x1 = getX();
     int y1 = getY();
     if (x0 == x1 && y0 == y1 && !_collided) { remove(); return; }
-    ArrayList<Entity> toHit = _level.getEntities(x1-rx, y1-ry, x1+rx, y1+ry);
+    List<Entity> toHit = _level.getEntities(x1-rx, y1-ry, x1+rx, y1+ry);
     //System.out.println(toHit);
     for (Entity e : toHit) {
       if (!(e instanceof Bullet)) {
