@@ -202,6 +202,12 @@ public class Renderer {
     _g.drawRoundRect(mx, my, mwid, mhei, 10, 10);
     renderString(rstr,mx+30, my+20, 0);
   }
+  
+  public void clear(Color c) {
+    _g.setColor(c);
+    _g.clearRect(0, 0, _width, _height);
+  }
+  public void clear() { clear(Color.BLACK); }
   public int getViewportWidth() { return _width; }
   public int getViewportHeight() { return _height; }
   private void setOffset(int x, int y) { _offX = x; _offY = y; }

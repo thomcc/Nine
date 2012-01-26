@@ -3,9 +3,8 @@ package com.thomcc.nine.entity;
 import com.thomcc.nine.render.Renderer;
 
 public class Enemy extends Mobile {
-  private int _health;
   public Enemy() {
-    _health = 1;
+    health = 1;
     _collisionFriction = 0.3;
     _friction = 0.98;
     _maxSpeed = 4.0;
@@ -40,14 +39,12 @@ public class Enemy extends Mobile {
   }
   protected void touched(Entity e) {
     if (e instanceof Player) {
-      e.hurt(this, _health, dir);
+      e.hurt(this, 1, dir);
     }
   }
   public boolean appearsOnMinimap() { return true; }
   public int getColor() { return 0xff649f42; }
   public void render(Renderer r) {
-    int d = (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15);
-    //r.render(2, getBoundedX(), getBoundedY(), d);
-    r.render(2, (int)x, (int)y, d);
+    r.render(2, (int)x, (int)y, getDirection());
   }
 }

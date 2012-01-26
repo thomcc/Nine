@@ -7,12 +7,11 @@ import com.thomcc.nine.render.Renderer;
 
 public class Player extends Mobile {
   public Input _i;
-  public int health;
   private int _maxHealth;
   private int _ammoCount, _maxFireCount, _reAmmoRate;
   private int _fireRate;
   private boolean _canFire = true;
-  
+  private boolean _fireNotClicked = true;
   public Player(Input i, Game g) {
     _i = i;
     _maxHealth = 50;
@@ -33,9 +32,8 @@ public class Player extends Mobile {
   
   private void updateStats(long ticks) { // if this gets above 5 i should write a "Stat" class
     if (ticks % _reAmmoRate == 0 && _ammoCount < _maxFireCount && !firing()) { ++_ammoCount; }
-    if (ticks % _fireRate == 0) { _canFire = true; }
+    if (ticks % _fireRate == 0 || _fireNotClicked) { _canFire = true; }
   }
-  
   public void tick(long ticks) {
     _canFire = false;
     updateStats(ticks);    
@@ -45,6 +43,13 @@ public class Player extends Mobile {
     if (_i.left) _px -= 1.0;
     if (_i.up) _py -= 1.0;
     if (firing() && _canFire) fire();
+    if (!firing()) {
+      _fireNotClicked = true;
+    } else {
+      _fireNotClicked = false;
+    }
+    
+    if (_i.mod_shift) hurt(this, 5, 0); 
 
     super.tick(ticks);
   }
@@ -53,14 +58,6 @@ public class Player extends Mobile {
     _level.add(new Bullet(this, dir, 6));
     _ammoCount--;
   }
-  public void hurt(Entity cause, int damage, double dir) {
-    health -= damage;
-    double cd = Math.cos(dir);
-    double sd = Math.sin(dir);
-    _px += cd*damage;
-    _py += sd*damage;
-  }
-  
   public void render(Renderer r) { r.render(0, (int)x, (int)y, getDirection()); }
   public int getFireCount() { return _ammoCount; }
   private boolean firing() { return _i.fire || _i.mouseDown; }

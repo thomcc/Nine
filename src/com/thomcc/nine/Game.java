@@ -2,6 +2,7 @@ package com.thomcc.nine;
 
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
+import com.thomcc.nine.render.GameOverMenu;
 import com.thomcc.nine.render.Menu;
 import com.thomcc.nine.render.Renderer;
 
@@ -13,10 +14,18 @@ public class Game {
   public int offX, offY;
   private long _ticks;
   private Menu _menu;
+  public boolean lost;
   public Game(Input ih) {
     offX = 0;
     offY = 0;
     _ih = ih;
+    start();
+    //lost = true;
+    //setMenu(new GameOverMenu());
+    
+  }
+  public void start() {
+    lost = false;
     _level = new ShipLevel();
     _player = new Player(_ih, this);
     _level.add(_player);
@@ -26,8 +35,15 @@ public class Game {
     if (m != null) m.init(this, _ih);
   }
   public void tick() {
-    _level.tick(_ticks++);
-    _player.lookAt(_ih.mouseX+offX, _ih.mouseY+offY);
+    if (!lost) {
+      _level.tick(_ticks++);
+      if (_player.removed){
+        lost = true;
+        setMenu(new GameOverMenu());
+      } else {
+        _player.lookAt(_ih.mouseX+offX, _ih.mouseY+offY);
+      }
+    }
     if (_menu != null) _menu.tick();
   }
   public void render(Renderer r) {
