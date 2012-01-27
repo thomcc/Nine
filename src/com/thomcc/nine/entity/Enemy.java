@@ -12,7 +12,7 @@ public class Enemy extends Mobile {
     _moveInterval = 40 + random.nextInt(40);
   }
   private int _moveInterval; 
-  public void tick(long ticks) {
+  protected void behave(long ticks) {
     if (ticks % _moveInterval == 0) {
       int dx = 0, dy = 0;
       switch(random.nextInt(3)) {
@@ -35,6 +35,14 @@ public class Enemy extends Mobile {
       _px += dx*4;
       _py += dy*4;
     }
+  }
+  public void die() {
+    System.out.format("x:%s y:%s\n", getX(), getY());
+    _level.add(new HealthPackItem(getX(), getY()));
+    super.die();
+  }
+  public void tick(long ticks) {
+    behave(ticks);
     super.tick(ticks);
   }
   protected void touched(Entity e) {

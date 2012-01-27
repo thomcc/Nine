@@ -44,7 +44,7 @@ public class Bullet extends Entity {
     List<Entity> toHit = _level.getEntities(x1-rx, y1-ry, x1+rx, y1+ry);
     //System.out.println(toHit);
     for (Entity e : toHit) {
-      if (!(e instanceof Bullet)) {
+      if (!((e instanceof Bullet) || (e instanceof Item))) {
         e.hurt(owner, 2, dir+Math.PI);
         remove();
         return;
@@ -54,6 +54,6 @@ public class Bullet extends Entity {
   public void render(Renderer r) {
     r.render(1, (int)x, (int)y, 0);
   }
-  
+
   
 }

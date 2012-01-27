@@ -100,8 +100,8 @@ public class Renderer {
     for (Entity e : l.getEntities()) {
       if (!e.appearsOnMinimap()) continue;
       int col = e.getColor();
-      int x = e.getBoundedX();
-      int y = e.getBoundedY();
+      int x = e.getX();
+      int y = e.getY();
       x /= l.getHeight()/mmH;
       y /= l.getWidth()/mmW;
       pix[x+y*mmW] = col;
@@ -149,9 +149,15 @@ public class Renderer {
   }
   
   public void render(Sprite s, int x, int y, int dir) {
-    y -= _offY+s.size/2;
-    x -= _offX+s.size/2;
-    _g.drawImage(s.get(dir), x, y, null);
+//    y -= _offY+s.height/2;
+//    x -= _offX+s.width/2;
+//    _g.drawImage(s.get(dir), x, y, null);
+    render(s, x, y, dir, 0);
+  }
+  public void render(Sprite s, int x, int y, int dir, int template) {
+    y -= _offY+s.height/2;
+    x -= _offX+s.width/2;
+    _g.drawImage(s.get(template, dir), x, y, null);
   }
   private void renderFontChar(int px, int py, int xf, int yf, int col) {
     int offset = xf * CHAR_WIDTH + yf * CHAR_HEIGHT * _fontImg.getWidth();
@@ -212,6 +218,7 @@ public class Renderer {
   public int getViewportHeight() { return _height; }
   private void setOffset(int x, int y) { _offX = x; _offY = y; }
   public void renderString(String str, int x, int y) { renderString(str, x, y, 0xffffdd); }
-  public void render(int s_idx, int x, int y, int dir) { render(sprites[s_idx], x, y, dir); }
+  public void render(int s_idx, int x, int y, int dir) { render(sprites[s_idx], x, y, dir, 0); }
+  public void render(int s_idx, int x, int y, int dir, int template) { render(sprites[s_idx], x, y, dir, template); }
   public Graphics getGraphics() { return image.getGraphics(); }
 }

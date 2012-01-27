@@ -58,10 +58,14 @@ public class Player extends Mobile {
     _level.add(new Bullet(this, dir, 6));
     _ammoCount--;
   }
+  public void heal(int n) { health += n; if (health > _maxHealth) health = _maxHealth; }
   public void render(Renderer r) { r.render(0, (int)x, (int)y, getDirection()); }
   public int getFireCount() { return _ammoCount; }
   private boolean firing() { return _i.fire || _i.mouseDown; }
   public boolean appearsOnMinimap() { return true; }
-  public int getColor() { return 0xffff6249; }
   
+  public int getColor() { return 0xffff6249; }
+  protected void touched(Entity e) {
+    if (e instanceof Item) ((Item) e).apply(this);
+  }
 }

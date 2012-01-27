@@ -4,79 +4,54 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 public class Sprite {
-  public final BufferedImage[] images;
+  public final BufferedImage[][] images;
   public final int dirs;
-  public final int[][] template;
+  public final int[][][] templates;
   public final int[] colors;
-  public final int size;
-  public Sprite(int[][] img) {
-    int max = -1;
-    for (int i = 0; i < img.length*img[0].length; ++i)
-      if (img[i/img.length][i%img.length] > max) 
-        max = img[i/img.length][i%img.length];
-    int c = 255/max;
-    
-    int[] cols = new int[max];
-    for (int i = 0, cc = c; i < max; ++i, cc += c) 
-      cols[i] = 0xff << 24 | cc << 16 | cc << 8 | cc;
-    
-    this.dirs = 1;
-    this.colors = cols;
-    template = img;
-    size = img.length;
-    for (int i = 0; i < size; ++i)
-      if (img[i].length != size)
-        throw new IllegalArgumentException("template image must be square!");
-    images = new BufferedImage[dirs];
-    initializeImages();
-  }
-  public Sprite(int[][] img, int[] colors) {
-    this(img, 1, colors);
-  }
-  public Sprite(int[][] img, int dirs, int[] colors) {
+  public final int height;
+  public final int width;
+  public final int num;
+  public Sprite(int[][][] imgs, int dirs, int[] colors) {
     this.dirs = dirs;
     this.colors = colors;
-    template = img;
-    size = img.length;
     
-    for (int i = 0; i < size; ++i)
-      if (img[i].length != size)
-        throw new IllegalArgumentException("template image must be square!");
+    templates = imgs;
     
-    images = new BufferedImage[dirs];
+    height = imgs[0].length;
+    width = imgs[0][0].length;
+    num = imgs.length;
+    images = new BufferedImage[num][dirs];
     initializeImages();
     
   }
-  private int getColor(int x, int y) {
-    if (x < 0 || y < 0 || x >= size || y >= size) {
+  private int getColor(int t, int x, int y) {
+    if (x < 0 || y < 0 || x >= width || y >= height) {
       return 0;
     }
-    int c = template[y][x];
-    if (c == 0) {
-      return 0;
-    } else {
-      return colors[c];
-    }
+    int c = templates[t][y][x];
+    return colors[c];
+    
   }
   private void initializeImages() {
-    for (int d = 0; d < dirs; ++d) {
-      images[d] = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-      int[] pix = ((DataBufferInt) images[d].getRaster().getDataBuffer()).getData();
-      double dir = d * Math.PI * 2.0 / dirs;
-      double cd = Math.cos(dir);
-      double sd = Math.sin(dir);
-      for (int j = 0; j < size; ++j) {
-        for (int i = 0; i < size; ++i) {
-          int xPix = (int) (cd * (i - size/2) + sd * (j-size/2) + size/2 + 0.5);
-          int yPix = (int) (cd * (j - size/2) - sd * (i-size/2) + size/2 + 0.5);
-          pix[i+j*size] = getColor(xPix, yPix);
+    for (int t = 0; t < num; ++t) {
+      for (int d = 0; d < dirs; ++d) {
+        images[t][d] = new BufferedImage(height, height, BufferedImage.TYPE_INT_ARGB);
+        int[] pix = ((DataBufferInt) images[t][d].getRaster().getDataBuffer()).getData();
+        double dir = d * Math.PI * 2.0 / dirs;
+        double cd = Math.cos(dir);
+        double sd = Math.sin(dir);
+        for (int j = 0; j < height; ++j) {
+          for (int i = 0; i < width; ++i) {
+            int xPix = (int) (cd * (i - width/2) + sd * (j-height/2) + width/2 + 0.5);
+            int yPix = (int) (cd * (j - height/2) - sd * (i-width/2) + height/2 + 0.5);
+            pix[i+j*height] = getColor(t, xPix, yPix);
+            
+          }
         }
       }
     }
   }
-  public Sprite recolor(int[] colors) {
-    return new Sprite(template, dirs, colors);
-  }
-  public BufferedImage get() { return get(0); }
-  public BufferedImage get(int d) { return images[d]; }
+  public BufferedImage get() { return get(0, 0); }
+  public BufferedImage get(int d) { return (get(0, d)); }
+  public BufferedImage get(int t, int d) { return images[t][d]; }
 }

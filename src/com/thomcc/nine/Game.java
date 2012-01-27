@@ -7,6 +7,7 @@ import com.thomcc.nine.render.Menu;
 import com.thomcc.nine.render.Renderer;
 
 
+
 public class Game {
   private Player _player;
   private Level _level;
@@ -14,21 +15,21 @@ public class Game {
   public int offX, offY;
   private long _ticks;
   private Menu _menu;
-  public boolean lost;
+  public boolean lost = true;
+  public boolean loading = false;
   public Game(Input ih) {
     offX = 0;
     offY = 0;
     _ih = ih;
     start();
-    //lost = true;
-    //setMenu(new GameOverMenu());
-    
   }
   public void start() {
     lost = false;
+    loading = true;
     _level = new ShipLevel();
     _player = new Player(_ih, this);
     _level.add(_player);
+    loading = false;
   }
   public void setMenu(Menu m) {
     _menu = m;
@@ -47,16 +48,19 @@ public class Game {
     if (_menu != null) _menu.tick();
   }
   public void render(Renderer r) {
-    r.centerAroundPlayer(this);
-    _level.render(r);
-    renderGui(r);
+    if (!lost) {
+      r.centerAroundPlayer(this);
+      _level.render(r);
+      renderGui(r);
+    }
+    if (_menu != null) _menu.render(r);
   }
   private void renderGui(Renderer r) {
     r.renderMinimap(_level);
     r.renderString("Ammo: "+_player.getFireCount(), 6, 6);
     r.renderString("Health: "+_player.health, 6, 6+Renderer.CHAR_HEIGHT);
     r.renderString("Enemies: " + _level.enemiesRemaining(), 6, 6+Renderer.CHAR_HEIGHT*2);
-    if (_menu != null) _menu.render(r);
+    
   }
   public void setOffset(int x, int y) { offX = x; offY = y; }
   public Player getPlayer() { return _player; }

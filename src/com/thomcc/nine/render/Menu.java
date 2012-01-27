@@ -38,7 +38,6 @@ public class Menu {
     renderTitle(r);
     renderMenuItems(r);
   }
-  
   protected void renderTitle(Renderer r) {
     int w = r.getViewportWidth();
     int sw = title.length()*Renderer.CHAR_WIDTH;

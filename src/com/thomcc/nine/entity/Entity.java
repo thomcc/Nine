@@ -116,19 +116,12 @@ public class Entity {
         }
       }
     }
-    int xx = getBoundedX();
-    int yy = getBoundedY();
-    //List<Entity> lastinside = _level.getEntities(lastx-rx, lasty-ry, lastx+rx, lasty+ry);
+    int xx = (int)x;
+    int yy = (int)y;
     List<Entity> nowinside = _level.getEntities(xx-rx,yy-ry,xx+rx,yy+ry);
     for (Entity e : nowinside)
       if (e == this) continue;
       else e.touched(this);
-    double lw = _level.getWidth();
-    double lh = _level.getHeight();
-    while (x < lw) x += lw;
-    if (x > lw) x %= lw;
-    while (y < lh) y += lh;
-    if (y > lh) y %= lh;
   }
   
   
@@ -154,26 +147,9 @@ public class Entity {
     return true;
   }
   
-  public int getBoundedX() {
-    int xx = (int) x;
-    if (_level != null) {
-      while (xx < 0) xx += _level.getWidth();
-      xx %= _level.getWidth();
-    }
-    return xx;
-  }
   public boolean intersects(int x0, int y0, int x1, int y1) {
     return !(x + rx < x0 || y + ry < y0 || x - rx > x1 || y - ry > y1);
   }
-  public int getBoundedY() {
-    int yy = (int) y;
-    if (_level != null) {
-      while (yy < 0) yy += _level.getHeight();
-      yy %= _level.getHeight();
-    }
-    return yy;
-  }
-  
 
   public void setPosition(int x, int y) {
     if (_startX < 0 && _startY < 0) {

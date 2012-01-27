@@ -7,8 +7,34 @@ public class Art {
   private static final int _ = 0;
   private static final int A = 1;
   private static final int B = 2;
+  private static final int C = 3;
+  private static final int D = 4;
+  private static final int E = 5;
   private static final int[] playerColors = { 0, 0xffff6249, 0xff4e4240 };
-  private static final int[][] playerTemplate = new int[][] {
+  private static final int[] healthPackColors = { 0, 0xffa3ce9c, 0xff19a204, 0xff3cc327, 0xff0f6a01, 0xff7b9b76 }; 
+  private static final int[][][] healthPackTemplate = new int[][][] {
+    { { C, C, C, C, C, C },
+      { C, A, B, B, A, D },   
+      { C, A, B, B, A, D },   
+      { C, A, A, A, A, D },
+      { C, A, B, B, A, D },
+      { C, A, B, B, A, D },
+      { D, D, D, D, D, D } }
+    /*,
+    
+      { { C, C, C, C, C, C },
+        { C, E, B, B, E, D },   
+        { C, E, B, B, E, D },   
+        { C, E, E, E, E, D },
+        { C, E, B, B, E, D },
+        { C, E, B, B, E, D },
+        { D, D, D, D, D, D } }*/
+  };
+  
+  
+  
+  
+  private static final int[][][] playerTemplate = new int[][][] {{
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
@@ -21,9 +47,9 @@ public class Art {
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ }
-  };
+  }};
   private static final int[] enemyColors = { 0, 0xff262626, 0xff649f42 };
-  private static final int[][] enemyTemplate = new int[][] {
+  private static final int[][][] enemyTemplate = new int[][][] {{
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, A, _, _, _, A, _, _, _ },
@@ -36,15 +62,15 @@ public class Art {
     { _, _, _, _, _, A, A, A, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ }
-  };
+  }};
   private static final int[] bulletColors = { 0, 0xff282b35, 0xff82333b };
-  private static final int[][] bulletTemplate = new int[][] {
+  private static final int[][][] bulletTemplate = new int[][][] {{
     { _, A, A, _ },
     { A, B, B, A },
     { A, B, B, A },
     { _, A, A, _ }
-  };
-  private static final int[][] nineTemplate = new int[][] {
+  }};
+  private static final int[][][] nineTemplate = new int[][][] {{
     { _, _, _, _, _, _, _, 1, 1, 1, 1, _, _, _, _, _, _ },
     { _, _, _, _, _, _, 1, _, _, _, _, 1, _, _, _, _, _ },
     { _, _, _, _, _, 1, _, _, _, _, _, _, 1, _, _, _, _ },
@@ -62,15 +88,16 @@ public class Art {
     { _, _, _, _, _, _, _, _, _, _, _, 1, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, 1, 1, _, _, _, _, _, _ },
     { _, _, _, _, _, 1, 1, 1, 1, _, _, _, _, _, _, _, _ }
-  };
-  
+  }};
+
   public final Sprite[] sprites;
   public final Sprite nine;
   public Art() {
     sprites = new Sprite[] {
         new Sprite(playerTemplate, 16, playerColors),
         new Sprite(bulletTemplate, 1, bulletColors),
-        new Sprite(enemyTemplate, 16, enemyColors)
+        new Sprite(enemyTemplate, 16, enemyColors),
+        new Sprite(healthPackTemplate, 1, healthPackColors)
     };
     nine = new Sprite(nineTemplate, 1, new int[] {0, 0xffdddddd});
     
