@@ -58,7 +58,19 @@ public class Player extends Mobile {
     _level.add(new Bullet(this, dir, 6));
     _ammoCount--;
   }
-  public void heal(int n) { health += n; if (health > _maxHealth) health = _maxHealth; }
+  public void heal(int n) { 
+    if (health < _maxHealth) {
+      health += n;
+      if (health > _maxHealth) {
+        health = _maxHealth;
+      }
+      Sound.getHealth.play();
+    }
+  }
+  public void hurt(Entity cause, int damage, double dir) {
+    Sound.hurt.play();
+    super.hurt(cause, damage, dir);
+  }
   public void render(Renderer r) { r.render(0, (int)x, (int)y, getDirection()); }
   public int getFireCount() { return _ammoCount; }
   private boolean firing() { return _i.fire || _i.mouseDown; }

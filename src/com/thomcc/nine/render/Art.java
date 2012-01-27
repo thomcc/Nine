@@ -9,7 +9,7 @@ public class Art {
   private static final int B = 2;
   private static final int C = 3;
   private static final int D = 4;
-  private static final int E = 5;
+//  private static final int E = 5;
   private static final int[] playerColors = { 0, 0xffff6249, 0xff4e4240 };
   private static final int[] healthPackColors = { 0, 0xffa3ce9c, 0xff19a204, 0xff3cc327, 0xff0f6a01, 0xff7b9b76 }; 
   private static final int[][][] healthPackTemplate = new int[][][] {
