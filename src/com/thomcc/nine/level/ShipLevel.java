@@ -148,7 +148,9 @@ public class ShipLevel implements Level{
       
       if (e.removed) {
         _entities.remove(i--);
+//        _entities.remove(e);
         removeEntity(ntx, nty, e);
+        removeEntity(tx, ty, e);//?
         if (e instanceof Enemy) --_enemiesRemaining;
       } else if (tx != ntx || ty != nty) {
         removeEntity(tx, ty, e);

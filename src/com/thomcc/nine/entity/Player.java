@@ -49,12 +49,13 @@ public class Player extends Mobile {
       _fireNotClicked = false;
     }
     
-    if (_i.mod_shift) hurt(this, 5, 0); 
-
+    //if (_i.mod_shift) hurt(this, 5, 0); 
+    
     super.tick(ticks);
   }
   public void fire() {
     if (_ammoCount == 0) return;
+    Sound.shoot.play();
     _level.add(new Bullet(this, dir, 6));
     _ammoCount--;
   }
