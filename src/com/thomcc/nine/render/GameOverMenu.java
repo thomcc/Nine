@@ -3,7 +3,10 @@ package com.thomcc.nine.render;
 public class GameOverMenu extends Menu {
   public GameOverMenu() {
     title = "You have failed.";
-    options = new String[] { "retry", "give up" };
+    items = new MenuItem[] { 
+        new MenuItem("retry", 90, 90),
+        new MenuItem("give up", 90, 90+24)
+    };
   }
   protected void onSelect(int which) {
     switch(which) {

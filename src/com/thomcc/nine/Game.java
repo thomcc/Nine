@@ -5,6 +5,7 @@ import com.thomcc.nine.level.*;
 import com.thomcc.nine.render.GameOverMenu;
 import com.thomcc.nine.render.Menu;
 import com.thomcc.nine.render.Renderer;
+import com.thomcc.nine.render.TitleMenu;
 import com.thomcc.nine.render.WonMenu;
 
 
@@ -23,7 +24,8 @@ public class Game {
     offX = 0;
     offY = 0;
     _ih = ih;
-    start();
+    setMenu(new TitleMenu());
+//    start();
   }
   public void start() {
     lost = false;

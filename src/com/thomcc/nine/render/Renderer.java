@@ -40,6 +40,7 @@ public class Renderer {
   public final Sprite[] sprites;
   private BufferedImage _fontImg;
   private int[] _fontPix;
+  private final Art _art;
   public Renderer(int w, int h) {
     
     _width = w;
@@ -59,7 +60,7 @@ public class Renderer {
     _fontPix = _fontImg.getRGB(0, 0, _fontImg.getWidth(), _fontImg.getHeight(), null, 0, _fontImg.getWidth());
     
     Art a = new Art();
-    
+    _art = a;
     sprites = a.sprites;
     
     _patW = _patH = 300;
@@ -212,6 +213,9 @@ public class Renderer {
   public void clear(Color c) {
     _g.setColor(c);
     _g.clearRect(0, 0, _width, _height);
+  }
+  public void render9(int x, int y) {
+    _g.drawImage(_art.nine.get(), x, y, null);
   }
   public void clear() { clear(Color.BLACK); }
   public int getViewportWidth() { return _width; }

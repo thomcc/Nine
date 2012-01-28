@@ -4,40 +4,40 @@ import com.thomcc.nine.Game;
 import com.thomcc.nine.Input;
 
 public class Menu {
-  public Input i;
+  public Input input;
   public Game g;
-  
-  protected int selected = 0;
-//  private int _lastMX = -1, _lastMY = -1;
   protected String title = "";
-  protected String[] options;// = { "Start", "How to play" };
+  protected MenuItem[] items = new MenuItem[] {
+      new MenuItem("nothing", 90, 90)
+  };
   protected boolean _hit = false;
   public void init(Game game, Input input) {
-    i = input;
+    this.input = input;
     g = game;
   }
   
   public void tick() {
-    if (i.up && !_hit) --selected;
-    if (i.down && !_hit) ++selected;
-    int len = options.length;
-    
-    _hit = i.up || i.down;
-    
-    if (selected < 0) selected += len;
-    if (selected >= len) selected -= len;
-    
-    if (i.select) {
-      onSelect(selected);
+    if (input.mouseDown) {
+      int chosen = -1;
+      for (int item = 0; item < items.length && chosen == -1; ++item)
+        if (items[item].contains(input.mouseX, input.mouseY))
+          chosen = item;
+      
+      if (chosen >= 0) onSelect(chosen); 
     }
   }
   protected void onSelect(int which) {}
-  
-  public void render(Renderer r) {
+  protected void renderFrame(Renderer r) {
     r.clear();
+  }
+  public void render(Renderer r) {
+    renderFrame(r);
     renderTitle(r);
+    renderContent(r);
     renderMenuItems(r);
   }
+  protected void renderContent(Renderer r) {}
+
   protected void renderTitle(Renderer r) {
     int w = r.getViewportWidth();
     int sw = title.length()*Renderer.CHAR_WIDTH;
@@ -45,16 +45,8 @@ public class Menu {
   }
   
   protected void renderMenuItems(Renderer r) {
-    for (int i = 0; i < options.length; ++i) {
-      String s = options[i];
-      String d;
-      if (selected == i) {
-        d = "-> "+s;
-      } else {
-        d = "   " + s;
-      }
-      r.renderString(d, 90, 90+i*24);
+    for (int i = 0; i < items.length; ++i) {
+      items[i].render(r, items[i].contains(input.mouseX, input.mouseY) ? 0xffffff : 0x888888);
     }
   }
-  
 }

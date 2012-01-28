@@ -99,7 +99,7 @@ public class Art {
         new Sprite(enemyTemplate, 16, enemyColors),
         new Sprite(healthPackTemplate, 1, healthPackColors)
     };
-    nine = new Sprite(nineTemplate, 1, new int[] {0, 0xffdddddd});
+    nine = new Sprite(nineTemplate, 1, new int[] {0, 0xffff6249});
     
   }
   
