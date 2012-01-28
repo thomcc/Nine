@@ -2,7 +2,6 @@ package com.thomcc.nine;
 
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
-import com.thomcc.nine.render.GameOverMenu;
 import com.thomcc.nine.render.Menu;
 import com.thomcc.nine.render.Renderer;
 import com.thomcc.nine.render.TitleMenu;
@@ -45,7 +44,7 @@ public class Game {
       _level.tick(_ticks++);
       if (_player.removed){
         lost = true;
-        setMenu(new GameOverMenu());
+        setMenu(new TitleMenu());
       } else if (_level.won()) {
         won = true;
         setMenu(new WonMenu());
