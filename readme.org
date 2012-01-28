@@ -1,0 +1,14 @@
+* 9
+
+9 is a game that evolved out of a noise generator.
+
+** Controls
+
+WASD/Arrow keys/Numpad for movement
+
+Click or space bar to shoot.
+
+
+
+
+
