@@ -58,12 +58,12 @@ public class Player extends Mobile {
     _ammoCount--;
   }
   public void heal(int n) { 
+    Sound.getHealth.play();
     if (health < _maxHealth) {
       health += n;
       if (health > _maxHealth) {
         health = _maxHealth;
       }
-      Sound.getHealth.play();
     }
   }
   public void die() {
