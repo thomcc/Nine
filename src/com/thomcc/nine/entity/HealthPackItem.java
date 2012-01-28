@@ -13,7 +13,7 @@ public class HealthPackItem extends Item {
 
   protected void apply(Mobile m) {
     if (m instanceof Player) {
-      ((Player)m).heal(5);
+      ((Player)m).heal(2+random.nextInt(3));
       remove();
     }
   }

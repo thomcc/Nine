@@ -20,4 +20,6 @@ public interface Level {
   public int[][] getMinimap(int w, int h);
   public void tick(long ticks);
   public Player getPlayer();
+  public boolean won();
+  public boolean wallBetween(int x0, int y0, int x1, int y1);
 }

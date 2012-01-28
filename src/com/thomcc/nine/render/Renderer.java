@@ -85,8 +85,8 @@ public class Renderer {
   
   public void renderMinimap(Level l) {
     int mmW = 60; int mmH = 60;
-    int mmXoff = _width-20-mmW;
-    int mmYoff = 20;
+    int mmXoff = _width-10-mmW;
+    int mmYoff = 10;
     int[][] m = l.getMinimap(mmW, mmH);
     BufferedImage mmImg = new BufferedImage(mmW, mmH, BufferedImage.TYPE_INT_RGB);
     int[] pix = ((DataBufferInt)mmImg.getRaster().getDataBuffer()).getData();

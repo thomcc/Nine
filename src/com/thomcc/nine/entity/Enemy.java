@@ -33,6 +33,7 @@ public class Enemy extends Mobile {
     }
   }
   private void stareAt(Player p) {
+    Sound.notice.play();
     player_stare_x = p.x;
     player_stare_y = p.y;
     player_stare_bc = p.getFireCount();
@@ -62,26 +63,21 @@ public class Enemy extends Mobile {
     if (!canSee(p)) {
       setState(State.Wandering);
     }
-    /*
-    if (canSee(p)) {
-      
-      System.out.println("I SEE YOU");
-      double d = Math.hypot(p.x-x, p.y-y);
-      _px = 0;//(p.x - x)/d;
-      _py = 0;//(p.y - y)/d;
-      dir = Math.atan2(p.y-y,p.x-x);
-    } else {
-      setState(State.Wandering);
-    }*/
   }
   private void setState(State state) {
     _state = state;
   }
   protected boolean canSee(Entity e) {
     Player p = _level.getPlayer();
-    if (Math.hypot(x-p.x, y-p.y) > vision) { return false; }
+    if (Math.hypot(x-p.x, y-p.y) > vision) return false; 
+    
     double pedir = Math.atan2(p.y-y, p.x-x); 
-    return (Math.abs(dir-pedir)<Math.PI/8);
+    if (Math.abs(dir-pedir)<Math.PI/8) {
+      if (_level.wallBetween((int)x, (int)y, (int)p.x, (int)p.y)) {
+        //System.out.println("A WALL BLOCKS MY VISION");
+        return false;
+      } else return true;
+    } else return false;
   }
   protected void wander(long ticks) {
     Player p = _level.getPlayer();

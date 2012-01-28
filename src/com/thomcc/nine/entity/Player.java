@@ -14,13 +14,13 @@ public class Player extends Mobile {
   private boolean _fireNotClicked = true;
   public Player(Input i, Game g) {
     _i = i;
-    _maxHealth = 50;
+    _maxHealth = 20;
     health = _maxHealth;
     _collisionFriction = 0.3;
     _friction = 0.9;
     _maxSpeed = 4.0;
-    _maxFireCount = 20;
-    _reAmmoRate = 20;
+    _maxFireCount = 10;
+    _reAmmoRate = 30;
     _ammoCount = _maxFireCount;
     _fireRate = 10;
   }
@@ -30,7 +30,7 @@ public class Player extends Mobile {
     l.findPlayerLocation(this);
   }
   
-  private void updateStats(long ticks) { // if this gets above 5 i should write a "Stat" class
+  private void updateStats(long ticks) {
     if (ticks % _reAmmoRate == 0 && _ammoCount < _maxFireCount && !firing()) { ++_ammoCount; }
     if (ticks % _fireRate == 0 || _fireNotClicked) { _canFire = true; }
   }
@@ -49,8 +49,6 @@ public class Player extends Mobile {
       _fireNotClicked = false;
     }
     
-    //if (_i.mod_shift) hurt(this, 5, 0); 
-    
     super.tick(ticks);
   }
   public void fire() {
@@ -67,6 +65,10 @@ public class Player extends Mobile {
       }
       Sound.getHealth.play();
     }
+  }
+  public void die() {
+    Sound.playerDeath.play();
+    super.die();
   }
   public void hurt(Entity cause, int damage, double dir) {
     Sound.hurt.play();

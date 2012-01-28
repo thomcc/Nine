@@ -7,7 +7,8 @@ public class Sound {
   public final static Sound hurt = new Sound("/hurt.wav");
   public final static Sound shoot = new Sound("/shoot.wav");
   public final static Sound enemyDeath = new Sound("/enemydie.wav");
-  
+  public final static Sound notice = new Sound("/notice.wav");
+  public final static Sound playerDeath = new Sound("/playerdie.wav");
   public Sound(String filename) {
     try {
       _ac = Applet.newAudioClip(Sound.class.getResource(filename));

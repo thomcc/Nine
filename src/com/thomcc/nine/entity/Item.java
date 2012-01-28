@@ -19,7 +19,7 @@ public class Item extends Entity {
     rx = ry = 3;
     _time = 0;
     _totalFrames = 1;
-    _life = 200+random.nextInt(100);
+    _life = 400+random.nextInt(100);
   }
   
   
