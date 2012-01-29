@@ -18,6 +18,7 @@ public class Gun {
     _fireRate = 10;
     _canRegenAmmo = true;
     _maxAmmo = 10;
+    _ammo = _maxAmmo;
     _ammoRegenRate = 30;
     _bulletSpeed = 6;
   }
@@ -30,7 +31,7 @@ public class Gun {
       _fireNotClicked = false;
     }
     else _fireNotClicked = true;
-    if (_canRegenAmmo && (ticks % _ammoRegenRate) == 0) ++_ammo;
+    if (_canRegenAmmo && _ammo < _maxAmmo && (ticks % _ammoRegenRate) == 0) ++_ammo;
   }
   
   public boolean fireIsPossible(long ticks) {
