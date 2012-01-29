@@ -114,8 +114,10 @@ public class Enemy extends Mobile {
     
     if (random.nextInt(3) == 0) 
       _level.add(new HealthPackItem(getX(), getY()));
-    else if (random.nextInt(10) == 0) {
+    else if (random.nextInt(10) == 0) 
       _level.add(new ThreeGunItem(getX(), getY()));
+    else if (random.nextInt(10) == 0) {
+      _level.add(new OneUpItem(getX(), getY()));
     }
     super.die();
   }

@@ -1,25 +1,12 @@
 package com.thomcc.nine.entity;
 
-import com.thomcc.nine.render.Renderer;
-
 public class HealthPackItem extends Item {
 
   public HealthPackItem(int x, int y) {
     super(x, y);
     _animDelay = 10;
-    
+    spriteIndex = 3;
   }
 
-  protected void apply(Mobile m) {
-    super.apply(m);
-    if (m instanceof Player) {
-      ((Player)m).heal(2+random.nextInt(3));
-      remove();
-    }
-  }
-  public void render(Renderer r) {
-    if (_flickering) {
-      if (_flicker) r.render(3, (int)x, (int)y, 0, frame);
-    } else r.render(3, (int)x, (int)y, 0, frame);
-  }
+  protected void onPlayerContact(Player p) { p.heal(2+random.nextInt(3)); }
 }
