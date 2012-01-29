@@ -21,11 +21,14 @@ public class Renderer {
   public static final int CHAR_HEIGHT = 12;
   public static final int CHARS_PER_ROW = 43;
 
-  private static final Color MENU_COLOR = new Color(0xcc, 0xcc, 0xcc);
   private static final int FLOOR = 0x616786;
   private static final int DFLOOR = 0x575d79;
   private static final int WALL_OUTER = 0x222222;
   private static final int WALL_INNER = 0x2D81C3;
+
+  public static final Color MENU_BOX_COLOR = new Color(0x24, 0x4e, 0x67);
+  //public static final int MENU_TEXT_COLOR = 0xacc2cf;
+  public static final Color MENU_OUTLINE_COLOR = new Color(0x22, 0x31, 0x3a);
   
   private int[] _pix;
   
@@ -41,32 +44,21 @@ public class Renderer {
   private int[] _fontPix;
   private final Art _art;
   public Renderer(int w, int h) {
-    
-    _width = w;
-    _height = h;
+    _width = w; _height = h;
     
     image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-    
     _pix = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
-    
     _g = image.getGraphics();
     
-    try { 
-      _fontImg = ImageIO.read(Renderer.class.getResourceAsStream("/font.png")); 
-    } catch (IOException e) { 
-      throw new RuntimeException(e); 
-    }
+    try { _fontImg = ImageIO.read(Renderer.class.getResourceAsStream("/font.png")); } 
+    catch (IOException e) { throw new RuntimeException(e); }
     _fontPix = _fontImg.getRGB(0, 0, _fontImg.getWidth(), _fontImg.getHeight(), null, 0, _fontImg.getWidth());
     
-    Art a = new Art();
-    _art = a;
+    _art = new Art();
     
     _patW = _patH = 300;
-    
     _floorPattern = new boolean[_patH][_patW];
-    
     generateFloorPattern();
-    
   }
   
   private void generateFloorPattern() {
@@ -75,11 +67,6 @@ public class Renderer {
       for (int x = 0; x < _patW; ++x) 
         if (floorPat[y][x] < 0.05) _floorPattern[y][x] = true;
         else _floorPattern[y][x] = false;
-  }
-  
-  public void render(Game game) {
-    _g.clearRect(0, 0, _width, _height);
-    game.render(this);
   }
   
   public void renderMinimap(ILevel l) {
@@ -119,10 +106,7 @@ public class Renderer {
       int yy = _offY/3 + y; // yy is the coordinate on the background map 
       while (yp < 0) yp += lh;
       yp %= lh;
-//      if (Game.fancyGraphics) {
-        while (yy < 0) yy += _patH;
-        yy %= _patH;
-//      }
+      yy %= _patH;
       int[] cellrow = map[yp]; 
       for (int x = 0; x < _width; ++x) {
         int xp = _offX + x;
@@ -131,13 +115,10 @@ public class Renderer {
         xp %= lw;
         int cell = cellrow[xp];
         int col = FLOOR;
-        // if it's a wall draw it as a wall
         if (cell == 2) col = WALL_INNER;
         else if (cell == 1) col = WALL_OUTER;
         else if (cell == -1) col = WALL_OUTER;
-        // otherwise, render from the background pattern
-        else /*if (Game.fancyGraphics)*/ {
-          while (xx < 0) xx += _patW;
+        else {
           xx %= _patW;
           if (_floorPattern[yy][xx]) col = DFLOOR;
           else col = FLOOR;
@@ -147,17 +128,12 @@ public class Renderer {
     }
   }
   
-  public void render(Sprite s, int x, int y, int dir) {
-//    y -= _offY+s.height/2;
-//    x -= _offX+s.width/2;
-//    _g.drawImage(s.get(dir), x, y, null);
-    render(s, x, y, dir, 0);
-  }
   public void render(Sprite s, int x, int y, int dir, int template) {
     y -= _offY+s.height/2;
     x -= _offX+s.width/2;
     _g.drawImage(s.get(template, dir), x, y, null);
   }
+  
   private void renderFontChar(int px, int py, int xf, int yf, int col) {
     int offset = xf * CHAR_WIDTH + yf * CHAR_HEIGHT * _fontImg.getWidth();
     for (int y = 0; y < CHAR_HEIGHT; ++y) {
@@ -197,36 +173,6 @@ public class Renderer {
     setOffset(xo, yo);
     g.setOffset(xo, yo);
   }
-  public void centerAround(Menu m) {
-    setOffset(0, 0);
-  }
-  
-  public void renderFocusRequest() {
-    String rstr = "Click to resume!";
-    int rstrw = "Click to resume!".length()*CHAR_WIDTH;
-    int rstrh = CHAR_HEIGHT;
-    int mwid = rstrw+60;
-    int mhei = rstrh+40;
-    int mx = (_width-mwid)/2;
-    int my = (_height-mhei)/2;
-    _g.setColor(MENU_COLOR);
-    _g.fillRoundRect(mx, my, mwid, mhei, 10, 10);
-    _g.setColor(MENU_COLOR.brighter());
-    _g.drawRoundRect(mx, my, mwid, mhei, 10, 10);
-    renderString(rstr,mx+30, my+20, 0);
-  }
-  
-  public void clear(Color c) {
-    _g.setColor(c);
-    _g.clearRect(0, 0, _width, _height);
-  }
-  public void fill(Color c) {
-    _g.setColor(c);
-    _g.fillRect(0, 0, _width, _height);
-  }
-  public static final Color MENU_BOX_COLOR = new Color(0x24, 0x4e, 0x67);
-  public static final int MENU_TEXT_COLOR = 0xacc2cf;
-  public static final Color MENU_OUTLINE_COLOR = new Color(0x22, 0x31, 0x3a);
   
   public void drawMenuBox(int x0, int y0, int w, int h) {
     _g.setColor(MENU_BOX_COLOR);
@@ -234,14 +180,18 @@ public class Renderer {
     _g.setColor(MENU_OUTLINE_COLOR);
     _g.drawRect(x0, y0, w, h);
   }
-  public void clear() { clear(Color.BLACK); }
+  
+  public void centerAround(Menu m) { setOffset(0, 0); }
+  public void clear() { _g.clearRect(0, 0, _width, _height); }
   public int getViewportWidth() { return _width; }
   public int getViewportHeight() { return _height; }
   private void setOffset(int x, int y) { _offX = x; _offY = y; }
+  public void fill(Color c) { _g.setColor(c); _g.fillRect(0, 0, _width, _height); }
   public void renderString(String str, int x, int y) { renderString(str, x, y, 0xffffdd); }
   public void render(int s_idx, int x, int y, int dir) { render(_art.sprites[s_idx], x, y, dir, 0); }
+  public void render(Sprite s, int x, int y, int dir) { render(s, x, y, dir, 0); }
   public void render(int s_idx, int x, int y, int dir, int template) { render(_art.sprites[s_idx], x, y, dir, template); }
   public void render9(int x, int y) { _g.drawImage(_art.nine.get(), x, y, null); }
+  public void render(Game game) { _g.clearRect(0, 0, _width, _height); game.render(this); }
   public Graphics getGraphics() { return image.getGraphics(); }
-
 }
