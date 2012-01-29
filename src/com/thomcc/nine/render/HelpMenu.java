@@ -19,6 +19,7 @@ public class HelpMenu extends Menu {
     String[] strs = new String[] {
         "9 is a game which takes place in space.",
         "Controls are simple: ",
+        " - Pause with P, I, Tab, or Escape",
         " - WASD/Arrow keys/Numpad for motion",
         " - Aim with the mouse",
         " - Shoot by clicking (or pressing the space bar)",

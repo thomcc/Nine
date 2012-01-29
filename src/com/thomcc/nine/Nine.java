@@ -73,9 +73,9 @@ public class Nine extends Canvas implements Runnable {
     BufferStrategy bs = getBufferStrategy();
     Graphics g = bs.getDrawGraphics();
     g.clearRect(0, 0, getWidth(), getHeight());
-    
+
+    if (!hasFocus() && !_game.hasMenu()) _game.pause();
     _renderer.render(_game);
-    if (!hasFocus() && !_game.hasMenu()) _renderer.renderFocusRequest();
     g.drawImage(_renderer.image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
     g.dispose();
     bs.show();

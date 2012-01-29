@@ -8,6 +8,8 @@ public class Menu {
   public Game g;
   protected String title = "";
   private boolean wait = false;
+  protected int menuItemActive = 0xffffff;
+  protected int menuItemInactive = 0x888888;
   protected MenuItem[] items = new MenuItem[] {
       new MenuItem("nothing", 90, 90)
   };
@@ -49,10 +51,9 @@ public class Menu {
     int sw = title.length()*Renderer.CHAR_WIDTH;
     r.renderString(title, (w-sw)/2, 50);
   }
-  
   protected void renderMenuItems(Renderer r) {
     for (int i = 0; i < items.length; ++i) {
-      items[i].render(r, items[i].contains(input.mouseX, input.mouseY) ? 0xffffff : 0x888888);
+      items[i].render(r, items[i].contains(input.mouseX, input.mouseY) ? menuItemActive : menuItemInactive);
     }
   }
 }

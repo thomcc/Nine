@@ -220,7 +220,20 @@ public class Renderer {
     _g.setColor(c);
     _g.clearRect(0, 0, _width, _height);
   }
+  public void fill(Color c) {
+    _g.setColor(c);
+    _g.fillRect(0, 0, _width, _height);
+  }
+  public static final Color MENU_BOX_COLOR = new Color(0x24, 0x4e, 0x67);
+  public static final int MENU_TEXT_COLOR = 0xacc2cf;
+  public static final Color MENU_OUTLINE_COLOR = new Color(0x22, 0x31, 0x3a);
   
+  public void drawMenuBox(int x0, int y0, int w, int h) {
+    _g.setColor(MENU_BOX_COLOR);
+    _g.fillRect(x0, y0, w, h);
+    _g.setColor(MENU_OUTLINE_COLOR);
+    _g.drawRect(x0, y0, w, h);
+  }
   public void clear() { clear(Color.BLACK); }
   public int getViewportWidth() { return _width; }
   public int getViewportHeight() { return _height; }
@@ -230,4 +243,5 @@ public class Renderer {
   public void render(int s_idx, int x, int y, int dir, int template) { render(_art.sprites[s_idx], x, y, dir, template); }
   public void render9(int x, int y) { _g.drawImage(_art.nine.get(), x, y, null); }
   public Graphics getGraphics() { return image.getGraphics(); }
+
 }

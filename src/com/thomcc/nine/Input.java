@@ -5,10 +5,10 @@ import java.awt.event.*;
 public class Input implements KeyListener, MouseListener, MouseMotionListener {
   public int mouseX, mouseY;
   public boolean mouseDown;
-  public boolean up, down, left, right, select, fire;
+  public boolean up, down, left, right, select, fire, pause;
   public boolean mod_ctrl, mod_shift, mod_alt; 
   public Input(Nine game) {
-    mouseDown = up = down = left = right = fire = select = false;
+    mouseDown = up = down = left = right = fire = select = pause = false;
     mod_ctrl = mod_shift = mod_alt = false;
     mouseX = mouseY = -1;
     game.addMouseListener(this);
@@ -35,6 +35,13 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener {
     case KeyEvent.VK_D:
     case KeyEvent.VK_NUMPAD6: right = pressed; break;
     
+    case KeyEvent.VK_TAB:
+    case KeyEvent.VK_I:
+    case KeyEvent.VK_P:
+    case KeyEvent.VK_ESCAPE:
+      pause = pressed;
+      break;
+    
     case KeyEvent.VK_SPACE: fire = pressed;
     case KeyEvent.VK_ENTER:
     case KeyEvent.VK_NUMPAD0: select = pressed; break;
@@ -45,7 +52,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener {
     }
   }
   public void onMouse(int x, int y) { mouseX = x/2; mouseY = y/2; }
-  public void releaseAll() { mouseDown = up = down = left = right = fire = select = mod_ctrl = mod_shift = mod_alt = false; }
+  public void releaseAll() { mouseDown = up = down = left = right = fire = pause = select = mod_ctrl = mod_shift = mod_alt = false; }
   public void mousePressed(MouseEvent e) { mouseDown = true; }
   public void mouseReleased(MouseEvent e) { mouseDown = false; }
   public void mouseMoved(MouseEvent e) { onMouse(e.getX(), e.getY()); }

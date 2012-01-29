@@ -4,6 +4,7 @@ import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
 import com.thomcc.nine.render.LoadingMenu;
 import com.thomcc.nine.render.Menu;
+import com.thomcc.nine.render.PauseMenu;
 import com.thomcc.nine.render.Renderer;
 import com.thomcc.nine.render.TitleMenu;
 import com.thomcc.nine.render.WonMenu;
@@ -21,13 +22,23 @@ public class Game {
   public boolean loading = false;
   public boolean hasDisplayedLoading = false;
   public boolean ticking = false;
+  public boolean paused = false;
   public Game(Input ih) {
     offX = 0;
     offY = 0;
     _ih = ih;
     setMenu(new TitleMenu());
   }
-  
+  public void pause() {
+    paused = true;
+
+    setMenu(new PauseMenu());
+  }
+  public void unPause() {
+    paused = false;
+
+    setMenu(null);
+  }
   public void start() {
     lost = false;
     won = false;
@@ -63,7 +74,8 @@ public class Game {
   }
   
   public void tick() {
-    if (ticking) {
+    if (_ih.pause) pause();
+    if (ticking && !paused) {
       _level.tick(_ticks++);
       if (_player.removed){
         lose();
