@@ -29,7 +29,7 @@ public class LevelImpl implements ILevel{
     this.width = width; this.height = height;
     _random = new Random();
     long now = System.nanoTime();
-    map = new VoronoiLevelGen(points).generate(width, height);
+    map = new VoronoiLevelGen(points).generateAndCheck(width, height);
     long later = System.nanoTime();
     long t = later-now;
     long millis = t/1000000;
