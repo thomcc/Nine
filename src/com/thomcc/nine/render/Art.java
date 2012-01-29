@@ -13,35 +13,35 @@ public class Art {
   private static final int[] playerColors = { 0, 0xffff6249, 0xff4e4240 };
   private static final int[] healthPackColors = { 0, 0xffa3ce9c, 0xff19a204, 0xff3cc327, 0xff0f6a01, 0xff7b9b76 }; 
   private static final int[][][] healthPackTemplate = new int[][][] {
-    { { C, C, C, C, C, C },
-      { C, A, B, B, A, D },   
-      { C, A, B, B, A, D },   
-      { C, A, A, A, A, D },
-      { C, A, B, B, A, D },
-      { C, A, B, B, A, D },
-      { D, D, D, D, D, D } }
-    /*,
-    
-      { { C, C, C, C, C, C },
-        { C, E, B, B, E, D },   
-        { C, E, B, B, E, D },   
-        { C, E, E, E, E, D },
-        { C, E, B, B, E, D },
-        { C, E, B, B, E, D },
-        { D, D, D, D, D, D } }*/
+    { { C, C, C, C, C, C, C },
+      { C, A, B, B, B, A, D },   
+      { C, A, B, B, B, A, D },   
+      { C, A, A, A, A, A, D },
+      { C, A, B, B, B, A, D },
+      { C, A, B, B, B, A, D },
+      { D, D, D, D, D, D, D } }
+  };
+  private static final int[][][] oneUpTemplate = new int[][][] {
+    { { C, C, C, C, C, C, C },
+      { C, B, B, B, A, A, D },   
+      { C, B, A, B, B, A, D },   
+      { C, A, A, A, B, A, D },
+      { C, B, A, B, B, A, D },
+      { C, B, B, B, B, A, D },
+      { D, D, D, D, D, D, D } }
   };
   
   private static final int[] b3colors = new int[] {
       0, 0xff82333b, 0xffddbbbb, 0xffd22345, 0xff832735 
   };
   private static final int[][][] b3template = new int[][][] {
-    { { C, C, C, C, C, C },
-      { C, B, B, B, A, D },
-      { C, A, A, A, B, D },
-      { C, A, B, B, A, D },
-      { C, A, A, A, B, D },
-      { C, B, B, B, A, D },
-      { D, D, D, D, D, D } }
+    { { C, C, C, C, C, C, C },
+      { C, A, B, B, A, A, D },
+      { C, A, A, A, B, A, D },
+      { C, A, B, B, A, A, D },
+      { C, A, A, A, B, A, D },
+      { C, A, B, B, A, A, D },
+      { D, D, D, D, D, D, D } }
   };
   
   private static final int[][][] playerTemplate = new int[][][] {{
@@ -108,7 +108,8 @@ public class Art {
         new Sprite(bulletTemplate, 1, bulletColors),
         new Sprite(enemyTemplate, 16, enemyColors),
         new Sprite(healthPackTemplate, 1, healthPackColors),
-        new Sprite(b3template, 1, b3colors)
+        new Sprite(b3template, 1, b3colors),
+        new Sprite(oneUpTemplate, 1, healthPackColors)
     };
     nine = new Sprite(nineTemplate, 1, new int[] {0, 0xffff6249});
     
