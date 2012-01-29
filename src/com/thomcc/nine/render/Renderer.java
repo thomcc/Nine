@@ -82,7 +82,7 @@ public class Renderer {
     game.render(this);
   }
   
-  public void renderMinimap(Level l) {
+  public void renderMinimap(ILevel l) {
     int mmW = 60; int mmH = 60;
     int mmXoff = _width-10-mmW;
     int mmYoff = 10;
@@ -110,7 +110,7 @@ public class Renderer {
     _g.drawImage(mmImg, mmXoff, mmYoff, null);
   }
   
-  public void render(ShipLevel l) {
+  public void render(LevelImpl l) {
     int[][] map = l.map;
     int lw = l.width;
     int lh = l.height;
@@ -180,7 +180,7 @@ public class Renderer {
     Player p = g.getPlayer();
     int xo = p.getX()-_width/2;
     int yo = p.getY()-_height/2;
-    Level l = g.getLevel();
+    ILevel l = g.getLevel();
     int xmin = 0;
     int xmax = l.getWidth()-_width;
     int ymin = 0;

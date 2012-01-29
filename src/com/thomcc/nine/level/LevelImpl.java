@@ -10,7 +10,7 @@ import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.gen.VoronoiLevelGen;
 import com.thomcc.nine.render.Renderer;
 
-public class ShipLevel implements Level{
+public class LevelImpl implements ILevel{
   public int[][] map;
   public final int width, height;
   private Player _player;
@@ -21,11 +21,11 @@ public class ShipLevel implements Level{
   private int _enemiesRemaining;
   private Random _random;
   public boolean won = false;
-  public ShipLevel() { this(600, 600, 50); }
+  public LevelImpl() { this(600, 600, 50); }
   
 
   @SuppressWarnings("unchecked")
-  public ShipLevel(int width, int height, int points) {
+  public LevelImpl(int width, int height, int points) {
     this.width = width; this.height = height;
     _random = new Random();
     long now = System.nanoTime();

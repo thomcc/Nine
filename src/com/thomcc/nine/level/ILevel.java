@@ -6,7 +6,7 @@ import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.render.Renderer;
 
-public interface Level {
+public interface ILevel {
   public boolean blocks(int tx, int ty);
   public void add(Entity e);
   public void remove(Entity e);

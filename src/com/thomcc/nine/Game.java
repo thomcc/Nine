@@ -10,7 +10,7 @@ import com.thomcc.nine.render.WonMenu;
 
 public class Game {
   private Player _player;
-  private Level _level;
+  private ILevel _level;
   private Input _ih;
   public int offX, offY;
   private long _ticks;
@@ -31,7 +31,7 @@ public class Game {
     won = false;
     ticking = true;
     loading = true;
-    _level = new ShipLevel();
+    _level = new LevelImpl();
     _player = new Player(_ih, this);
     _level.add(_player);
     loading = false;
@@ -87,5 +87,5 @@ public class Game {
   public Player getPlayer() { return _player; }
   public long getTicks() { return _ticks; }
   public void setPlayer(Player p) { _player = p; }
-  public Level getLevel() { return _level; }
+  public ILevel getLevel() { return _level; }
 }

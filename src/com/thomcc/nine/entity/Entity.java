@@ -3,13 +3,13 @@ package com.thomcc.nine.entity;
 import java.util.List;
 import java.util.Random;
 
-import com.thomcc.nine.level.Level;
+import com.thomcc.nine.level.ILevel;
 import com.thomcc.nine.render.Renderer;
 
 public class Entity {
   
   protected final Random random = new Random();
-  protected Level _level;
+  protected ILevel _level;
   public double x = 0, y = 0;
   public int rx = 1, ry = 1;
   protected int _startX = -1, _startY = -1;
@@ -169,7 +169,7 @@ public class Entity {
   public int getX() { return (int)x; }
   public int getY() { return (int)y; }
   public int getDirection() { return (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15); }
-  public void setLevel(Level l) { _level = l; }
+  public void setLevel(ILevel l) { _level = l; }
   protected void touched(Entity e) {}
   public boolean blocks(Entity e) { return false; }
   public boolean appearsOnMinimap() { return false; }

@@ -1,6 +1,6 @@
 package com.thomcc.nine.level.gen;
 
-public class VoronoiLevelGen implements LevelGen {
+public class VoronoiLevelGen {
   public int points;
   
   public VoronoiLevelGen(int points) { this.points = points; }

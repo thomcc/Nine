@@ -2,7 +2,7 @@ package com.thomcc.nine.entity;
 
 
 import com.thomcc.nine.*;
-import com.thomcc.nine.level.Level;
+import com.thomcc.nine.level.ILevel;
 import com.thomcc.nine.render.Renderer;
 
 public class Player extends Mobile {
@@ -21,7 +21,7 @@ public class Player extends Mobile {
     _gun = new Gun(this);
   }
   
-  public void setLevel(Level l) {
+  public void setLevel(ILevel l) {
     super.setLevel(l);
     l.findPlayerLocation(this);
   }
