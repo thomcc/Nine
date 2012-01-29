@@ -2,6 +2,7 @@ package com.thomcc.nine;
 
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
+import com.thomcc.nine.render.LoadingMenu;
 import com.thomcc.nine.render.Menu;
 import com.thomcc.nine.render.Renderer;
 import com.thomcc.nine.render.TitleMenu;
@@ -18,6 +19,7 @@ public class Game {
   public boolean lost = true;
   public boolean won = false;
   public boolean loading = false;
+  public boolean hasDisplayedLoading = false;
   public boolean ticking = false;
   public Game(Input ih) {
     offX = 0;
@@ -29,12 +31,19 @@ public class Game {
   public void start() {
     lost = false;
     won = false;
-    ticking = true;
+    ticking = false;
     loading = true;
+    hasDisplayedLoading = false;
+    setMenu(new LoadingMenu());
+  }
+  
+  public void loadGame() {
     _level = new LevelImpl();
     _player = new Player(_ih, this);
     _level.add(_player);
     loading = false;
+    ticking = true;
+    setMenu(null);
   }
   
   public void setMenu(Menu m) {
@@ -52,6 +61,7 @@ public class Game {
     setMenu(new WonMenu());
     
   }
+  
   public void tick() {
     if (ticking) {
       _level.tick(_ticks++);
@@ -63,17 +73,20 @@ public class Game {
         _player.lookAt(_ih.mouseX+offX, _ih.mouseY+offY);
       }
     }
-    
     if (_menu != null) _menu.tick();
+    if (loading && hasDisplayedLoading) loadGame();
   }
-  
+  public boolean hasMenu() {
+    return _menu != null;
+  }
   public void render(Renderer r) {
-    if (!lost) {
+    if (!lost && !won && !loading) {
       r.centerAroundPlayer(this);
       _level.render(r);
       renderGui(r);
     }
     if (_menu != null) _menu.render(r);
+    if (loading && !hasDisplayedLoading) hasDisplayedLoading = true;
   }
   
   private void renderGui(Renderer r) {
