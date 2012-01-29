@@ -10,9 +10,12 @@ public class Player extends Mobile {
   private int _maxHealth;
 
   private Gun _gun;
-  
+  public int lives;
+  public int deadcounter = 0;
+  public int invulncounter = 0;
   public Player(Input i, Game g) {
     _i = i;
+    lives = 3;
     _maxHealth = 20;
     health = _maxHealth;
     _collisionFriction = 0.3;
@@ -20,7 +23,6 @@ public class Player extends Mobile {
     _maxSpeed = 4.0;
     _gun = new Gun(this);
   }
-  
   public void setLevel(ILevel l) {
     super.setLevel(l);
     l.findPlayerLocation(this);
@@ -28,16 +30,23 @@ public class Player extends Mobile {
   
   private void updateStats(long ticks) {}
   public void tick(long ticks) {
-    updateStats(ticks);    
+    if (deadcounter == 0) {
+      updateStats(ticks);    
     
-    if (_i.down) _py += 1.0;
-    if (_i.right) _px += 1.0;
-    if (_i.left) _px -= 1.0;
-    if (_i.up) _py -= 1.0;
+      if (_i.down) _py += 1.0;
+      if (_i.right) _px += 1.0;
+      if (_i.left) _px -= 1.0;
+      if (_i.up) _py -= 1.0;
     
-    _gun.tick(firing(), ticks);
-    
-    super.tick(ticks);
+      _gun.tick(firing(), ticks);
+      if (invulncounter > 0) --invulncounter;  
+      super.tick(ticks);
+    } else {
+      if (--deadcounter == 0) {
+        invulncounter = 60;
+        health = _maxHealth;
+      }
+    }
   }
   public void fire() {
   }
@@ -51,14 +60,21 @@ public class Player extends Mobile {
   }
   public void die() {
     Sound.playerDeath.play();
-    super.die();
+    deadcounter = 20;
+    --lives;
+    if (lives == 0) super.die();
   }
   public void hurt(Entity cause, int damage, double dir) {
-    Sound.hurt.play();
-    super.hurt(cause, damage, dir);
+    if (invulncounter == 0) {
+      Sound.hurt.play();
+      super.hurt(cause, damage, dir);
+    }
   }
   
-  public void render(Renderer r) { r.render(0, (int)x, (int)y, getDirection()); }
+  public void render(Renderer r) { 
+    if (invulncounter == 0 || invulncounter % 5 == 0)
+      r.render(0, (int)x, (int)y, getDirection()); 
+  }
   public int getFireCount() { return _gun.getAmmo(); }
   private boolean firing() { return _i.fire || _i.mouseDown; }
   public boolean appearsOnMinimap() { return true; }

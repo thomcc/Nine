@@ -92,8 +92,9 @@ public class Game {
   private void renderGui(Renderer r) {
     r.renderMinimap(_level);
     r.renderString("Ammo: "+_player.getFireCount(), 6, 6);
-    r.renderString("Health: "+_player.health, 6, 6+Renderer.CHAR_HEIGHT);
+    r.renderString("Health: "+_player.health+" x "+_player.lives, 6, 6+Renderer.CHAR_HEIGHT);
     r.renderString("Enemies: " + _level.enemiesRemaining(), 6, 6+Renderer.CHAR_HEIGHT*2);
+    
   }
   
   public void setOffset(int x, int y) { offX = x; offY = y; }
