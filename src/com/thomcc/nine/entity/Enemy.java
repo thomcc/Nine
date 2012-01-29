@@ -33,7 +33,7 @@ public class Enemy extends Mobile {
     }
   }
   private void stareAt(Player p) {
-    Sound.notice.play();
+    _level.play(Sound.notice);
     player_stare_x = p.x;
     player_stare_y = p.y;
     player_stare_bc = p.getFireCount();
@@ -110,7 +110,7 @@ public class Enemy extends Mobile {
     
   }
   public void die() {
-    Sound.enemyDeath.play();
+    _level.play(Sound.enemyDeath);
     
     if (random.nextInt(3) == 0) 
       _level.add(new HealthPackItem(getX(), getY()));

@@ -59,14 +59,14 @@ public class Player extends Mobile {
     }
   }
   public void die() {
-    Sound.playerDeath.play();
+    _level.play(Sound.playerDeath);
     deadcounter = 20;
     --lives;
     if (lives == 0) super.die();
   }
   public void hurt(Entity cause, int damage, double dir) {
     if (invulncounter == 0) {
-      Sound.hurt.play();
+      _level.play(Sound.hurt);
       super.hurt(cause, damage, dir);
     }
   }

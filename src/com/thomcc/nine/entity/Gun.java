@@ -41,7 +41,7 @@ public class Gun {
   public boolean tryFire() {
     if (_ammo == 0) return false;
     if (canFire) {
-      Sound.shoot.play();
+      _player._level.play(Sound.shoot);
       fire();
       --_ammo;
       return true;

@@ -31,6 +31,7 @@ public class PauseMenu extends Menu {
   protected void onSelect(int which) {
     switch(which) {
     case 0: g.unPause(); break;
+    case 1: g.setMenu(new SettingsMenu()); break;
     case 2: g.lose(); g.setMenu(new TitleMenu()); break;
     }
   }

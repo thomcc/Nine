@@ -45,7 +45,7 @@ public class Item extends Entity {
   protected void touched(Entity e) { if (e instanceof Mobile) apply((Mobile)e);}
   protected void apply(Mobile m) {
     if (m instanceof Player) {
-      Sound.getItem.play();
+      _level.play(Sound.getItem);
       onPlayerContact((Player)m);
       remove();
     } else {

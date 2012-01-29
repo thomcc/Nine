@@ -2,7 +2,7 @@ package com.thomcc.nine.render;
 
 public class MenuItem {
   public final String title;
-  public final int width, height;
+  public int width, height;
   public final int x, y;
   public MenuItem(String title, int x, int y) {
     this.title = title;
@@ -14,7 +14,9 @@ public class MenuItem {
   public boolean contains(int mx, int my) {
     return mx >= x && mx < width+x && my >= y && my < height+y;
   }  
+  
   public void render(Renderer r, int color) {
     r.renderString(title, x, y, color);
   }
+  public void click() {}
 }

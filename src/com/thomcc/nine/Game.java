@@ -1,5 +1,7 @@
 package com.thomcc.nine;
 
+import java.util.List;
+
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
 import com.thomcc.nine.render.LoadingMenu;
@@ -23,7 +25,9 @@ public class Game {
   public boolean hasDisplayedLoading = false;
   public boolean ticking = false;
   public boolean paused = false;
+  public Settings settings;
   public Game(Input ih) {
+    settings = new Settings();
     offX = 0;
     offY = 0;
     _ih = ih;
@@ -84,9 +88,17 @@ public class Game {
       } else {
         _player.lookAt(_ih.mouseX+offX, _ih.mouseY+offY);
       }
+      playAll(_level.getSounds());
     }
     if (_menu != null) _menu.tick();
     if (loading && hasDisplayedLoading) loadGame();
+    
+  }
+  public void playAll(List<Sound> sounds) {
+    if (settings.getPlaySounds()) 
+      for (Sound s : sounds) 
+        s.play();
+    sounds.clear();
   }
   public boolean hasMenu() {
     return _menu != null;
@@ -102,7 +114,7 @@ public class Game {
   }
   
   private void renderGui(Renderer r) {
-    r.renderMinimap(_level);
+    if (settings.getShowMinimap()) r.renderMinimap(_level);
     r.renderString("Ammo: "+_player.getFireCount(), 6, 6);
     r.renderString("Health: "+_player.health+" x "+_player.lives, 6, 6+Renderer.CHAR_HEIGHT);
     r.renderString("Enemies: " + _level.enemiesRemaining(), 6, 6+Renderer.CHAR_HEIGHT*2);

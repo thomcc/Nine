@@ -1,9 +1,11 @@
 package com.thomcc.nine.level;
 
 import java.util.ArrayList;
-
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Random;
 
+import com.thomcc.nine.Sound;
 import com.thomcc.nine.entity.Enemy;
 import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
@@ -20,6 +22,7 @@ public class LevelImpl implements ILevel{
   private ArrayList<Entity>[] _entLookup;
   private int _enemiesRemaining;
   private Random _random;
+  private List<Sound> toPlay;
   public boolean won = false;
   public LevelImpl() { this(600, 600, 50); }
   
@@ -28,14 +31,20 @@ public class LevelImpl implements ILevel{
   public LevelImpl(int width, int height, int points) {
     this.width = width; this.height = height;
     _random = new Random();
+    
+    System.out.println("## Generating level:");
     long now = System.nanoTime();
     map = new VoronoiLevelGen(points).generateAndCheck(width, height);
     long later = System.nanoTime();
     long t = later-now;
     long millis = t/1000000;
-    
     System.out.format("Voronoi calculated in %.1f seconds. (%s nanoseconds, %s milliseconds)\n", (double)t/1e9, t, millis);
     System.out.format("\tWidth: %s, Height: %s, Points: %s\n", width, height, points);
+    System.out.println("## Level generated.");
+    
+
+    toPlay = new LinkedList<Sound>();
+    
     _entities = new ArrayList<Entity>();
     _enemiesRemaining = 0;
     _entLookup = new ArrayList[width * height / 64];
@@ -67,7 +76,10 @@ public class LevelImpl implements ILevel{
     p.setPosition(x, y);
   }
   
-  
+  public void play(Sound s) {
+    toPlay.add(s);
+  }
+  public List<Sound> getSounds() { return toPlay; }
   
   private void updateCachedMinimap(int w, int h) {
     if (w != _cmmw || h != _cmmh) {

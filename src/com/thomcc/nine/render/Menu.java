@@ -20,17 +20,24 @@ public class Menu {
     else wait = false;
     g = game;
   }
-  
+  protected boolean mouseDownLast = false;
   public void tick() {
+
     if (input.mouseDown && !wait) {
       int chosen = -1;
       for (int item = 0; item < items.length && chosen == -1; ++item)
         if (items[item].contains(input.mouseX, input.mouseY))
           chosen = item;
-      
-      if (chosen >= 0) onSelect(chosen); 
+      clicked(chosen);
     } else if (!input.mouseDown && wait) {
       wait = false;
+    }
+    mouseDownLast = input.mouseDown;
+  }
+  protected void clicked(int chosen) {
+    if (chosen >= 0) {
+      items[chosen].click();
+      onSelect(chosen); 
     }
   }
   protected void onSelect(int which) {}

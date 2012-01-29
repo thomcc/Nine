@@ -1,7 +1,9 @@
 package com.thomcc.nine.level;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.thomcc.nine.Sound;
 import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.render.Renderer;
@@ -21,5 +23,7 @@ public interface ILevel {
   public void tick(long ticks);
   public Player getPlayer();
   public boolean won();
+  public void play(Sound s);
+  public List<Sound> getSounds();
   public boolean wallBetween(int x0, int y0, int x1, int y1);
 }
