@@ -175,9 +175,14 @@ public class Renderer {
       if (ix >= 0) renderFontChar(x+i*CHAR_WIDTH, y, ix % CHARS_PER_ROW, ix / CHARS_PER_ROW, color);
     }
   }
-
-  public void centerAroundPlayer(Game g) {
+  
+  public void centerAround(Game g) {
     Player p = g.getPlayer();
+    if (p == null) {
+      setOffset(0, 0);
+      g.setOffset(0, 0);
+      return;
+    }
     int xo = p.getX()-_width/2;
     int yo = p.getY()-_height/2;
     ILevel l = g.getLevel();
@@ -191,6 +196,9 @@ public class Renderer {
     else if (yo > ymax) yo = ymax;
     setOffset(xo, yo);
     g.setOffset(xo, yo);
+  }
+  public void centerAround(Menu m) {
+    setOffset(0, 0);
   }
   
   public void renderFocusRequest() {

@@ -81,7 +81,7 @@ public class Game {
   }
   public void render(Renderer r) {
     if (!lost && !won && !loading) {
-      r.centerAroundPlayer(this);
+      r.centerAround(this);
       _level.render(r);
       renderGui(r);
     }

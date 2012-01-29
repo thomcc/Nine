@@ -27,13 +27,16 @@ public class Menu {
           chosen = item;
       
       if (chosen >= 0) onSelect(chosen); 
-    } else wait = false;
+    } else if (!input.mouseDown && wait) {
+      wait = false;
+    }
   }
   protected void onSelect(int which) {}
   protected void renderFrame(Renderer r) {
     r.clear();
   }
   public void render(Renderer r) {
+    r.centerAround(this);
     renderFrame(r);
     renderTitle(r);
     renderContent(r);

@@ -3,7 +3,7 @@ package com.thomcc.nine.render;
 import com.thomcc.nine.Nine;
 
 public class HelpMenu extends Menu {
-  private int offset = 30;
+  private final int offset = 30;
   public HelpMenu() {
     items = new MenuItem[] {
         new MenuItem("<- Go Back", Nine.WIDTH-120, Nine.HEIGHT-24)
