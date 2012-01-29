@@ -8,10 +8,9 @@ import com.thomcc.nine.render.Renderer;
 public class Player extends Mobile {
   public Input _i;
   private int _maxHealth;
-  private int _ammoCount, _maxFireCount, _reAmmoRate;
-  private int _fireRate;
-  private boolean _canFire = true;
-  private boolean _fireNotClicked = true;
+
+  private Gun _gun;
+  
   public Player(Input i, Game g) {
     _i = i;
     _maxHealth = 20;
@@ -19,10 +18,7 @@ public class Player extends Mobile {
     _collisionFriction = 0.3;
     _friction = 0.9;
     _maxSpeed = 4.0;
-    _maxFireCount = 10;
-    _reAmmoRate = 30;
-    _ammoCount = _maxFireCount;
-    _fireRate = 10;
+    _gun = new Gun(this);
   }
   
   public void setLevel(Level l) {
@@ -30,35 +26,22 @@ public class Player extends Mobile {
     l.findPlayerLocation(this);
   }
   
-  private void updateStats(long ticks) {
-    if (ticks % _reAmmoRate == 0 && _ammoCount < _maxFireCount && !firing()) { ++_ammoCount; }
-    if (ticks % _fireRate == 0 || _fireNotClicked) { _canFire = true; }
-  }
+  private void updateStats(long ticks) {}
   public void tick(long ticks) {
-    _canFire = false;
     updateStats(ticks);    
     
     if (_i.down) _py += 1.0;
     if (_i.right) _px += 1.0;
     if (_i.left) _px -= 1.0;
     if (_i.up) _py -= 1.0;
-    if (firing() && _canFire) fire();
-    if (!firing()) {
-      _fireNotClicked = true;
-    } else {
-      _fireNotClicked = false;
-    }
+    
+    _gun.tick(firing(), ticks);
     
     super.tick(ticks);
   }
   public void fire() {
-    if (_ammoCount == 0) return;
-    Sound.shoot.play();
-    _level.add(new Bullet(this, dir, 6));
-    _ammoCount--;
   }
   public void heal(int n) { 
-    Sound.getHealth.play();
     if (health < _maxHealth) {
       health += n;
       if (health > _maxHealth) {
@@ -74,13 +57,12 @@ public class Player extends Mobile {
     Sound.hurt.play();
     super.hurt(cause, damage, dir);
   }
+  
   public void render(Renderer r) { r.render(0, (int)x, (int)y, getDirection()); }
-  public int getFireCount() { return _ammoCount; }
+  public int getFireCount() { return _gun.getAmmo(); }
   private boolean firing() { return _i.fire || _i.mouseDown; }
   public boolean appearsOnMinimap() { return true; }
-  
+  public void setGun(Gun g) { _gun = g; }
   public int getColor() { return 0xffff6249; }
-  protected void touched(Entity e) {
-    if (e instanceof Item) ((Item) e).apply(this);
-  }
+  protected void touched(Entity e) { if (e instanceof Item) ((Item) e).apply(this); }
 }

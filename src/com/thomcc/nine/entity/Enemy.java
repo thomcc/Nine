@@ -112,9 +112,11 @@ public class Enemy extends Mobile {
   public void die() {
     Sound.enemyDeath.play();
     
-    if (random.nextInt(5) == 0) 
+    if (random.nextInt(3) == 0) 
       _level.add(new HealthPackItem(getX(), getY()));
-    
+    else if (random.nextInt(10) == 0) {
+      _level.add(new ThreeGunItem(getX(), getY()));
+    }
     super.die();
   }
   public void tick(long ticks) {

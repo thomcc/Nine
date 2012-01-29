@@ -37,7 +37,6 @@ public class Renderer {
   private int _patW, _patH;
   private boolean[][] _floorPattern;
   public Color textColor = new Color(255, 255, 230);
-  public final Sprite[] sprites;
   private BufferedImage _fontImg;
   private int[] _fontPix;
   private final Art _art;
@@ -61,7 +60,6 @@ public class Renderer {
     
     Art a = new Art();
     _art = a;
-    sprites = a.sprites;
     
     _patW = _patH = 300;
     
@@ -214,15 +212,14 @@ public class Renderer {
     _g.setColor(c);
     _g.clearRect(0, 0, _width, _height);
   }
-  public void render9(int x, int y) {
-    _g.drawImage(_art.nine.get(), x, y, null);
-  }
+  
   public void clear() { clear(Color.BLACK); }
   public int getViewportWidth() { return _width; }
   public int getViewportHeight() { return _height; }
   private void setOffset(int x, int y) { _offX = x; _offY = y; }
   public void renderString(String str, int x, int y) { renderString(str, x, y, 0xffffdd); }
-  public void render(int s_idx, int x, int y, int dir) { render(sprites[s_idx], x, y, dir, 0); }
-  public void render(int s_idx, int x, int y, int dir, int template) { render(sprites[s_idx], x, y, dir, template); }
+  public void render(int s_idx, int x, int y, int dir) { render(_art.sprites[s_idx], x, y, dir, 0); }
+  public void render(int s_idx, int x, int y, int dir, int template) { render(_art.sprites[s_idx], x, y, dir, template); }
+  public void render9(int x, int y) { _g.drawImage(_art.nine.get(), x, y, null); }
   public Graphics getGraphics() { return image.getGraphics(); }
 }

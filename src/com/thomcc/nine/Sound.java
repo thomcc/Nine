@@ -3,7 +3,7 @@ import java.applet.Applet;
 import java.applet.AudioClip;
 
 public class Sound {
-  public final static Sound getHealth = new Sound("/healthpack.wav");
+  public final static Sound getItem = new Sound("/healthpack.wav");
   public final static Sound hurt = new Sound("/hurt.wav");
   public final static Sound shoot = new Sound("/shoot.wav");
   public final static Sound enemyDeath = new Sound("/enemydie.wav");

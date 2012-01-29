@@ -8,7 +8,6 @@ import com.thomcc.nine.render.TitleMenu;
 import com.thomcc.nine.render.WonMenu;
 
 
-
 public class Game {
   private Player _player;
   private Level _level;
@@ -19,41 +18,55 @@ public class Game {
   public boolean lost = true;
   public boolean won = false;
   public boolean loading = false;
+  public boolean ticking = false;
   public Game(Input ih) {
     offX = 0;
     offY = 0;
     _ih = ih;
     setMenu(new TitleMenu());
-//    start();
   }
+  
   public void start() {
     lost = false;
     won = false;
+    ticking = true;
     loading = true;
     _level = new ShipLevel();
     _player = new Player(_ih, this);
     _level.add(_player);
     loading = false;
   }
+  
   public void setMenu(Menu m) {
     _menu = m;
     if (m != null) m.init(this, _ih);
   }
+  public void lose() {
+    ticking = false;
+    lost = true;
+    setMenu(new TitleMenu());
+  }
+  public void win() {
+    won = true;
+    ticking = false;
+    setMenu(new WonMenu());
+    
+  }
   public void tick() {
-    if (!lost) {
+    if (ticking) {
       _level.tick(_ticks++);
       if (_player.removed){
-        lost = true;
-        setMenu(new TitleMenu());
+        lose();
       } else if (_level.won()) {
-        won = true;
-        setMenu(new WonMenu());
+        win();
       } else {
         _player.lookAt(_ih.mouseX+offX, _ih.mouseY+offY);
       }
     }
+    
     if (_menu != null) _menu.tick();
   }
+  
   public void render(Renderer r) {
     if (!lost) {
       r.centerAroundPlayer(this);
@@ -62,13 +75,14 @@ public class Game {
     }
     if (_menu != null) _menu.render(r);
   }
+  
   private void renderGui(Renderer r) {
     r.renderMinimap(_level);
     r.renderString("Ammo: "+_player.getFireCount(), 6, 6);
     r.renderString("Health: "+_player.health, 6, 6+Renderer.CHAR_HEIGHT);
     r.renderString("Enemies: " + _level.enemiesRemaining(), 6, 6+Renderer.CHAR_HEIGHT*2);
-    
   }
+  
   public void setOffset(int x, int y) { offX = x; offY = y; }
   public Player getPlayer() { return _player; }
   public long getTicks() { return _ticks; }

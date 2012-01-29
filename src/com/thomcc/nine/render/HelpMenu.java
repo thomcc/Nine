@@ -50,6 +50,8 @@ public class HelpMenu extends Menu {
           int tempx = x+strs[i-1].length()*Renderer.CHAR_WIDTH;
           int tempy = y-12+6;
           r.render(3, tempx, tempy, 0);
+          tempx += 7;
+          r.render(4, tempx, tempy, 0);
         }
 
       } else {

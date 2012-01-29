@@ -1,5 +1,6 @@
 package com.thomcc.nine.entity;
 
+import com.thomcc.nine.Sound;
 import com.thomcc.nine.render.Renderer;
 
 public class Item extends Entity {
@@ -34,6 +35,8 @@ public class Item extends Entity {
   public void render(Renderer r) {
   }
   protected void touched(Entity e) { if (e instanceof Mobile) apply((Mobile)e);}
-  protected void apply(Mobile m) {}
+  protected void apply(Mobile m) {
+    Sound.getItem.play();
+  }
   
 }

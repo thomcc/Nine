@@ -31,8 +31,18 @@ public class Art {
         { D, D, D, D, D, D } }*/
   };
   
-  
-  
+  private static final int[] b3colors = new int[] {
+      0, 0xff82333b, 0xffddbbbb, 0xffd22345, 0xff832735 
+  };
+  private static final int[][][] b3template = new int[][][] {
+    { { C, C, C, C, C, C },
+      { C, B, B, B, A, D },
+      { C, A, A, A, B, D },
+      { C, A, B, B, A, D },
+      { C, A, A, A, B, D },
+      { C, B, B, B, A, D },
+      { D, D, D, D, D, D } }
+  };
   
   private static final int[][][] playerTemplate = new int[][][] {{
     { _, _, _, _, _, _, _, _, _, _, _, _ },
@@ -97,7 +107,8 @@ public class Art {
         new Sprite(playerTemplate, 16, playerColors),
         new Sprite(bulletTemplate, 1, bulletColors),
         new Sprite(enemyTemplate, 16, enemyColors),
-        new Sprite(healthPackTemplate, 1, healthPackColors)
+        new Sprite(healthPackTemplate, 1, healthPackColors),
+        new Sprite(b3template, 1, b3colors)
     };
     nine = new Sprite(nineTemplate, 1, new int[] {0, 0xffff6249});
     

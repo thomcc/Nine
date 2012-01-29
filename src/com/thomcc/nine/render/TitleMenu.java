@@ -8,7 +8,7 @@ public class TitleMenu extends Menu {
         new MenuItem("New Game", 90, 90),
         new MenuItem("How to play", 90, 90+24),
         new MenuItem("Credits", 90, 90+48)
-    };  
+    };
   }
   protected void renderTitle(Renderer r) {
     r.render9((Nine.WIDTH-17)/2, 15);
