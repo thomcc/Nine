@@ -1,14 +1,15 @@
 * 9
 
-9 is a game that evolved out of a noise generator.
+9 is my second game ever.  It's more fun than my first.  Play it!
 
-** Controls
+** How to play
+ - WASD/Arrow keys/Numpad for movement
+ - Mouse for aiming
+ - P, Tab, Escape, and I all pause the game.
 
-WASD/Arrow keys/Numpad for movement
-
-Click or space bar to shoot.
+*** For more, see the in-game help menu
 
 
 
-
+(c) 2012 Thom Chiovoloni all rights reserved
 
