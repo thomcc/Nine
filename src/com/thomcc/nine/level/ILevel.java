@@ -7,7 +7,7 @@ import com.thomcc.nine.Sound;
 import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.render.Renderer;
-
+// what a misguided effort _this_ file was.
 public interface ILevel {
   public boolean blocks(int tx, int ty);
   public void add(Entity e);
@@ -17,11 +17,13 @@ public interface ILevel {
   public void render(Renderer r);
   public ArrayList<Entity> getEntities(int x0, int y0, int x1, int y1);
   public ArrayList<Entity> getEntities();
-  public void findPlayerLocation(Player p);
   public int enemiesRemaining();
+  public void findAndSetLocation(Entity e);
   public int[][] getMinimap(int w, int h);
   public void tick(long ticks);
   public Player getPlayer();
+  public void addEnemies(int num);
+  public void generateLevel(int points);
   public boolean won();
   public void play(Sound s);
   public List<Sound> getSounds();

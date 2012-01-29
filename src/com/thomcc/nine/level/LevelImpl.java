@@ -16,22 +16,48 @@ public class LevelImpl implements ILevel{
   public int[][] map;
   public final int width, height;
   private Player _player;
-  private ArrayList<Entity> _entities;
+  
+  protected Random _random;
+  
+  private ArrayList<Entity> _entities;  
+  private ArrayList<Entity>[] _entLookup;
+  private int _activeEnemies;
+
+  // bounds for the cached minimap
   private int[][] _cachedmm;
   private int _cmmw = -1, _cmmh = -1;
-  private ArrayList<Entity>[] _entLookup;
-  private int _enemiesRemaining;
-  private Random _random;
   private List<Sound> toPlay;
   public boolean won = false;
+
   public LevelImpl() { this(600, 600, 50); }
   
-
+  // yeah and i hate you you too java. 
   @SuppressWarnings("unchecked")
   public LevelImpl(int width, int height, int points) {
     this.width = width; this.height = height;
     _random = new Random();
+
+    // initialize our lookup table, which will be used mostly for collision detection
+    _entLookup = new ArrayList[width * height / 64];
+    for (int i = 0; i < _entLookup.length; ++i) 
+      _entLookup[i] = new ArrayList<Entity>();
+
+    toPlay = new LinkedList<Sound>();
+    _entities = new ArrayList<Entity>();
+    _activeEnemies = 0;
     
+    generateLevel(points);
+  }
+  
+  // create and add num enemies
+  public void addEnemies(int num) {
+    for (int i = 0; i < num; ++i) {
+      findLocationAndAdd(new Enemy());
+      ++_activeEnemies;
+    }
+  }
+  
+  public void generateLevel(int points) {
     System.out.println("## Generating level:");
     long now = System.nanoTime();
     map = new VoronoiLevelGen(points).generateAndCheck(width, height);
@@ -41,146 +67,132 @@ public class LevelImpl implements ILevel{
     System.out.format("Voronoi calculated in %.1f seconds. (%s nanoseconds, %s milliseconds)\n", (double)t/1e9, t, millis);
     System.out.format("\tWidth: %s, Height: %s, Points: %s\n", width, height, points);
     System.out.println("## Level generated.");
-    
-
-    toPlay = new LinkedList<Sound>();
-    
-    _entities = new ArrayList<Entity>();
-    _enemiesRemaining = 0;
-    _entLookup = new ArrayList[width * height / 64];
-    for (int i = 0; i < _entLookup.length; ++i) {
-      _entLookup[i] = new ArrayList<Entity>();
-    }
-    for (int i = 0; i < 15+_random.nextInt(10); ++i) {
-      findLocationAndAdd(new Enemy());
-      ++_enemiesRemaining;
-    }
   }
-
+  
+  // is this a place something can go?
   public boolean blocks(int x, int y) {
     if (!inBounds(x, y)) return true;
     else return map[y][x] != 0;
   }
   
-  public void findPlayerLocation(Player p) {
-    Random r = new Random();
-    int x = -1; int y = -1;
-    while (true) {
-      x = r.nextInt(width);
-      y = r.nextInt(height);
-      if (get(x, y) == 0 && 
-          get(x-p.rx, y-p.ry) == 0 && get(x-p.rx, y+p.ry) == 0 && 
-          get(x+p.rx, y-p.ry) == 0 && get(x+p.rx, y+p.ry) == 0) 
-        break;
-    }
-    p.setPosition(x, y);
+  public int[][] getMinimap(int w, int h) {
+    // we want to be sure to cache the minimap, but it sometimes needs updating.
+    if (_cachedmm == null || w != _cmmw || h != _cmmh) updateCachedMinimap(w, h);    
+    return _cachedmm;
   }
-  
-  public void play(Sound s) {
-    toPlay.add(s);
-  }
-  public List<Sound> getSounds() { return toPlay; }
-  
   private void updateCachedMinimap(int w, int h) {
     if (w != _cmmw || h != _cmmh) {
       _cachedmm = new int[h][w];
       _cmmw = w;
       _cmmh = h;
     }
-    
-    int xs = width/w;
-    int ys = height/h;
-    
-    for (int y = 0; y < h; ++y)
-      for (int x = 0; x < w; ++x)
-        _cachedmm[y][x] = map[(int)((y+0.5)*ys)][(int)((x+0.5)*xs)];
-    
-  }
-  
-  public int[][] getMinimap(int w, int h) {
-    if (_cachedmm == null || w != _cmmw || h != _cmmh) {
-      updateCachedMinimap(w, h);
+    int xStep = width/w;
+    int yStep = height/h;
+    for (int y = 0; y < h; ++y) {
+      for (int x = 0; x < w; ++x) {
+        int yy = (int)((y+0.5)*yStep);
+        int xx = (int)((x+0.5)*xStep);
+        int val = inBounds(xx, yy) ? map[yy][xx] : 1; 
+        _cachedmm[y][x] = val;
+      }
     }
-    return _cachedmm;
   }
   
-  
-  public Player getPlayer() { return _player; }
-  public void findLocationAndAdd(Entity e) {
-    Random r = new Random();
+  // find an open spot and set the entity's location to that spot.
+  // am I taking into account the difference between their x location and where
+  // collision/drawing occurs?
+  public void findAndSetLocation(Entity e) {
     int x = -1; int y = -1;
+    int erx = e.rx;
+    int ery = e.ry;
     while (true) {
-      x = r.nextInt(width);
-      y = r.nextInt(height);
+      x = _random.nextInt(width);
+      y = _random.nextInt(height);
+      // let's not embed them in a wall or anything.
       if (get(x, y) == 0 && 
-          get(x-e.rx, y-e.ry) == 0 && get(x-e.rx, y+e.ry) == 0 && 
-          get(x+e.rx, y-e.ry) == 0 && get(x+e.rx, y+e.ry) == 0) 
+          get(x-erx, y-ery) == 0 && 
+          get(x-erx, y+ery) == 0 && 
+          get(x+erx, y-ery) == 0 && 
+          get(x+erx, y+ery) == 0) {
         break;
+      }
     }
     e.setPosition(x, y);
-    add(e);
   }
   
+  
+  // do everything necessary to add an entity to this level
   public void add(Entity e) {
     if (e instanceof Player) {
+      // then set our player.
       _player = (Player) e;
     }
+    // make sure they don't think they're removed, and add them to the list
     e.removed = false;
     _entities.add(e);
-    
+    // set their level, put them in the lookup table
     e.setLevel(this);
     insertEntity(e.getX() >> 4, e.getY() >> 4, e);
   }
   
-
-
-  public void remove(Entity e) {
-    e.removed = true;
-    _entities.remove(e);
-  }
-  public ArrayList<Entity> getEntities() { return _entities; }
+  // get all entities within x0, y0, x1, y1.
   public ArrayList<Entity> getEntities(int x0, int y0, int x1, int y1) {
     ArrayList<Entity> res = new ArrayList<Entity>();
+    // scale to within the lookuptable (as with tick), increasing the bounds to handle
+    // cases where i'm just asking for a single point, and when it's on bounds' edge
     int xt0 = (x0 >> 4) - 1;
     int yt0 = (y0 >> 4) - 1;
     int xt1 = (x1 >> 4) + 1;
     int yt1 = (y1 >> 4) + 1;
+    // iterate over the rectangle, check if there's an intersection, and if there is cool, add it to the list    
     for (int y = yt0; y <= yt1; ++y) 
       for (int x = xt0; x <= xt1; ++x) 
-        for (Entity e : _entLookup[x+y*(width >> 4)]) 
-          if (e.intersects(x0, y0, x1, y1)) 
+        for (Entity e : _entLookup[x+y*(width >> 4)])  
+          if (e.intersects(x0, y0, x1, y1))  
             res.add(e);
+    
     return res;
   }
+  
   public void tick(long ticks) {
     for (int i = 0; i < _entities.size(); ++i) {
       Entity e = _entities.get(i);
-      int tx = e.getX() >> 4;
-      int ty = e.getY() >> 4;
+      // find where it is and divide by 16 to scale into the range of the lookup table
+      int lookup_x = e.getX() >> 4;
+      int lookup_y = e.getY() >> 4;
+      
       e.tick(ticks);
-      int ntx = e.getX() >> 4;
-      int nty = e.getY() >> 4;
+      
+      // and then divide the new location by 16 to scale into the range of the lookup table
+      int new_lookup_x = e.getX() >> 4;
+      int new_lookup_y = e.getY() >> 4;
       
       if (e.removed) {
+        // remove the enemy, and decrement the index so we don't skip anybody.
         _entities.remove(i--);
-//        _entities.remove(e);
-        removeEntity(ntx, nty, e);
-        removeEntity(tx, ty, e);//?
+        //removeEntity(new_lookup_x, new_lookup_y, e); // i really don't _think_ i need this, but... i might.
+        removeEntity(lookup_x, lookup_y, e); 
+        
         if (e instanceof Enemy) {
-          if (--_enemiesRemaining <= 0) {
+          // kill kill kill
+          if (--_activeEnemies <= 0) {
+            // sweet, level is won and now the game will take care of the rest
             won = true;
           }
         }
-      } else if (tx != ntx || ty != nty) {
-        removeEntity(tx, ty, e);
-        insertEntity(ntx, nty, e);
+      } else if (lookup_x != new_lookup_x || lookup_y != new_lookup_y) {
+        // they've moved so update the lookup table
+        removeEntity(lookup_x, lookup_y, e);
+        insertEntity(new_lookup_x, new_lookup_y, e);
       }
     }
   }
-  public void render(Renderer r) {
-    r.render(this);
-    for (Entity e : _entities) e.render(r);
-  }
+  
+  
+  
+  // use bresenham's line algorithm to check if theres a blocking point between two other points
+  // might need to refactor this out of here if i decide to implement something like a line indicating
+  // where you're aiming.
   public boolean wallBetween(int x0, int y0, int x1, int y1) {
     if (!inBounds(x0, y0) || !inBounds(x1, y1)) return true;
     int dx = Math.abs(x1-x0);
@@ -202,12 +214,40 @@ public class LevelImpl implements ILevel{
     }
     return false;
   }
+  
+  //tell the renderer to draw us and tell the entities to draw themselves
+  // (they just tell the renderer to draw their sprite)
+  public void render(Renderer r) {
+    r.render(this);
+    for (Entity e : _entities) e.render(r);
+  }
+  
+  // yay i love one liners. 
+  
+  // a holdover from when this did both of these things.  but hey, a little abstraction never hurts, right?
+  public void findLocationAndAdd(Entity e) { findAndSetLocation(e); add(e); }
+  // set the player then do the rest of the adding
+  public void add(Player p) { _player = p; add((Entity)p); }
+  // add a sound to the list so that the game can play or not play it later
+  public void play(Sound s) { toPlay.add(s); }
+  // return list of sounds for the game
+  public List<Sound> getSounds() { return toPlay; }
+  // are there any enemies left or (potentially) has some other winning condition been satisfied
   public boolean won() { return won; }
-  public int getWidth() { return width; }
-  public int getHeight() { return height; }
+  // get _all_ entities.
+  public ArrayList<Entity> getEntities() { return _entities; }
+  // will we get an error if we do map[y][x]
   public boolean inBounds(int x, int y) { return x >= 0 && y >= 0 && x < width && y < height; }
-  public int get(int x, int y) { return map[y][x]; }
+  // insert or remove entity into/from the lookup table at i,j
   private void insertEntity(int i, int j, Entity e) { _entLookup[i+j*(width>>4)].add(e); }
   private void removeEntity(int i, int j, Entity e) { _entLookup[i+j*(width>>4)].remove(e); }
-  public int enemiesRemaining() { return _enemiesRemaining; }
+  // remove entity alltogether from level.
+  public void remove(Entity e) { e.removed = true; _entities.remove(e); }
+  // how many are left?
+  public int enemiesRemaining() { return _activeEnemies; }
+  // obvious
+  public int getWidth() { return width; }
+  public int getHeight() { return height; }
+  public int get(int x, int y) { return map[y][x]; }
+  public Player getPlayer() { return _player; }
 }

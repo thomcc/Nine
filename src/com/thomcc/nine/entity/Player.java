@@ -25,7 +25,7 @@ public class Player extends Mobile {
   }
   public void setLevel(ILevel l) {
     super.setLevel(l);
-    l.findPlayerLocation(this);
+    l.findAndSetLocation(this);
   }
   
   private void updateStats(long ticks) {}
