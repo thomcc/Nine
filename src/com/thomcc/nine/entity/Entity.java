@@ -7,7 +7,8 @@ import com.thomcc.nine.level.ILevel;
 import com.thomcc.nine.render.Renderer;
 
 public class Entity {
-  
+  // mostly motion and collision code here.
+  // e.g. mostly cruft.
   protected final Random random = new Random();
   protected ILevel _level;
   public double x = 0, y = 0;
@@ -50,6 +51,7 @@ public class Entity {
     }
   
   }
+  
   protected void collision(boolean ycol, double dx, double dy) {
     if (dx == 0) {
       _py *= -_collisionFriction;
@@ -73,6 +75,7 @@ public class Entity {
     _px = fx*pmag/fmag;
     _py = fy*pmag/fmag;
   }
+  
   public void updatePosition() {
     if (_px == 0 && _py == 0) return;
 

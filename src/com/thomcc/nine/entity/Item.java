@@ -31,6 +31,8 @@ public class Item extends Entity {
     super.tick(ticks);
     if (--_life <= 0) { remove(); return; }
     if (_life - _time < 100) _flickering = true;
+    // this animation code isn't used.  I might as well ditch it because
+    // i doubt I'll ever get around to it...
     if (ticks % _animDelay == 0) frame = (frame+1) % _totalFrames;
     if (_flickering) _flicker = !_flicker; //ticks % _animDelay == 0;
   }
@@ -52,6 +54,7 @@ public class Item extends Entity {
       onMobileContact(m);
     }
   }
+  // :/  yeah yeah yeah this is ugly.
   protected void onPlayerContact(Player p) {}
   protected void onMobileContact(Mobile m) {}
 }

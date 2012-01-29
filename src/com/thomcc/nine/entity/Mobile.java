@@ -15,11 +15,11 @@ public class Mobile extends Entity {
     if (health <= 0) {
       die(); return; 
     }
-    double cd = Math.cos(dir);
-    double sd = Math.sin(dir);
-    _px += cd*damage;
-    _py += sd*damage;
+    // bounce back!
+    _px += Math.cos(dir)*damage;
+    _py += Math.sin(dir)*damage;
   }
+  // cruft.  just pure cruft.  don't look at this code i don't want to talk about it.
   protected void collision(boolean ycol, double dx, double dy) {
     if (ycol) {
       switch ((int)dx) {
@@ -55,7 +55,9 @@ public class Mobile extends Entity {
   public void lookAt(int px, int py) {
     _eyeX = px;
     _eyeY = py;
-    dir = Math.atan2(py - y, px - x);
+    dir = Math.atan2(py - y, px - x);  
+    // i think there might be a bug in here.
+    // TODO: find out why exactly bullets don't go where the user is clicking
   }
   
 }

@@ -10,9 +10,14 @@ public class Player extends Mobile {
   private int _maxHealth;
 
   private Gun _gun;
+  
   public int lives;
-  public int deadcounter = 0;
-  public int invulncounter = 0;
+  // after the player dies there's a brief delay before they 
+  // respawn.  deadcounter represents this number
+  private int deadcounter = 0;
+  // once they respawn they can't be damaged for invulncounter more ticks
+  private int invulncounter = 0;
+  
   public Player(Input i, Game g) {
     _i = i;
     lives = 3;
@@ -23,6 +28,7 @@ public class Player extends Mobile {
     _maxSpeed = 4.0;
     _gun = new Gun(this);
   }
+  
   public void setLevel(ILevel l) {
     super.setLevel(l);
     l.findAndSetLocation(this);
@@ -32,24 +38,31 @@ public class Player extends Mobile {
   public void tick(long ticks) {
     if (deadcounter == 0) {
       updateStats(ticks);    
-    
+      // update our momentum/speed/whatever i'm calling _px and _py today
+      // to be in accordance with the user's demands
       if (_i.down) _py += 1.0;
       if (_i.right) _px += 1.0;
       if (_i.left) _px -= 1.0;
       if (_i.up) _py -= 1.0;
-    
+      // also shoot maybe.
       _gun.tick(firing(), ticks);
-      if (invulncounter > 0) --invulncounter;  
+      //decrement the invulnerability counter
+      if (invulncounter > 0) --invulncounter;
+      // and then let the mobile or entity motion code take care of actually
+      // moving and whatnot
       super.tick(ticks);
     } else {
       if (--deadcounter == 0) {
+        // i'm invincibleeee!
         invulncounter = 60;
+        // after respawning set health to max, and lose any upgrades
         health = _maxHealth;
+        _gun = new Gun(this);
       }
     }
   }
-  public void fire() {
-  }
+  
+  // duh.
   public void heal(int n) { 
     if (health < _maxHealth) {
       health += n;
@@ -58,12 +71,17 @@ public class Player extends Mobile {
       }
     }
   }
+  
+  // make the explosion sound, and decrement lives (and setup the 
+  // die/respawn/invulnerable stuff).  if we're out of lives then _really_ die.
   public void die() {
     _level.play(Sound.playerDeath);
     deadcounter = 20;
     --lives;
     if (lives == 0) super.die();
   }
+  
+  // take damage, play the sound (unless we're invulnerable)
   public void hurt(Entity cause, int damage, double dir) {
     if (invulncounter == 0) {
       _level.play(Sound.hurt);
@@ -71,8 +89,10 @@ public class Player extends Mobile {
     }
   }
   
-  public void render(Renderer r) { 
-    if (invulncounter == 0 || invulncounter % 5 == 0)
+  public void render(Renderer r) {
+    // if they're not blinking, or they are and its one of the times we
+    // want to draw them, ... do that.
+    if (invulncounter == 0 || invulncounter % 3 == 0)
       r.render(0, (int)x, (int)y, getDirection()); 
   }
   public int getFireCount() { return _gun.getAmmo(); }
