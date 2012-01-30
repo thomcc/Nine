@@ -1,4 +1,4 @@
-package com.thomcc.nine.render;
+package com.thomcc.nine.menu;
 
 public class WonMenu extends Menu {
   public WonMenu() {

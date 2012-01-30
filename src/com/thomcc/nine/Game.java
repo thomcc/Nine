@@ -3,6 +3,12 @@ package com.thomcc.nine;
 import java.util.List;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
+import com.thomcc.nine.menu.GameOverMenu;
+import com.thomcc.nine.menu.LoadingMenu;
+import com.thomcc.nine.menu.Menu;
+import com.thomcc.nine.menu.PauseMenu;
+import com.thomcc.nine.menu.TitleMenu;
+import com.thomcc.nine.menu.WonLevelMenu;
 import com.thomcc.nine.render.*;
 
 

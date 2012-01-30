@@ -1,6 +1,9 @@
-package com.thomcc.nine.entity;
+package com.thomcc.nine.entity.item;
 
 import com.thomcc.nine.Sound;
+import com.thomcc.nine.entity.Entity;
+import com.thomcc.nine.entity.Mobile;
+import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.render.Renderer;
 
 public class Item extends Entity {
@@ -45,7 +48,7 @@ public class Item extends Entity {
     }
   }
   protected void touched(Entity e) { if (e instanceof Mobile) apply((Mobile)e);}
-  protected void apply(Mobile m) {
+  public void apply(Mobile m) {
     if (m instanceof Player) {
       _level.play(Sound.getItem);
       onPlayerContact((Player)m);

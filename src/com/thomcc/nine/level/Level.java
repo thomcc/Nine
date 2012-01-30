@@ -9,8 +9,7 @@ import com.thomcc.nine.Sound;
 import com.thomcc.nine.entity.Enemy;
 import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
-import com.thomcc.nine.level.gen.VoronoiLevelGen;
-import com.thomcc.nine.render.LevelDescriptionMenu;
+import com.thomcc.nine.menu.LevelDescriptionMenu;
 import com.thomcc.nine.render.Renderer;
 
 public class Level {

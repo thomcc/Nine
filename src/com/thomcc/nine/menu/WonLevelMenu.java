@@ -1,10 +1,11 @@
-package com.thomcc.nine.render;
+package com.thomcc.nine.menu;
 
 import com.thomcc.nine.Game;
 import com.thomcc.nine.Input;
 import com.thomcc.nine.Sound;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.Level;
+import com.thomcc.nine.render.Renderer;
 
 public class WonLevelMenu extends PauseMenu {
   public WonLevelMenu() {

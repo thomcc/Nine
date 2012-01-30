@@ -1,6 +1,7 @@
-package com.thomcc.nine.render;
+package com.thomcc.nine.menu;
 
 import com.thomcc.nine.Nine;
+import com.thomcc.nine.render.Renderer;
 
 public class TitleMenu extends Menu {
   public TitleMenu() {

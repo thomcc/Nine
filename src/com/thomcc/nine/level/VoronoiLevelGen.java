@@ -1,4 +1,4 @@
-package com.thomcc.nine.level.gen;
+package com.thomcc.nine.level;
 
 import java.util.ArrayList;
 import java.util.Collections;

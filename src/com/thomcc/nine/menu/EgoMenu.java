@@ -1,4 +1,6 @@
-package com.thomcc.nine.render;
+package com.thomcc.nine.menu;
+
+import com.thomcc.nine.render.Renderer;
 
 
 public class EgoMenu extends HelpMenu {

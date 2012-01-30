@@ -1,6 +1,9 @@
 package com.thomcc.nine.entity;
 
 import com.thomcc.nine.Sound;
+import com.thomcc.nine.entity.item.HealthPackItem;
+import com.thomcc.nine.entity.item.OneUpItem;
+import com.thomcc.nine.entity.item.ThreeGunItem;
 import com.thomcc.nine.render.Renderer;
 
 public class Enemy extends Mobile {

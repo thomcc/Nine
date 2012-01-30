@@ -1,6 +1,8 @@
 package com.thomcc.nine.entity;
 
 import java.util.List;
+
+import com.thomcc.nine.entity.item.Item;
 import com.thomcc.nine.render.Renderer;
 
 public class Bullet extends Entity {

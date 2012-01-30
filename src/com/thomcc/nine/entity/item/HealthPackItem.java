@@ -1,4 +1,6 @@
-package com.thomcc.nine.entity;
+package com.thomcc.nine.entity.item;
+
+import com.thomcc.nine.entity.Player;
 
 public class HealthPackItem extends Item {
 

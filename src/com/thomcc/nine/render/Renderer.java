@@ -11,7 +11,7 @@ import com.thomcc.nine.Game;
 import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
-import com.thomcc.nine.level.gen.VoronoiNoise;
+import com.thomcc.nine.menu.Menu;
 
 public class Renderer {
   public static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()[]<>/"+
@@ -69,7 +69,7 @@ public class Renderer {
         else _floorPattern[y][x] = false;
   }
   
-  public void renderMinimap(Level _level) {
+  public void renderMinimap(Level _level) { // TODO: minimap -> radar
     
     int mmW = _level.width/10; int mmH = _level.height/10;
     

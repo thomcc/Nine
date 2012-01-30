@@ -1,9 +1,10 @@
-package com.thomcc.nine.render;
+package com.thomcc.nine.menu;
 
 import java.util.ArrayList;
 
 import com.thomcc.nine.Game;
 import com.thomcc.nine.Input;
+import com.thomcc.nine.render.Renderer;
 
 public class Menu {
   public Input input;

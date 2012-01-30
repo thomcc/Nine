@@ -1,4 +1,6 @@
-package com.thomcc.nine.render;
+package com.thomcc.nine.menu;
+
+import com.thomcc.nine.render.Renderer;
 
 
 // 320 characters is about as large as i can get away with for the descriptions.

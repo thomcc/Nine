@@ -1,8 +1,9 @@
-package com.thomcc.nine.render;
+package com.thomcc.nine.menu;
 
 import java.awt.Color;
 
 import com.thomcc.nine.Nine;
+import com.thomcc.nine.render.Renderer;
 
 public class PauseMenu extends Menu {
   public static final Color bgColor = new Color(0x88000000, true);

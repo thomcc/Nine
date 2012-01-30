@@ -1,4 +1,4 @@
-package com.thomcc.nine.level.gen;
+package com.thomcc.nine.level;
 //import java.awt.Image;
 import java.awt.Image;
 import java.awt.geom.Point2D;

@@ -2,6 +2,7 @@ package com.thomcc.nine.entity;
 
 
 import com.thomcc.nine.*;
+import com.thomcc.nine.entity.item.Item;
 import com.thomcc.nine.level.Level;
 import com.thomcc.nine.render.Renderer;
 
