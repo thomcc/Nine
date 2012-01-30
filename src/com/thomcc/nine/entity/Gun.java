@@ -1,7 +1,5 @@
 package com.thomcc.nine.entity;
 
-import com.thomcc.nine.Sound;
-
 public class Gun {
   
   protected Player _player;
@@ -41,8 +39,8 @@ public class Gun {
   public boolean tryFire() {
     if (_ammo == 0) return false;
     if (canFire) {
-      _player._level.play(Sound.shoot);
       fire();
+      _player.didShoot();
       --_ammo;
       return true;
     } else return false;

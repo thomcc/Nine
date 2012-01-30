@@ -10,9 +10,10 @@ import com.thomcc.nine.entity.Enemy;
 import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.gen.VoronoiLevelGen;
+import com.thomcc.nine.render.LevelDescriptionMenu;
 import com.thomcc.nine.render.Renderer;
 
-public class LevelImpl implements ILevel{
+public class Level {
   public int[][] map;
   public final int width, height;
   private Player _player;
@@ -22,18 +23,29 @@ public class LevelImpl implements ILevel{
   private ArrayList<Entity> _entities;  
   private ArrayList<Entity>[] _entLookup;
   private int _activeEnemies;
-
+  
+  public int num;
+  
+  public int _enemiesKilled;
+  
+  public String description;
+  
+  public int score;
   // bounds for the cached minimap
   private int[][] _cachedmm;
+  
   private int _cmmw = -1, _cmmh = -1;
+  
   private List<Sound> toPlay;
+  private long time = 0;
   public boolean won = false;
-
-  public LevelImpl() { this(600, 600, 50); }
+  public int scoreScroll = 0;
+  
+  public Level() { this(600, 600, 50); }
   
   // yeah and i hate you you too java. 
   @SuppressWarnings("unchecked")
-  public LevelImpl(int width, int height, int points) {
+  public Level(int width, int height, int points) {
     this.width = width; this.height = height;
     _random = new Random();
 
@@ -53,7 +65,6 @@ public class LevelImpl implements ILevel{
   public void addEnemies(int num) {
     for (int i = 0; i < num; ++i) {
       findLocationAndAdd(new Enemy());
-      ++_activeEnemies;
     }
   }
   
@@ -68,7 +79,6 @@ public class LevelImpl implements ILevel{
     System.out.format("\tWidth: %s, Height: %s, Points: %s\n", width, height, points);
     System.out.println("## Level generated.");
   }
-  
   // is this a place something can go?
   public boolean blocks(int x, int y) {
     if (!inBounds(x, y)) return true;
@@ -155,6 +165,7 @@ public class LevelImpl implements ILevel{
   }
   
   public void tick(long ticks) {
+    ++time;
     for (int i = 0; i < _entities.size(); ++i) {
       Entity e = _entities.get(i);
       // find where it is and divide by 16 to scale into the range of the lookup table
@@ -175,6 +186,9 @@ public class LevelImpl implements ILevel{
         
         if (e instanceof Enemy) {
           // kill kill kill
+          ++_enemiesKilled;
+          score += ((Enemy) e).getScoreValue();
+          scoreScroll  += 15;
           if (--_activeEnemies <= 0) {
             // sweet, level is won and now the game will take care of the rest
             won = true;
@@ -221,11 +235,30 @@ public class LevelImpl implements ILevel{
     r.render(this);
     for (Entity e : _entities) e.render(r);
   }
-  
+  //a holdover from when this did both of these things.  but hey, a little abstraction never hurts, right?
+  public void findLocationAndAdd(Entity e) { 
+    findAndSetLocation(e); 
+    add(e); 
+    if (e instanceof Enemy) ++_activeEnemies;
+  }
+  public String getScoreString() {
+    int s = score;
+    if (scoreScroll == 0) return "Score: "+s;
+    else if (scoreScroll > 0) return "Score: " + (s - scoreScroll--);
+    else return "Score: " + (s - scoreScroll++);
+  }
+  public void playerDied() {
+    if (score - 60 < 0) {
+      scoreScroll = -score;
+      score = 0;
+    } else {
+      scoreScroll = -60;
+      score -= 60;
+    }
+  }
   // yay i love one liners. 
   
-  // a holdover from when this did both of these things.  but hey, a little abstraction never hurts, right?
-  public void findLocationAndAdd(Entity e) { findAndSetLocation(e); add(e); }
+  
   // set the player then do the rest of the adding
   public void add(Player p) { _player = p; add((Entity)p); }
   // add a sound to the list so that the game can play or not play it later
@@ -250,4 +283,7 @@ public class LevelImpl implements ILevel{
   public int getHeight() { return height; }
   public int get(int x, int y) { return map[y][x]; }
   public Player getPlayer() { return _player; }
+  public long getTime() { return time; }
+  public LevelDescriptionMenu getDescriptionMenu() { return new LevelDescriptionMenu(num, description); }
+
 }

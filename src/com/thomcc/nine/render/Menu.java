@@ -1,5 +1,7 @@
 package com.thomcc.nine.render;
 
+import java.util.ArrayList;
+
 import com.thomcc.nine.Game;
 import com.thomcc.nine.Input;
 
@@ -10,9 +12,7 @@ public class Menu {
   private boolean wait = false;
   protected int menuItemActive = 0xffffff;
   protected int menuItemInactive = 0x888888;
-  protected MenuItem[] items = new MenuItem[] {
-      new MenuItem("nothing", 90, 90)
-  };
+  protected MenuItem[] items = new MenuItem[0];
   protected boolean _hit = false;
   public void init(Game game, Input input) {
     this.input = input;
@@ -53,6 +53,31 @@ public class Menu {
   }
   protected void renderContent(Renderer r) {}
 
+  
+  protected String[] splitup(String text, int cols) {
+    ArrayList<StringBuilder> lines = new ArrayList<StringBuilder>();
+    String[] words = text.split("[\\s]+");
+    StringBuilder line = new StringBuilder();
+    
+    for (int pos = 0; pos < words.length; ++pos) {
+
+      line.append(line.length() == 0 ? "" : " ");
+      line.append(words[pos]);
+      if (pos+1 == words.length) continue; 
+      if (line.length()+words[pos+1].length()+1 > cols){
+        lines.add(line);
+        line = new StringBuilder();
+      }
+    }
+    if (line.length() > 0) lines.add(line);
+    
+    String[] ss = new String[lines.size()];
+    
+    for (int i = 0; i < lines.size(); ++i)
+      ss[i] = lines.get(i).toString();
+    
+    return ss;
+  }
   protected void renderTitle(Renderer r) {
     int w = r.getViewportWidth();
     int sw = title.length()*Renderer.CHAR_WIDTH;

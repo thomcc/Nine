@@ -3,14 +3,15 @@ package com.thomcc.nine.entity;
 import java.util.List;
 import java.util.Random;
 
-import com.thomcc.nine.level.ILevel;
+
+import com.thomcc.nine.level.Level;
 import com.thomcc.nine.render.Renderer;
 
 public class Entity {
   // mostly motion and collision code here.
   // e.g. mostly cruft.
   protected final Random random = new Random();
-  protected ILevel _level;
+  protected Level _level;
   public double x = 0, y = 0;
   public int rx = 1, ry = 1;
   protected int _startX = -1, _startY = -1;
@@ -172,7 +173,7 @@ public class Entity {
   public int getX() { return (int)x; }
   public int getY() { return (int)y; }
   public int getDirection() { return (((int) (dir / (Math.PI * 2) * 16 + 20.5)) & 15); }
-  public void setLevel(ILevel l) { _level = l; }
+  public void setLevel(Level l) { _level = l; }
   protected void touched(Entity e) {}
   public boolean blocks(Entity e) { return false; }
   public boolean appearsOnMinimap() { return false; }

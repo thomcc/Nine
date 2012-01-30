@@ -4,20 +4,24 @@ import java.awt.Color;
 
 import com.thomcc.nine.Game;
 import com.thomcc.nine.Input;
-import com.thomcc.nine.Nine;
 import com.thomcc.nine.Settings;
 
 public class SettingsMenu extends PauseMenu {
   public static final Color bgColor = new Color(0x88000000, true);
-  private int x;
   private Settings s;
   public SettingsMenu() {
     title = "Settings!";
-    x = (Nine.WIDTH - (13*Renderer.CHAR_WIDTH+40))/2;
+    padding = 20;
+    
+    width = 16*Renderer.CHAR_WIDTH;
+    height = 4*Renderer.CHAR_HEIGHT;
+    titley = 50;
+    int xx = getTextX();//(Nine.WIDTH-width)/2 + padding;
+    int yy = getTextY();//((Nine.HEIGHT-height)+titley)/2+padding;
     items = new MenuItem[] {
-        new ToggleableMenuItem("Show Minimap", x+20, 90),
-        new ToggleableMenuItem("Play Sounds", x+20, 90+24),
-        new MenuItem("Okay", x+20, 90+48)
+        new ToggleableMenuItem("Show Minimap", xx, yy),
+        new ToggleableMenuItem("Play Sounds", xx, yy+2*Renderer.CHAR_HEIGHT),
+        new MenuItem("Okay", xx, yy+4*Renderer.CHAR_HEIGHT)
     };
   }
   public void clicked(int chosen) {

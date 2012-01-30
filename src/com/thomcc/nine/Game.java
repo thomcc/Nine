@@ -1,21 +1,14 @@
 package com.thomcc.nine;
 
 import java.util.List;
-import java.util.Random;
-
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
-import com.thomcc.nine.render.LoadingMenu;
-import com.thomcc.nine.render.Menu;
-import com.thomcc.nine.render.PauseMenu;
-import com.thomcc.nine.render.Renderer;
-import com.thomcc.nine.render.TitleMenu;
-import com.thomcc.nine.render.WonMenu;
+import com.thomcc.nine.render.*;
 
 
 public class Game {
   private Player _player;
-  private ILevel _level;
+  private Level _level;
   private Input _ih;
   // offset for drawing and for mouse input.  
   public int offX, offY;
@@ -23,7 +16,7 @@ public class Game {
   private long _ticks;
   // currently active menu
   private Menu _menu;
-  private Random _random;
+  //private Random _random;
   // settings!  yay, not a singleton like i was going to do
   public Settings settings;
   // should we render
@@ -37,17 +30,26 @@ public class Game {
   // are we paused?
   public boolean paused = false;
   
+  public int score;
+  
+  public int levelNumber = 0;
+  
   public Game(Input ih) {
     settings = new Settings();
     offX = 0;
+    score = 0;
     offY = 0;
     _ih = ih;
-    _random = new Random();
+   // _random = new Random();
     setMenu(new TitleMenu());
   }
+  
   // basically, display the loading menu and set a variable so that next time we tick
   // (after the loading menu actually renders) we'll load the game
-  public void start() {
+  public void start() { start(1); }
+  public void start(int n) {
+    if (n == 1) score = 0;
+    levelNumber = n;
     ticking = false;
     loading = true;
     hasDisplayedLoading = false;
@@ -56,15 +58,19 @@ public class Game {
   // load the level, add some enemies, make a new player, and set some shit to indicate that
   // this all happened.
   public void loadGame() {
-    _level = new LevelImpl();
-    _level.addEnemies(_random.nextInt(10)+15);
+    _level = Levels.getLevel(levelNumber);
     _player = new Player(_ih, this);
     _level.add(_player);
     loading = false;
     ticking = true;
     shouldRender = true;
-    setMenu(null);
+    paused = true;
+    setMenu(_level.getDescriptionMenu());
   }
+  
+  
+  
+  
   // TICK!
   public void tick() {
     if (_ih.pause) pause();
@@ -96,12 +102,17 @@ public class Game {
     if (loading && !hasDisplayedLoading) hasDisplayedLoading = true;
   }
   
+  
+  
+  
+  
   // TODO make the methods i wrote to do this actually do them.
   private void renderGui(Renderer r) {
     if (settings.getShowMinimap()) r.renderMinimap(_level);
     r.renderString("Ammo: "+_player.getFireCount(), 6, 6);
     r.renderString("Health: "+_player.health+" x "+_player.lives, 6, 6+Renderer.CHAR_HEIGHT);
     r.renderString("Enemies: " + _level.enemiesRemaining(), 6, 6+Renderer.CHAR_HEIGHT*2);
+    r.renderString(_level.getScoreString(), Nine.WIDTH/2, 6);
   }
   
   // make sounds happen if they gotta.
@@ -109,15 +120,27 @@ public class Game {
     if (settings.getPlaySounds()) for (Sound s : sounds) s.play();
     sounds.clear();
   }
+  public void playSound(Sound s) {
+    if (settings.getPlaySounds()) s.play();
+  }
+  
+  
+  public void win() {
+    pause();
+    setMenu(new WonLevelMenu());  
+  }
+  
+  public void lose() { 
+    shouldRender = ticking = false; 
+    score += _level.score;
+    setMenu(new GameOverMenu());
+  }
+
+  
   
   // never can have too many one liners, can you?
-  
   // set the menu.  if it's not null, give it a pointer to this and the input handler
   public void setMenu(Menu m) { _menu = m; if (m != null) m.init(this, _ih); }
-  // lose the game, basically just stop ticking and rendering and return to the tile
-  public void lose() { shouldRender = ticking = false; setMenu(new TitleMenu()); }
-  // win the game.  congratulate the player i guess for now.
-  public void win() { shouldRender = ticking = false; setMenu(new WonMenu()); }
   // pause and unpause.  Pretty straightforward.
   public void pause() { paused = true; setMenu(new PauseMenu()); }
   public void unPause() { paused = false; setMenu(null); }
@@ -129,5 +152,5 @@ public class Game {
   public Player getPlayer() { return _player; }
   public long getTicks() { return _ticks; }
   public void setPlayer(Player p) { _player = p; }
-  public ILevel getLevel() { return _level; }
+  public Level getLevel() { return _level; }
 }

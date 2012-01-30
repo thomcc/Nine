@@ -9,6 +9,8 @@ public class Sound {
   public final static Sound enemyDeath = new Sound("/enemydie.wav");
   public final static Sound notice = new Sound("/notice.wav");
   public final static Sound playerDeath = new Sound("/playerdie.wav");
+  public final static Sound scoreUp = new Sound("/scoreup.wav");
+  public final static Sound winLevel = new Sound("/winLevel.wav");
   public Sound(String filename) {
     try {
       _ac = Applet.newAudioClip(Sound.class.getResource(filename));

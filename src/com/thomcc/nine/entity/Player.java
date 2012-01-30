@@ -2,13 +2,13 @@ package com.thomcc.nine.entity;
 
 
 import com.thomcc.nine.*;
-import com.thomcc.nine.level.ILevel;
+import com.thomcc.nine.level.Level;
 import com.thomcc.nine.render.Renderer;
 
 public class Player extends Mobile {
   public Input _i;
   private int _maxHealth;
-
+  public int shotsFired = 0;
   private Gun _gun;
   
   public int lives;
@@ -29,7 +29,7 @@ public class Player extends Mobile {
     _gun = new Gun(this);
   }
   
-  public void setLevel(ILevel l) {
+  public void setLevel(Level l) {
     super.setLevel(l);
     l.findAndSetLocation(this);
   }
@@ -62,6 +62,10 @@ public class Player extends Mobile {
     }
   }
   
+  public void didShoot() {
+    _level.play(Sound.shoot);
+    ++shotsFired;
+  }
   // duh.
   public void heal(int n) { 
     if (health < _maxHealth) {
@@ -77,6 +81,7 @@ public class Player extends Mobile {
   public void die() {
     _level.play(Sound.playerDeath);
     deadcounter = 20;
+    _level.playerDied();
     --lives;
     if (lives == 0) super.die();
   }

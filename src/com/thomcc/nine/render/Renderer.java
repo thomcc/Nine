@@ -69,11 +69,11 @@ public class Renderer {
         else _floorPattern[y][x] = false;
   }
   
-  public void renderMinimap(ILevel l) {
+  public void renderMinimap(Level _level) {
     int mmW = 60; int mmH = 60;
     int mmXoff = _width-10-mmW;
     int mmYoff = 10;
-    int[][] m = l.getMinimap(mmW, mmH);
+    int[][] m = _level.getMinimap(mmW, mmH);
     BufferedImage mmImg = new BufferedImage(mmW, mmH, BufferedImage.TYPE_INT_RGB);
     int[] pix = ((DataBufferInt)mmImg.getRaster().getDataBuffer()).getData();
     for (int y = 0; y < mmH; ++y)
@@ -83,13 +83,13 @@ public class Renderer {
         case -1: case 1: pix[x+y*mmW] = WALL_OUTER; break;
         case 2: pix[x+y*mmW] = WALL_INNER; break;
         }
-    for (Entity e : l.getEntities()) {
+    for (Entity e : _level.getEntities()) {
       if (!e.appearsOnMinimap()) continue;
       int col = e.getColor();
       int x = e.getX();
       int y = e.getY();
-      x /= l.getHeight()/mmH;
-      y /= l.getWidth()/mmW;
+      x /= _level.getHeight()/mmH;
+      y /= _level.getWidth()/mmW;
       pix[x+y*mmW] = col;
     }
     _g.setColor(Color.BLACK);
@@ -97,7 +97,7 @@ public class Renderer {
     _g.drawImage(mmImg, mmXoff, mmYoff, null);
   }
   
-  public void render(LevelImpl l) {
+  public void render(Level l) {
     int[][] map = l.map;
     int lw = l.width;
     int lh = l.height;
@@ -161,7 +161,7 @@ public class Renderer {
     }
     int xo = p.getX()-_width/2;
     int yo = p.getY()-_height/2;
-    ILevel l = g.getLevel();
+    Level l = g.getLevel();
     int xmin = 0;
     int xmax = l.getWidth()-_width;
     int ymin = 0;

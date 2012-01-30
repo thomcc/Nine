@@ -143,6 +143,7 @@ public class Enemy extends Mobile {
     
     super.die();
   }
+  public int getScoreValue() { return 15; }
   protected void touched(Entity e) { if (e instanceof Player) e.hurt(this, 1, dir); }
   public boolean appearsOnMinimap() { return true; }
   public int getColor() { return 0xff649f42; }
