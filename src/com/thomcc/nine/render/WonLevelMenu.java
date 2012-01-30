@@ -38,7 +38,7 @@ public class WonLevelMenu extends PauseMenu {
     totalScore = g.score;
     shotsFired = p.shotsFired;
     thingsKilled = l._enemiesKilled;
-    accuracy = (int)(100.0*((double)(shotsFired-thingsKilled))/(double)shotsFired);
+    accuracy = (int)(100.0*(1.0 - (double)(shotsFired-thingsKilled)/(double)(shotsFired)));
     speed = l.getTime()/60;
     
     double secmul;
@@ -63,7 +63,6 @@ public class WonLevelMenu extends PauseMenu {
     if (!calced) calc();
     
     String[] content = new String[] {
-        
         "Things killed: "+thingsKilled,
         "Shots Fired: "+shotsFired,
         "Accuracy: " + accuracy + "%",

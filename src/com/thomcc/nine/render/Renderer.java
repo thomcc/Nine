@@ -70,9 +70,18 @@ public class Renderer {
   }
   
   public void renderMinimap(Level _level) {
-    int mmW = 60; int mmH = 60;
+    
+    int mmW = _level.width/10; int mmH = _level.height/10;
+    
+    int i = 10, j = 10;
+    
+    while (mmW > 80) mmW = _level.width / --i;
+    while (mmH > 80) mmH = _level.height / --j;
+    
     int mmXoff = _width-10-mmW;
+    
     int mmYoff = 10;
+    
     int[][] m = _level.getMinimap(mmW, mmH);
     BufferedImage mmImg = new BufferedImage(mmW, mmH, BufferedImage.TYPE_INT_RGB);
     int[] pix = ((DataBufferInt)mmImg.getRaster().getDataBuffer()).getData();
@@ -90,7 +99,7 @@ public class Renderer {
       int y = e.getY();
       x /= _level.getHeight()/mmH;
       y /= _level.getWidth()/mmW;
-      pix[x+y*mmW] = col;
+      if (x+y*mmW < pix.length) pix[x+y*mmW] = col;
     }
     _g.setColor(Color.BLACK);
     _g.drawRect(mmXoff-1, mmYoff-1, mmW+1, mmH+1);

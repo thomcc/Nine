@@ -59,7 +59,7 @@ public class Game {
   // this all happened.
   public void loadGame() {
     _level = Levels.getLevel(levelNumber);
-    _player = new Player(_ih, this);
+    if (levelNumber == 1) _player = new Player(_ih, this);
     _level.add(_player);
     loading = false;
     ticking = true;
@@ -67,9 +67,6 @@ public class Game {
     paused = true;
     setMenu(_level.getDescriptionMenu());
   }
-  
-  
-  
   
   // TICK!
   public void tick() {
