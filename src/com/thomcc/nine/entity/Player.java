@@ -26,6 +26,7 @@ public class Player extends Mobile {
     health = _maxHealth;
     _collisionFriction = 0.3;
     _friction = 0.9;
+    size = 12;
     _maxSpeed = 4.0;
     _gun = new Gun(this);
   }

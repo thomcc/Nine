@@ -10,6 +10,7 @@ import com.thomcc.nine.entity.Enemy;
 import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.menu.LevelDescriptionMenu;
+import com.thomcc.nine.render.Minimap;
 import com.thomcc.nine.render.Renderer;
 
 public class Level {
@@ -30,14 +31,11 @@ public class Level {
   public String description;
   
   public int score;
-  // bounds for the cached minimap
-  private int[][] _cachedmm;
-  
-  private int _cmmw = -1, _cmmh = -1;
   
   private List<Sound> toPlay;
   private long time = 0;
   public boolean won = false;
+  public Minimap minimap;
   public int scoreScroll = 0;
   
   public Level() { this(600, 600, 50); }
@@ -47,7 +45,6 @@ public class Level {
   public Level(int width, int height, int points) {
     this.width = width; this.height = height;
     _random = new Random();
-
     // initialize our lookup table, which will be used mostly for collision detection
     _entLookup = new ArrayList[width * height / 64];
     for (int i = 0; i < _entLookup.length; ++i) 
@@ -58,6 +55,8 @@ public class Level {
     _activeEnemies = 0;
     
     generateLevel(points);
+
+    minimap = new Minimap(this);
   }
   
   // create and add num enemies
@@ -83,30 +82,6 @@ public class Level {
     if (!inBounds(x, y)) return true;
     else return map[y][x] != 0;
   }
-  
-  public int[][] getMinimap(int w, int h) {
-    // we want to be sure to cache the minimap, but it sometimes needs updating.
-    if (_cachedmm == null || w != _cmmw || h != _cmmh) updateCachedMinimap(w, h);    
-    return _cachedmm;
-  }
-  private void updateCachedMinimap(int w, int h) {
-    if (w != _cmmw || h != _cmmh) {
-      _cachedmm = new int[h][w];
-      _cmmw = w;
-      _cmmh = h;
-    }
-    int xStep = width/w;
-    int yStep = height/h;
-    for (int y = 0; y < h; ++y) {
-      for (int x = 0; x < w; ++x) {
-        int yy = (int)((y+0.5)*yStep);
-        int xx = (int)((x+0.5)*xStep);
-        int val = inBounds(xx, yy) ? map[yy][xx] : 1; 
-        _cachedmm[y][x] = val;
-      }
-    }
-  }
-  
   // find an open spot and set the entity's location to that spot.
   // am I taking into account the difference between their x location and where
   // collision/drawing occurs?

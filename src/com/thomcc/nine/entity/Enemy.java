@@ -22,6 +22,7 @@ public class Enemy extends Mobile {
     _friction = 0.98;
     _maxSpeed = 5.0;
     rx = ry = 3;
+    size = 12;
     _moveInterval = 40 + random.nextInt(40);
   }
   private int _moveInterval;

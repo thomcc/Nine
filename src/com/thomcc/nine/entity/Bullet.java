@@ -25,6 +25,7 @@ public class Bullet extends Entity {
     _life = 200+random.nextInt(100);
     _maxSpeed = 1000;
     _friction = 1;
+    size = 4;
     _collisionFriction = 1;
     _collisions = 0;
     _maxCollisions = 20;

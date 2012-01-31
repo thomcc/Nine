@@ -8,7 +8,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.thomcc.nine.Game;
-import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
 import com.thomcc.nine.menu.Menu;
@@ -21,10 +20,10 @@ public class Renderer {
   public static final int CHAR_HEIGHT = 12;
   public static final int CHARS_PER_ROW = 43;
 
-  private static final int FLOOR = 0x616786;
+  public static final int FLOOR = 0x616786;
   private static final int DFLOOR = 0x575d79;
-  private static final int WALL_OUTER = 0x222222;
-  private static final int WALL_INNER = 0x2D81C3;
+  public static final int WALL_OUTER = 0x222222;
+  public static final int WALL_INNER = 0x2D81C3;
 
   public static final Color MENU_BOX_COLOR = new Color(0x24, 0x4e, 0x67);
   //public static final int MENU_TEXT_COLOR = 0xacc2cf;
@@ -70,36 +69,14 @@ public class Renderer {
   }
   
   public void renderMinimap(Level _level) { // TODO: minimap -> radar
-    
-    int mmW = _level.width/10; int mmH = _level.height/10;
-    
-    int i = 1, j = 1;
-    while (mmW > 80) mmW = _level.width / ++i;
-    while (mmH > 80) mmH = _level.height / ++j;
+
+    BufferedImage mmImg = _level.minimap.getImage();
+    int mmW = mmImg.getWidth();
+    int mmH = mmImg.getHeight();
     
     int mmXoff = _width-10-mmW;
-    
     int mmYoff = 10;
     
-    int[][] m = _level.getMinimap(mmW, mmH);
-    BufferedImage mmImg = new BufferedImage(mmW, mmH, BufferedImage.TYPE_INT_RGB);
-    int[] pix = ((DataBufferInt)mmImg.getRaster().getDataBuffer()).getData();
-    for (int y = 0; y < mmH; ++y)
-      for (int x = 0; x < mmW; ++x) 
-        switch (m[y][x]) {
-        case 0: pix[x+y*mmW] = FLOOR; break;
-        case -1: case 1: pix[x+y*mmW] = WALL_OUTER; break;
-        case 2: pix[x+y*mmW] = WALL_INNER; break;
-        }
-    for (Entity e : _level.getEntities()) {
-      if (!e.appearsOnMinimap()) continue;
-      int col = e.getColor();
-      int x = e.getX();
-      int y = e.getY();
-      x /= _level.getHeight()/mmH;
-      y /= _level.getWidth()/mmW;
-      if (x+y*mmW < pix.length) pix[x+y*mmW] = col;
-    }
     _g.setColor(Color.BLACK);
     _g.drawRect(mmXoff-1, mmYoff-1, mmW+1, mmH+1);
     _g.drawImage(mmImg, mmXoff, mmYoff, null);

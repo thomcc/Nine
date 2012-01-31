@@ -18,6 +18,7 @@ public class Entity {
   protected double _px = 0, _py = 0;
   public boolean removed = false;
   public double dir = 0;
+  public int size = 1;
   protected boolean _canMove;
   protected double _maxSpeed;
   protected double _friction;
@@ -52,7 +53,6 @@ public class Entity {
     }
   
   }
-  
   protected void collision(boolean ycol, double dx, double dy) {
     if (dx == 0) {
       _py *= -_collisionFriction;
