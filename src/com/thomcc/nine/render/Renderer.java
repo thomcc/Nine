@@ -73,10 +73,9 @@ public class Renderer {
     
     int mmW = _level.width/10; int mmH = _level.height/10;
     
-    int i = 10, j = 10;
-    
-    while (mmW > 80) mmW = _level.width / --i;
-    while (mmH > 80) mmH = _level.height / --j;
+    int i = 1, j = 1;
+    while (mmW > 80) mmW = _level.width / ++i;
+    while (mmH > 80) mmH = _level.height / ++j;
     
     int mmXoff = _width-10-mmW;
     
