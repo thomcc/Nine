@@ -16,4 +16,11 @@ public class ThreeGun extends Gun {
     _player._level.add(new Bullet(_player, dir3, _bulletSpeed));
     if (--_uses == 0) _player.setGun(new Gun(_player));
   }
+  
+  
+  public void addUses(int u) { _uses += u; }
+  public String getAmmoString() {
+    String s = super.getAmmoString();
+    return s + ", special uses: "+_uses;
+  }
 }

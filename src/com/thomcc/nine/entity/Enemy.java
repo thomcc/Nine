@@ -93,7 +93,7 @@ public class Enemy extends Mobile {
     // or if theres a wall in their way, we can't see them.
     // otherwise we can.
     double pedir = Math.atan2(p.y-y, p.x-x); 
-    if (Math.abs(dir-pedir)<Math.PI/8) {
+    if (Math.abs(dir-pedir)<Math.PI/6) {
       if (_level.wallBetween((int)x, (int)y, (int)p.x, (int)p.y)) {
         //System.out.println("A WALL BLOCKS MY VISION");
         return false;

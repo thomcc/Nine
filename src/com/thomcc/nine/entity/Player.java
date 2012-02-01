@@ -107,5 +107,6 @@ public class Player extends Mobile {
   public boolean appearsOnMinimap() { return true; }
   public void setGun(Gun g) { _gun = g; }
   public int getColor() { return 0xffff6249; }
+  public Gun getGun() { return _gun; }
   protected void touched(Entity e) { if (e instanceof Item) ((Item) e).apply(this); }
 }

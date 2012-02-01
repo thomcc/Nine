@@ -1,6 +1,8 @@
 package com.thomcc.nine;
 
 import java.util.List;
+
+//import com.thomcc.nine.entity.Gun;
 import com.thomcc.nine.entity.Player;
 import com.thomcc.nine.level.*;
 import com.thomcc.nine.menu.GameOverMenu;
@@ -112,7 +114,8 @@ public class Game {
   // TODO make the methods i wrote to do this actually do them.
   private void renderGui(Renderer r) {
     if (settings.getShowMinimap()) r.renderMinimap(_level);
-    r.renderString("Ammo: "+_player.getFireCount(), 6, 6);
+
+    r.renderString(_player.getGun().getAmmoString(), 6, 6);
     r.renderString("Health: "+_player.health+" x "+_player.lives, 6, 6+Renderer.CHAR_HEIGHT);
     r.renderString("Enemies: " + _level.enemiesRemaining(), 6, 6+Renderer.CHAR_HEIGHT*2);
     r.renderString(_level.getScoreString(), Nine.WIDTH/2, 6);
