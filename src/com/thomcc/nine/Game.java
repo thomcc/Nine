@@ -78,7 +78,7 @@ public class Game {
   
   // TICK!
   public void tick() {
-    if (_ih.pause) pause();
+    if (_ih.pause && this._menu == null) pause();
     if (ticking && !paused) {
       _level.tick(_ticks++);
       

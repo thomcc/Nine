@@ -69,7 +69,7 @@ public class Entity {
     double pmag = Math.hypot(_px, _py);
     double npx = _px/pmag;
     double npy = _py/pmag;
-    pmag *= _collisionFriction;
+    //pmag *= _collisionFriction;
     double fx = nx * 2 + npx;
     double fy = ny * 2 + npy;
     double fmag = Math.hypot(fy, fx);
