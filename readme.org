@@ -14,14 +14,7 @@ For more, see the in-game help menu
 
 *** About
 
-This was made over the first 2 or 3 weeks of the spring 2012 semester.
-I'm pretty much done with it now (unless I find any particularly
-terrible bugs), but I might come back to it in the future.  It
-basically has 2 levels, though after that it will keep generating them
-until you die.  The code isn't the best (but then again I've never
-claimed to be great at OO), so don't think too much about it if you
-take a look at the inside.
-
 
 (c) 2012 Thom Chiovoloni all rights reserved
 
+    
