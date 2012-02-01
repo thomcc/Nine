@@ -62,19 +62,14 @@ public class Entity {
       return;
     }
     double mag = Math.hypot(dx, dy);
-    dx /= mag;
-    dy /= mag;
-    double nx = -dy;
-    double ny = dx;
-    double pmag = Math.hypot(_px, _py);
-    double npx = _px/pmag;
-    double npy = _py/pmag;
-    //pmag *= _collisionFriction;
-    double fx = nx * 2 + npx;
-    double fy = ny * 2 + npy;
-    double fmag = Math.hypot(fy, fx);
-    _px = fx*pmag/fmag;
-    _py = fy*pmag/fmag;
+
+    double nx = dy/mag;
+    double ny = dx/mag;
+
+    double pdotn2 = 2 * (_px * nx + _py * ny); 
+
+    _px = nx * pdotn2 - _px;
+    _py = ny * pdotn2 - _py;
   }
   
   public void updatePosition() {
