@@ -11,24 +11,29 @@ public class Player extends Mobile {
   private int _maxHealth;
   public int shotsFired = 0;
   private Gun _gun;
-  
+  public int score = 0;
+  private static final int nextLifeStep = 10000;
+  private int _nextLife = nextLifeStep;
   public int lives;
   // after the player dies there's a brief delay before they 
   // respawn.  deadcounter represents this number
   private int deadcounter = 0;
   // once they respawn they can't be damaged for invulncounter more ticks
   private int invulncounter = 0;
-  
+  private int maxAmmo = 10;
+  private int fireRate = 10;
+  private int ammoRegenRate = 30;
+  private int bulletSpeed = 6;
   public Player(Input i, Game g) {
     _i = i;
     lives = 3;
-    _maxHealth = 20;
+    _maxHealth = 25;
     health = _maxHealth;
     _collisionFriction = 0.3;
     _friction = 0.9;
     size = 12;
     _maxSpeed = 4.0;
-    _gun = new Gun(this);
+    setGun(new Gun(this));
   }
   
   public void setLevel(Level l) {
@@ -38,6 +43,10 @@ public class Player extends Mobile {
   
   private void updateStats(long ticks) {}
   public void tick(long ticks) {
+    if (score > _nextLife) {
+      ++lives;
+      _nextLife += nextLifeStep;
+    }
     if (deadcounter == 0) {
       updateStats(ticks);    
       // update our momentum/speed/whatever i'm calling _px and _py today
@@ -59,7 +68,7 @@ public class Player extends Mobile {
         invulncounter = 60;
         // after respawning set health to max, and lose any upgrades
         health = _maxHealth;
-        _gun = new Gun(this);
+        setGun(new Gun(this));
       }
     }
   }
@@ -68,7 +77,7 @@ public class Player extends Mobile {
     _level.play(Sound.shoot);
     ++shotsFired;
   }
-  // duh.
+
   public void heal(int n) { 
     if (health < _maxHealth) {
       health += n;
@@ -102,11 +111,45 @@ public class Player extends Mobile {
     if (invulncounter == 0 || invulncounter % 3 == 0)
       r.render(0, (int)x, (int)y, getDirection()); 
   }
+  
+  
+  public void setGun(Gun g) { 
+    _gun = g;
+    g.setMaxAmmo(maxAmmo);
+    g.setAmmoRegenRate(ammoRegenRate);
+    g.setBulletSpeed(bulletSpeed);
+    g.setFireRate(fireRate);
+  }
+  
+  public boolean appearsOnMinimap() { return true; }
   public int getFireCount() { return _gun.getAmmo(); }
   private boolean firing() { return _i.fire || _i.mouseDown; }
-  public boolean appearsOnMinimap() { return true; }
-  public void setGun(Gun g) { _gun = g; }
+  
+  public boolean canUpgradeS() { return _maxSpeed < 6; }
+  public boolean canUpgradeH() { return true; }
+  public boolean canUpgradeMA() { return true; }
+  public boolean canUpgradeFR() { return fireRate >= 5; }
+  public boolean canUpgradeARR() { return ammoRegenRate >= 10; }
+  public boolean canUpgradeBS() { return true; }
+  
+  public void upgradeS() { _maxSpeed += 0.3; }
+  public void upgradeH() { _maxHealth += 5; }
+  public void upgradeMA() { setMaxAmmo(maxAmmo+5); }
+  public void upgradeFR() { setFireRate(fireRate-3); }
+  public void upgradeARR() { setAmmoRegenRate(ammoRegenRate-5); }
+  public void upgradeBS() { setBulletSpeed(bulletSpeed+1); }
+  
+  public void setMaxAmmo(int a) { maxAmmo = a; _gun.setMaxAmmo(a); }
+  public void setAmmoRegenRate(int arr) { ammoRegenRate = arr; _gun.setAmmoRegenRate(arr); }
+  public void setFireRate(int fr) { fireRate = fr; _gun.setFireRate(fr); }
+  public void setBulletSpeed(int bs) { bulletSpeed = bs; _gun.setBulletSpeed(bs); }
+  
   public int getColor() { return 0xffff6249; }
   public Gun getGun() { return _gun; }
   protected void touched(Entity e) { if (e instanceof Item) ((Item) e).apply(this); }
+
+  public void replenish() {
+    health = _maxHealth;
+    _gun.replenishAmmo();
+  }
 }

@@ -12,7 +12,7 @@ public class GameOverMenu extends Menu {
     };  
   }
   protected void renderContent(Renderer r) {
-    String s = "Final Score: "+g.score;
+    String s = "Final Score: "+g.getPlayer().score;
     int w = s.length()*Renderer.CHAR_WIDTH;
     r.renderString(s, (Nine.WIDTH-(w+40))/2+20, 75);
   }

@@ -16,6 +16,7 @@ public class Enemy extends Mobile {
   private double player_stare_y = -1;
   private int player_stare_bc = -1;
   private int _attack = -1;
+  private double _age = 0;
   public Enemy() {
     health = 1;
     _collisionFriction = 0.3;
@@ -28,6 +29,7 @@ public class Enemy extends Mobile {
   private int _moveInterval;
 
   public void tick(long ticks) {
+    ++_age;
     behave(ticks); // BEHAVE.
     super.tick(ticks);
   }
@@ -147,7 +149,7 @@ public class Enemy extends Mobile {
     
     super.die();
   }
-  public int getScoreValue() { return 15; }
+  public int getScoreValue() { return (int)(50.0*(1.0+_age/360.0)); }
   protected void touched(Entity e) { if (e instanceof Player) e.hurt(this, 1, dir); }
   public boolean appearsOnMinimap() { return true; }
   public int getColor() { return 0xff649f42; }

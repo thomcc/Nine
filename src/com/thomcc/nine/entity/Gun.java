@@ -13,7 +13,7 @@ public class Gun {
   protected boolean _fireNotClicked = true;
   public Gun(Player p) {
     _player = p;
-    _fireRate = 10;
+    _fireRate = 15;
     _canRegenAmmo = true;
     _maxAmmo = 10;
     _ammo = _maxAmmo;
@@ -29,7 +29,9 @@ public class Gun {
       _fireNotClicked = false;
     }
     else _fireNotClicked = true;
-    if (_canRegenAmmo && _ammo < _maxAmmo && (ticks % _ammoRegenRate) == 0) ++_ammo;
+    if (_canRegenAmmo && 
+        _ammo < _maxAmmo && 
+        (ticks % _ammoRegenRate) == 0) ++_ammo;
   }
   
   public boolean fireIsPossible(long ticks) {
@@ -39,9 +41,10 @@ public class Gun {
   public boolean tryFire() {
     if (_ammo == 0) return false;
     if (canFire) {
+      --_ammo;
       fire();
       _player.didShoot();
-      --_ammo;
+      
       return true;
     } else return false;
   }
@@ -59,6 +62,7 @@ public class Gun {
       _ammoRegenRate = rr;
     }
   }
+  public void replenishAmmo() { _ammo = _maxAmmo; }
   public void setBulletSpeed(int s) { _bulletSpeed = s; }
   public void setFireRate(int r) { _fireRate = r; }
   public String getAmmoString() { return "Ammo: "+_ammo; }

@@ -6,6 +6,7 @@ public class MenuItem {
   public final String title;
   public int width, height;
   public final int x, y;
+  public boolean disabled = false;
   public MenuItem(String title, int x, int y) {
     this.title = title;
     this.x = x;
@@ -20,5 +21,6 @@ public class MenuItem {
   public void render(Renderer r, int color) {
     r.renderString(title, x, y, color);
   }
+  public void disable() { disabled = true; }
   public void click() {}
 }

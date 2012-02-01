@@ -30,7 +30,6 @@ public class Level {
   
   public String description;
   
-  public int score;
   
   private List<Sound> toPlay;
   private long time = 0;
@@ -161,8 +160,9 @@ public class Level {
         if (e instanceof Enemy) {
           // kill kill kill
           ++_enemiesKilled;
-          score += ((Enemy) e).getScoreValue();
-          scoreScroll  += 15;
+          int s = ((Enemy) e).getScoreValue();
+          _player.score += s;
+          scoreScroll  += s;
           if (--_activeEnemies <= 0) {
             // sweet, level is won and now the game will take care of the rest
             won = true;
@@ -216,18 +216,18 @@ public class Level {
     if (e instanceof Enemy) ++_activeEnemies;
   }
   public String getScoreString() {
-    int s = score;
+    int s = _player.score;
     if (scoreScroll == 0) return "Score: "+s;
     else if (scoreScroll > 0) return "Score: " + (s - scoreScroll--);
     else return "Score: " + (s - scoreScroll++);
   }
   public void playerDied() {
-    if (score - 60 < 0) {
-      scoreScroll = -score;
-      score = 0;
+    if (_player.score - 60 < 0) {
+      scoreScroll = -_player.score;
+      _player.score = 0;
     } else {
       scoreScroll = -60;
-      score -= 60;
+      _player.score -= 60;
     }
   }
   // yay i love one liners. 

@@ -48,7 +48,7 @@ public class Bullet extends Entity {
     //System.out.println(toHit);
     for (Entity e : toHit) {
       if (!((e instanceof Bullet) || (e instanceof Item))) {
-        e.hurt(owner, 2, dir+Math.PI);
+        e.hurt(owner, 1, dir+Math.PI);
         remove();
         return;
       }

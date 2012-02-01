@@ -1,12 +1,12 @@
 package com.thomcc.nine.level;
 
-//import java.util.Random;
+import java.util.Random;
 
 //import com.thomcc.nine.entity.Enemy;
 //import com.thomcc.nine.render.Renderer;
 
 public class Levels {
-  //private static final Random _random = new Random();
+  private static final Random _random = new Random();
   
   public static Level getLevel(int num) {
     //switch (num) {
@@ -22,7 +22,8 @@ public class Levels {
   private static Level makeGenericLevel(int num) {
     int n = num*5+15;
     int sz = 575 + num*25;
-    Level l = new Level(sz, sz, sz/10);
+    double pointmod = (_random.nextDouble()+2*_random.nextDouble()+4*_random.nextDouble())*4.0/7.0;
+    Level l = new Level(sz, sz, (int)(Math.sqrt(sz)/pointmod));
     l.addEnemies(n);
     l.num = num;
     l.description = "Kill all " + n + " enemies.";

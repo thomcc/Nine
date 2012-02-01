@@ -38,14 +38,14 @@ public class Game {
   // are we paused?
   public boolean paused = false;
   
-  public int score;
+  //public int score;
   
   public int levelNumber = 0;
   
   public Game(Input ih) {
     settings = new Settings();
     offX = 0;
-    score = 0;
+    //score = 0;
     offY = 0;
     _ih = ih;
    // _random = new Random();
@@ -56,7 +56,7 @@ public class Game {
   // (after the loading menu actually renders) we'll load the game
   public void start() { start(1); }
   public void start(int n) {
-    if (n == 1) score = 0;
+    //if (n == 1) score = 0;
     levelNumber = n;
     ticking = false;
     loading = true;
@@ -138,7 +138,7 @@ public class Game {
   
   public void lose() { 
     shouldRender = ticking = false; 
-    score += _level.score;
+    //score += _level.score;
     setMenu(new GameOverMenu());
   }
 

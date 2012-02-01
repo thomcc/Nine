@@ -4,94 +4,72 @@ import com.thomcc.nine.Game;
 import com.thomcc.nine.Input;
 import com.thomcc.nine.Sound;
 import com.thomcc.nine.entity.Player;
-import com.thomcc.nine.level.Level;
 import com.thomcc.nine.render.Renderer;
 
 public class WonLevelMenu extends PauseMenu {
   public WonLevelMenu() {
-    title = "Level Complete!";
-    this.padding = 20;
+    title = "Level Complete! Purchase Upgrades";
     this.width = 40*Renderer.CHAR_WIDTH;
     this.height = 8*Renderer.CHAR_HEIGHT;
+    int x = getTextX();
+    int y = getTextY();
+    int ch = Renderer.CHAR_HEIGHT;
     this.items = new MenuItem[] {
-        new MenuItem("Cool.",getTextX(), getTextY()+7*Renderer.CHAR_HEIGHT )
-    }; 
+        new MenuItem("More ammo!", x, y),
+        new MenuItem("Ammo returns faster!", x, y+ch),
+        new MenuItem("Shoot faster!", x, y+ch*2),
+        new MenuItem("More health!", x, y+ch*3),
+        new MenuItem("Faster ship!", x, y+ch*4),
+        new MenuItem("Faster bullets!", x, y+ch*5),
+        new MenuItem("More lives!", x, y+ch*6),
+        new MenuItem("I fight for glory alone! (points)", x, y+ch*7)
+    };
+    
   }
   public void init(Game game, Input input) {
     super.init(game, input);
     game.playSound(Sound.winLevel);
-  }
-  private boolean calced = false;
-  private boolean added = false;
-  private int thingsKilled;
-  private int shotsFired;
-  private int accuracy;
-  private int initScore;
-  private long speed;
-  private int finalScore;
-  private int totalScore;
-  
-  private void calc() {
-    calced = true;
-    Level l = g.getLevel();
-    Player p = g.getPlayer();
-    initScore = l.score;
-    totalScore = g.score;
-    shotsFired = p.shotsFired;
-    thingsKilled = l._enemiesKilled;
-    accuracy = (int)(100.0*(1.0 - (double)(shotsFired-thingsKilled)/(double)(shotsFired)));
-    speed = l.getTime()/60;
-    
-    double secmul;
-    if (speed < 25) secmul = 3;
-    else if (speed < 50) secmul = 2;
-    else if (speed < 100) secmul = 1.5;
-    else if (speed < 200) secmul = 1.25;
-    else if (speed < 500) secmul = 1.1;
-    else secmul = 1;
-    
-    double accmul;
-    
-    if (accuracy > 100) accmul = 3;
-    else if (accuracy > 75) accmul = 2;
-    else if (accuracy > 50) accmul = 1.5;
-    else accmul = 1;
-    
-    finalScore = (int)(initScore*accmul*secmul);
-    g.score += finalScore;
-  }
-  public void renderContent(Renderer r) {
-    if (!calced) calc();
-    
-    String[] content = new String[] {
-        "Things killed: "+thingsKilled,
-        "Shots Fired: "+shotsFired,
-        "Accuracy: " + accuracy + "%",
-        "Initial score: "+initScore,
-        "Speed: "+speed,
-        "Modified score: "+finalScore,
-        "Total Score: "+totalScore
-    };
-    
-    int xx = getTextX();
-    int yy = getTextY();
-    for (int i = 0; i < content.length; ++i) {
-      r.renderString(content[i], xx, yy+i*Renderer.CHAR_HEIGHT);
-    }
-  }
-  public void clicked(int chosen) {
-    if (!added) {
-      added = true;
-      totalScore += finalScore;
-      g.playSound(Sound.scoreUp);
-    } else if (chosen >= 0) onSelect(chosen);
-    
+    Player p = game.getPlayer();
+    if (!p.canUpgradeMA()) items[0].disable();
+    if (!p.canUpgradeARR()) items[1].disable();
+    if (!p.canUpgradeFR()) items[2].disable();
+    if (!p.canUpgradeH()) items[3].disable();
+    if (!p.canUpgradeS()) items[4].disable();
+    if (!p.canUpgradeBS()) items[5].disable();
   }
   protected void onSelect(int which) {
+    Player p = g.getPlayer();
     switch(which) {
     case 0: 
-      g.unPause();
-      g.start(g.levelNumber+1);
+      p.upgradeMA();
+      break;
+    case 1:
+      p.upgradeARR();
+      break;
+    case 2:
+      p.upgradeFR();
+      break;
+    case 3:
+      p.upgradeH();
+      break;
+    case 4:
+      p.upgradeS();
+      break;
+    case 5:
+      p.upgradeBS();
+      break;
+    case 6: 
+      p.lives += 3;
+      break;
+    case 7:
+      p.score += 15000;
+      break;
+    default:
+      return;
     }
+    p.replenish();
+    g.playSound(Sound.scoreUp);
+    g.unPause();
+    g.start(g.levelNumber+1);
   }
 }

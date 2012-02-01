@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.thomcc.nine.Game;
 import com.thomcc.nine.Input;
+import com.thomcc.nine.Sound;
 import com.thomcc.nine.render.Renderer;
 
 public class Menu {
@@ -38,7 +39,11 @@ public class Menu {
   protected void clicked(int chosen) {
     if (chosen >= 0) {
       items[chosen].click();
-      onSelect(chosen); 
+      if (items[chosen].disabled) {
+        
+        g.playSound(Sound.no);
+      }
+      else onSelect(chosen); 
     }
   }
   protected void onSelect(int which) {}
@@ -86,7 +91,21 @@ public class Menu {
   }
   protected void renderMenuItems(Renderer r) {
     for (int i = 0; i < items.length; ++i) {
-      items[i].render(r, items[i].contains(input.mouseX, input.mouseY) ? menuItemActive : menuItemInactive);
+      int col;
+      if(items[i].disabled) {
+        if (items[i].contains(input.mouseX, input.mouseY)) {
+          col = 0x880000;
+        } else {
+          col = 0xff4444 ;
+        }
+      } else {
+        if (items[i].contains(input.mouseX, input.mouseY)) {
+          col = menuItemActive;
+        } else {
+          col = menuItemInactive;
+        }
+      }
+      items[i].render(r, col);
     }
   }
 }
