@@ -109,7 +109,7 @@ public class Player extends Mobile {
   public void render(Renderer r) {
     // if they're not blinking, or they are and its one of the times we
     // want to draw them, ... do that.
-    if (invulncounter == 0 || invulncounter % 3 == 0)
+    if (deadcounter == 0 && (invulncounter == 0 || invulncounter % 3 == 0))
       r.render(Art.PLAYER_INDEX, (int)x, (int)y, getDirection()); 
   }
   
