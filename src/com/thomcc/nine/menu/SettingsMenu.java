@@ -17,8 +17,8 @@ public class SettingsMenu extends PauseMenu {
     width = 16*Renderer.CHAR_WIDTH;
     height = 4*Renderer.CHAR_HEIGHT;
     titley = 50;
-    int xx = getTextX();//(Nine.WIDTH-width)/2 + padding;
-    int yy = getTextY();//((Nine.HEIGHT-height)+titley)/2+padding;
+    int xx = getTextX();//(Nine.WIDTH-templ_width)/2 + padding;
+    int yy = getTextY();//((Nine.HEIGHT-templ_height)+titley)/2+padding;
     items = new MenuItem[] {
         new ToggleableMenuItem("Show Minimap", xx, yy),
         new ToggleableMenuItem("Play Sounds", xx, yy+2*Renderer.CHAR_HEIGHT),

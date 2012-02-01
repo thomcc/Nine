@@ -33,6 +33,7 @@ public class Player extends Mobile {
     _collisionFriction = 0.3;
     _friction = 0.9;
     size = 12;
+    _spriteIndex = Art.PLAYER_INDEX;
     _maxSpeed = 4.0;
     setGun(new Gun(this));
   }
@@ -110,7 +111,7 @@ public class Player extends Mobile {
     // if they're not blinking, or they are and its one of the times we
     // want to draw them, ... do that.
     if (deadcounter == 0 && (invulncounter == 0 || invulncounter % 3 == 0))
-      r.render(Art.PLAYER_INDEX, (int)x, (int)y, getDirection()); 
+      r.render(_spriteIndex, (int)x, (int)y, getDirection()); 
   }
   
   public void setGun(Gun g) { 

@@ -114,8 +114,8 @@ public class Renderer {
   }
   
   public void render(Sprite s, int x, int y, int dir, int template) {
-    y -= _offY+s.height/2;
-    x -= _offX+s.width/2;
+    y -= _offY+s.img_height/2;
+    x -= _offX+s.img_width/2;
     _g.drawImage(s.get(template, dir), x, y, null);
   }
   
@@ -165,7 +165,8 @@ public class Renderer {
     _g.setColor(MENU_OUTLINE_COLOR);
     _g.drawRect(x0, y0, w, h);
   }
-  
+  public int getSpriteWidth(int spriteindex) { return _art.sprites[spriteindex].img_width; }
+  public int getSpriteHeight(int spriteindex) { return _art.sprites[spriteindex].img_height; }
   public void centerAround(Menu m) { setOffset(0, 0); }
   public void clear() { _g.clearRect(0, 0, _width, _height); }
   public int getViewportWidth() { return _width; }

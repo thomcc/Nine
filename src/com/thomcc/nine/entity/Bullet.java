@@ -27,6 +27,7 @@ public class Bullet extends Entity {
     _maxSpeed = 1000;
     _friction = 1;
     size = 4;
+    _spriteIndex = Art.BULLET_INDEX;
     _collisionFriction = 1;
     _collisions = 0;
     _maxCollisions = 20;
@@ -56,7 +57,7 @@ public class Bullet extends Entity {
     }
   }
   public void render(Renderer r) {
-    r.render(Art.BULLET_INDEX, (int)x, (int)y, 0);
+    r.render(_spriteIndex, (int)x, (int)y, 0);
   }
 
   

@@ -74,8 +74,6 @@ public class Minimap {
     for (Entity e : _level.getEntities()) {
       if (!e.appearsOnMinimap()) continue;
       int col = e.getColor();
-      //int x = (int)(e.getX()-_xoff*2+0.5)/_xstep;
-      //int y = (int)(e.getY()-_yoff*2+0.5)/_ystep;
       int x = (int)(((e.x+e.size/2)-_xoff)/_xstep);
       int y = (int)(((e.y+e.size/2)-_yoff)/_ystep);
       if (x+y*_cmmw < pix.length) pix[x+y*_cmmw] = col;

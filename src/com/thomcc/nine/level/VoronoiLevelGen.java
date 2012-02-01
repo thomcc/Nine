@@ -15,7 +15,7 @@ public class VoronoiLevelGen {
     int[][] l = generate(width, height);
     new Checker(l).checkAndFix();
     return l;
-    //return generate(width, height);
+    //return generate(templ_width, templ_height);
   }
   private class Point {
     int x, y, rsz; // region size

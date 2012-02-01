@@ -16,6 +16,7 @@ public class Entity {
   public int rx = 1, ry = 1;
   protected int _startX = -1, _startY = -1;
   protected double _px = 0, _py = 0;
+  protected int _spriteIndex = -1;
   public boolean removed = false;
   public double dir = 0;
   public int size = 1;
@@ -161,7 +162,7 @@ public class Entity {
       this.y = y;
     }
   }
-  
+  public int getSpriteIndex() { return _spriteIndex; }
   public void remove() { removed = true; }
   public void hurt(Entity cause, int damage, double dir) {}
   protected void collision() {}

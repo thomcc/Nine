@@ -25,6 +25,7 @@ public class Enemy extends Mobile {
     _maxSpeed = 5.0;
     rx = ry = 3;
     size = 12;
+    _spriteIndex = Art.ENEMY_INDEX;
     _moveInterval = 40 + random.nextInt(40);
   }
   private int _moveInterval;
@@ -154,6 +155,6 @@ public class Enemy extends Mobile {
   protected void touched(Entity e) { if (e instanceof Player) e.hurt(this, 1, dir); }
   public boolean appearsOnMinimap() { return true; }
   public int getColor() { return 0xff649f42; }
-  public void render(Renderer r) { r.render(Art.ENEMY_INDEX, (int)x, (int)y, getDirection()); }
+  public void render(Renderer r) { r.render(_spriteIndex, (int)x, (int)y, getDirection()); }
   private void setState(State state) { _state = state; }
 }
