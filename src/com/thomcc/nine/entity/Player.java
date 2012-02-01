@@ -4,6 +4,7 @@ package com.thomcc.nine.entity;
 import com.thomcc.nine.*;
 import com.thomcc.nine.entity.item.Item;
 import com.thomcc.nine.level.Level;
+import com.thomcc.nine.render.Art;
 import com.thomcc.nine.render.Renderer;
 
 public class Player extends Mobile {
@@ -109,9 +110,8 @@ public class Player extends Mobile {
     // if they're not blinking, or they are and its one of the times we
     // want to draw them, ... do that.
     if (invulncounter == 0 || invulncounter % 3 == 0)
-      r.render(0, (int)x, (int)y, getDirection()); 
+      r.render(Art.PLAYER_INDEX, (int)x, (int)y, getDirection()); 
   }
-  
   
   public void setGun(Gun g) { 
     _gun = g;

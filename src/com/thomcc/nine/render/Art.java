@@ -9,6 +9,7 @@ public class Art {
   private static final int B = 2;
   private static final int C = 3;
   private static final int D = 4;
+  
 //  private static final int E = 5;
   private static final int[] playerColors = { 0, 0xffff6249, 0xff4e4240 };
   private static final int[] healthPackColors = { 0, 0xffa3ce9c, 0xff19a204, 0xff3cc327, 0xff0f6a01, 0xff7b9b76 }; 
@@ -99,7 +100,12 @@ public class Art {
     { _, _, _, _, _, _, _, _, _, 1, 1, _, _, _, _, _, _ },
     { _, _, _, _, _, 1, 1, 1, 1, _, _, _, _, _, _, _, _ }
   }};
-
+  public static final int PLAYER_INDEX = 0;
+  public static final int BULLET_INDEX = 1;
+  public static final int ENEMY_INDEX = 2;
+  public static final int HEALTHPACK_INDEX = 3;
+  public static final int GUN3_INDEX = 4;
+  public static final int ONEUP_INDEX = 5;
   public final Sprite[] sprites;
   public final Sprite nine;
   public Art() {

@@ -3,6 +3,7 @@ package com.thomcc.nine.entity;
 import java.util.List;
 
 import com.thomcc.nine.entity.item.Item;
+import com.thomcc.nine.render.Art;
 import com.thomcc.nine.render.Renderer;
 
 public class Bullet extends Entity {
@@ -55,7 +56,7 @@ public class Bullet extends Entity {
     }
   }
   public void render(Renderer r) {
-    r.render(1, (int)x, (int)y, 0);
+    r.render(Art.BULLET_INDEX, (int)x, (int)y, 0);
   }
 
   

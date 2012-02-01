@@ -4,6 +4,7 @@ import com.thomcc.nine.Sound;
 import com.thomcc.nine.entity.item.HealthPackItem;
 import com.thomcc.nine.entity.item.OneUpItem;
 import com.thomcc.nine.entity.item.ThreeGunItem;
+import com.thomcc.nine.render.Art;
 import com.thomcc.nine.render.Renderer;
 
 public class Enemy extends Mobile {
@@ -153,6 +154,6 @@ public class Enemy extends Mobile {
   protected void touched(Entity e) { if (e instanceof Player) e.hurt(this, 1, dir); }
   public boolean appearsOnMinimap() { return true; }
   public int getColor() { return 0xff649f42; }
-  public void render(Renderer r) { r.render(2, (int)x, (int)y, getDirection()); }
+  public void render(Renderer r) { r.render(Art.ENEMY_INDEX, (int)x, (int)y, getDirection()); }
   private void setState(State state) { _state = state; }
 }
