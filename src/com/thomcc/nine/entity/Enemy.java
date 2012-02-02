@@ -179,7 +179,7 @@ public class Enemy extends Mobile {
     // drop a +1life every 1/15 times unless we dropped something already
     else if (random.nextInt(15) == 0) {
       return new OneUpItem(getX(), getY());
-    } else if (random.nextInt(50) == 0) {
+    } else if (random.nextInt(30) == 0) {
       return new SuperItem(getX(), getY());
     }
     else return null;

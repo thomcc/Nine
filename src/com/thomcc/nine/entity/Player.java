@@ -134,7 +134,7 @@ public class Player extends Mobile {
   
   // take damage, play the sound (unless we're invulnerable)
   public void hurt(Entity cause, int damage, double dir) {
-    if (invulncounter == 0 && !isSuper) {
+    if (deadcounter == 0 && invulncounter == 0 && !isSuper) {
       _level.play(Sound.hurt);
       super.hurt(cause, damage, dir);
     }

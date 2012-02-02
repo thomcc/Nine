@@ -71,6 +71,7 @@ public class Entity {
 
     _px = nx * pdotn2 - _px;
     _py = ny * pdotn2 - _py;
+    dir = Math.atan2(_py, _px);
   }
   
   public void updatePosition() {
