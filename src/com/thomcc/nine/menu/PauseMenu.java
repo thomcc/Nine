@@ -25,7 +25,6 @@ public class PauseMenu extends Menu {
         new MenuItem("Settings", xx, yy+2*Renderer.CHAR_HEIGHT),
         new MenuItem("Quit to title", xx, yy+4*Renderer.CHAR_HEIGHT)
     };
-    items[2].disable();
   }
   protected void renderFrame(Renderer r) {
     r.fill(bgColor);

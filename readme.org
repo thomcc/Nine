@@ -4,7 +4,6 @@
 
 
 
-
 ** How to play
  - WASD/Arrow keys/Numpad for movement
  - Mouse for aiming

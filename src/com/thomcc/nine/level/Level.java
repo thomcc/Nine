@@ -9,6 +9,7 @@ import com.thomcc.nine.Sound;
 import com.thomcc.nine.entity.Enemy;
 import com.thomcc.nine.entity.Entity;
 import com.thomcc.nine.entity.Player;
+import com.thomcc.nine.entity.StrongEnemy;
 import com.thomcc.nine.menu.LevelDescriptionMenu;
 import com.thomcc.nine.render.Minimap;
 import com.thomcc.nine.render.Renderer;
@@ -64,7 +65,14 @@ public class Level {
       findLocationAndAdd(new Enemy());
     }
   }
-  
+
+  public void seedEnemies(int n, int maxstrong) {
+    int s = _random.nextInt(maxstrong-1)+1;
+    for (int i = 0; i < n; ++i) {
+      if(i < s) findLocationAndAdd(new StrongEnemy());
+      else findLocationAndAdd(new Enemy());
+    }
+  }
   public void generateLevel(int points) {
     System.out.println("## Generating level:");
     long now = System.nanoTime();
@@ -259,5 +267,6 @@ public class Level {
   public Player getPlayer() { return _player; }
   public long getTime() { return time; }
   public LevelDescriptionMenu getDescriptionMenu() { return new LevelDescriptionMenu(num, description); }
+
 
 }

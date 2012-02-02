@@ -1,6 +1,7 @@
 package com.thomcc.nine.menu;
 
 import com.thomcc.nine.Nine;
+import com.thomcc.nine.render.Art;
 import com.thomcc.nine.render.Renderer;
 
 public class HelpMenu extends Menu {
@@ -12,8 +13,16 @@ public class HelpMenu extends Menu {
   }
   private int ticks;
   private int rotation = 0;
+  private int enemystate = 0;
   public void tick() {
-    if (++ticks % 40 == 0) rotation = (1+rotation) % 16;
+    if (++ticks % 40 == 0) {
+      rotation = (1+rotation) % 16;
+
+      if (rotation == 0) {
+        if (enemystate == 0) enemystate = 1;
+        else enemystate = 0;
+      }
+    }
     super.tick();
   }
   protected void renderContent(Renderer r) {
@@ -41,21 +50,22 @@ public class HelpMenu extends Menu {
       String s = strs[i];
       if (s == "") {
         if (!renderedPlayer) {
-          r.render(0, x + Nine.WIDTH/2-80, y+12, rotation);
+          r.render(Art.PLAYER_INDEX, x + Nine.WIDTH/2-80, y+12, rotation);
           y += 24;
           renderedPlayer = true;
         } else if (!renderedEnemy) {
-          r.render(2, x+Nine.WIDTH/2-80, y+12, 15-rotation);
+          r.render(Art.ENEMY_INDEX, x+Nine.WIDTH/2-80, y+12, 15-rotation);
+          r.render(Art.SENEMY_INDEX, x+Nine.WIDTH/2-60, y+12, 15-rotation, enemystate);
           renderedEnemy = true;
           y += 24;
         } else {
           int tempx = x+strs[i-1].length()*Renderer.CHAR_WIDTH;
           int tempy = y-12+6;
-          r.render(3, tempx, tempy, 0);
+          r.render(Art.HEALTHPACK_INDEX, tempx, tempy, 0);
           tempx += 8;
-          r.render(4, tempx, tempy, 0);
+          r.render(Art.GUN3_INDEX, tempx, tempy, 0);
           tempx += 8;
-          r.render(5, tempx, tempy, 0);
+          r.render(Art.ONEUP_INDEX, tempx, tempy, 0);
         }
 
       } else {

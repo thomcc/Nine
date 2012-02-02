@@ -162,6 +162,7 @@ public class Entity {
       this.y = y;
     }
   }
+  public void setSpriteIndex(int si) { _spriteIndex = si; } 
   public int getSpriteIndex() { return _spriteIndex; }
   public void remove() { removed = true; }
   public void hurt(Entity cause, int damage, double dir) {}

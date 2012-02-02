@@ -51,13 +51,12 @@ public class Mobile extends Entity {
       }
     }
   }
-  
+  public void didShoot() {}
   public void lookAt(int px, int py) {
     _eyeX = px;
     _eyeY = py;
     dir = Math.atan2(py - y, px - x);  
-    // i think there might be a bug in here.
-    // TODO: find out why exactly bullets don't go where the user is clicking
   }
+  public void setGun(Gun gun) {}
   
 }

@@ -8,16 +8,19 @@ import com.thomcc.nine.render.Art;
 import com.thomcc.nine.render.Renderer;
 
 public class Enemy extends Mobile {
-  private enum State {
-    Wandering, Staring
-  }
+  
+  protected enum State { Wandering, Staring, Attacking }
+  
   public double vision = 50;
+  
   private State _state = State.Wandering;
+  
   private double player_stare_x = -1;
   private double player_stare_y = -1;
   private int player_stare_bc = -1;
   private int _attack = -1;
   private double _age = 0;
+  protected double baseScore;
   public Enemy() {
     health = 1;
     _collisionFriction = 0.3;
@@ -25,6 +28,7 @@ public class Enemy extends Mobile {
     _maxSpeed = 5.0;
     rx = ry = 3;
     size = 12;
+    baseScore = 50.0;
     _spriteIndex = Art.ENEMY_INDEX;
     _moveInterval = 40 + random.nextInt(40);
   }
@@ -43,12 +47,9 @@ public class Enemy extends Mobile {
     // if you move or shoot they lunge towards you.  They sorta suck at hitting 
     // you but can do lots of damage if they succeed.
     switch(_state) {
-    case Wandering:
-      wander(ticks);
-      break;
-    case Staring:
-      keepStaring(ticks);
-      break;
+    case Wandering: wander(ticks); break;
+    case Staring: stare(ticks); break;
+    case Attacking: attack(ticks); break;
     }
   }
   
@@ -65,29 +66,48 @@ public class Enemy extends Mobile {
   }
   
   // player moved, gotta kill them now.
-  private void attack() {
+  protected void attack(long ticks) {
     Player p = _level.getPlayer();
     if (_attack == -1) {
-      _px = (player_stare_x-x)/2;
-      _py = (player_stare_y-y)/2;
       // they stay interested for about 10 ticks after which they wander off.
-      _attack = 10;
-    } else --_attack;
-    if (!canSee(p) || _attack == 0) {
-      setState(State.Wandering);
+      _attack = 30;
+    } else if (_attack > 0) {
+      --_attack;
+      if (canSee(p)) attackPoint(p.x, p.y, ticks);
     }
+    postAttack(p);
   }
   
-  private void keepStaring(long ticks) {
+  protected void attackPoint(double x, double y, long ticks) {
+    dir = Math.atan2(y-this.y, x-this.x);
+    _px = (x-this.x)/2;
+    _py = (y-this.y)/2;
+  }
+
+
+
+  protected void postAttack(Player p) {
+    if (_attack == 0) {
+      setState(State.Wandering);
+    } else if (!canSee(p)) {
+      dir += 0.1;
+    }
+  }
+  private void stare(long ticks) {
     Player p = _level.getPlayer();
     if (player_stare_bc < p.getFireCount()) player_stare_bc = p.getFireCount();
     
     if (player_stare_bc != p.getFireCount() || p.x != player_stare_x || p.y != player_stare_y) {
-      attack();
+      setState(State.Attacking);
+      attack(ticks);
     }
+    
     if (!canSee(p)) {
+      
       setState(State.Wandering);
+      
     }
+
   }
   
   protected boolean canSee(Entity e) {
@@ -151,7 +171,7 @@ public class Enemy extends Mobile {
     
     super.die();
   }
-  public int getScoreValue() { return (int)(50.0*(1.0+_age/360.0)); }
+  public int getScoreValue() { return (int)(baseScore*(1.0+_age/360.0)); }
   protected void touched(Entity e) { if (e instanceof Player) e.hurt(this, 1, dir); }
   public boolean appearsOnMinimap() { return true; }
   public int getColor() { return 0xff649f42; }

@@ -49,6 +49,7 @@ public class Bullet extends Entity {
     List<Entity> toHit = _level.getEntities(x1-rx, y1-ry, x1+rx, y1+ry);
     //System.out.println(toHit);
     for (Entity e : toHit) {
+      if (e instanceof Enemy && owner instanceof Enemy) continue;
       if (!((e instanceof Bullet) || (e instanceof Item))) {
         e.hurt(owner, 1, dir+Math.PI);
         remove();

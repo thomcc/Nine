@@ -1,8 +1,10 @@
 package com.thomcc.nine.entity;
 
+import com.thomcc.nine.render.Art;
+
 public class Gun {
   
-  protected Player _player;
+  protected Mobile _owner;
   public boolean canFire = false;
   protected int _fireRate;
   protected boolean _canRegenAmmo;
@@ -11,14 +13,16 @@ public class Gun {
   protected int _ammoRegenRate;
   protected int _bulletSpeed;
   protected boolean _fireNotClicked = true;
-  public Gun(Player p) {
-    _player = p;
+  protected int _bulletSpriteIndex;
+  public Gun(Mobile m) {
+    _owner = m;
     _fireRate = 15;
     _canRegenAmmo = true;
     _maxAmmo = 10;
     _ammo = _maxAmmo;
     _ammoRegenRate = 30;
     _bulletSpeed = 6;
+    _bulletSpriteIndex = Art.BULLET_INDEX;
   }
   
   public void tick(boolean firing, long ticks) {
@@ -43,14 +47,16 @@ public class Gun {
     if (canFire) {
       --_ammo;
       fire();
-      _player.didShoot();
+      _owner.didShoot();
       
       return true;
     } else return false;
   }
   
   public void fire() {
-    _player._level.add(new Bullet(_player, _player.dir, _bulletSpeed));
+    Bullet b = new Bullet(_owner, _owner.dir, _bulletSpeed);
+    b.setSpriteIndex(_bulletSpriteIndex);
+    _owner._level.add(new Bullet(_owner, _owner.dir, _bulletSpeed));
   }
   
   public void setAmmoRegenRate(int rr) { 
@@ -62,6 +68,7 @@ public class Gun {
       _ammoRegenRate = rr;
     }
   }
+  public void setBulletSpriteIndex(int si) { _bulletSpriteIndex = si; }
   public void replenishAmmo() { _ammo = _maxAmmo; }
   public void setBulletSpeed(int s) { _bulletSpeed = s; }
   public void setFireRate(int r) { _fireRate = r; }

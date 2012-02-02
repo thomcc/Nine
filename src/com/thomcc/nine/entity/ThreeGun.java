@@ -8,13 +8,13 @@ public class ThreeGun extends Gun {
   }
   
   public void fire() {
-    double dir = _player.dir;
+    double dir = _owner.dir;
     double dir2 = dir+Math.PI/6;
     double dir3 = dir-Math.PI/6;
-    _player._level.add(new Bullet(_player, dir, _bulletSpeed));
-    _player._level.add(new Bullet(_player, dir2, _bulletSpeed));
-    _player._level.add(new Bullet(_player, dir3, _bulletSpeed));
-    if (--_uses == 0) _player.setGun(new Gun(_player));
+    _owner._level.add(new Bullet(_owner, dir, _bulletSpeed));
+    _owner._level.add(new Bullet(_owner, dir2, _bulletSpeed));
+    _owner._level.add(new Bullet(_owner, dir3, _bulletSpeed));
+    if (--_uses == 0) _owner.setGun(new Gun(_owner));
   }
   
   
