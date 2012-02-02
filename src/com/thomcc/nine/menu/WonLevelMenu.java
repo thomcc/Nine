@@ -30,6 +30,7 @@ public class WonLevelMenu extends PauseMenu {
     super.init(game, input);
     game.playSound(Sound.winLevel);
     Player p = game.getPlayer();
+    p.superStop();
     if (!p.canUpgradeMA()) items[0].disable();
     if (!p.canUpgradeARR()) items[1].disable();
     if (!p.canUpgradeFR()) items[2].disable();

@@ -11,5 +11,5 @@ public class HealthPackItem extends Item {
     spriteIndex = Art.HEALTHPACK_INDEX;
   }
 
-  protected void onPlayerContact(Player p) { p.heal(2+random.nextInt(3)); }
+  protected void onPlayerContact(Player p) { p.heal(5); }
 }

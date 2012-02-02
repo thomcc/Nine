@@ -11,7 +11,7 @@ public class Art {
   private static final int D = 4;
   
 //  private static final int E = 5;
-  private static final int[] playerColors = { 0, 0xffff6249, 0xff4e4240 };
+  private static final int[] playerColors = { 0, 0xffff6249, 0xff4e4240, 0xff888888 };
   private static final int[] healthPackColors = { 0, 0xffa3ce9c, 0xff19a204, 0xff3cc327, 0xff0f6a01, 0xff7b9b76 }; 
   private static final int[][][] healthPackTemplate = new int[][][] {
     { { C, C, C, C, C, C, C },
@@ -22,6 +22,17 @@ public class Art {
       { C, A, B, B, B, A, D },
       { D, D, D, D, D, D, D } }
   };
+  private static final int[] superColors = { 0, 0xffff6249, 0xff000000, 0xff888888, 0xff4e4240 };
+  private static final int[][][] superTemplate = new int[][][] {
+    { { C, C, C, C, C, C, D },
+      { C, B, A, A, A, B, D },   
+      { C, A, B, B, B, B, D },   
+      { C, B, A, A, A, B, D },
+      { C, B, B, B, B, A, D },
+      { C, B, A, A, A, B, D },
+      { D, D, D, D, D, D, D } }
+  };
+  
   private static final int[][][] oneUpTemplate = new int[][][] {
     { { C, C, C, C, C, C, C },
       { C, B, B, B, A, A, D },   
@@ -55,6 +66,19 @@ public class Art {
     { _, B, B, B, B, A, A, A, B, B, B, B },
     { _, _, B, B, B, B, B, B, B, B, B, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ }
+  }, { // superpowered
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, _, _, _, _, _, _, _, _ },
+    { _, _, _, _, C, C, A, C, C, _, _, _ },
+    { _, C, _, _, C, A, A, A, C, _, _, C },
+    { _, A, A, B, B, A, A, A, B, B, A, A },
+    { _, _, C, C, C, B, B, B, C, C, C, _ },
+    { _, _, _, _, A, A, A, A, A, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ },
     { _, _, _, _, _, _, _, _, _, _, _, _ }
@@ -135,6 +159,7 @@ public class Art {
   public static final int GUN3_INDEX = 4;
   public static final int ONEUP_INDEX = 5;
   public static final int SENEMY_INDEX = 6;
+  public static final int SUPER_INDEX = 7;
   public final Sprite[] sprites;
   public final Sprite nine;
   public Art() {
@@ -145,7 +170,8 @@ public class Art {
         new Sprite(healthPackTemplate, 1, healthPackColors),
         new Sprite(b3template, 1, b3colors),
         new Sprite(oneUpTemplate, 1, healthPackColors),
-        new Sprite(strongEnemyTemplate, 16, strongEnemyColors)
+        new Sprite(strongEnemyTemplate, 16, strongEnemyColors),
+        new Sprite(superTemplate, 1, superColors)
     };
     nine = new Sprite(nineTemplate, 1, new int[] {0, 0xffff6249});
     

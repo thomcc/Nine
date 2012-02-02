@@ -13,7 +13,8 @@ public class Player extends Mobile {
   public int shotsFired = 0;
   private Gun _gun;
   public int score = 0;
-  private static final int nextLifeStep = 10000;
+  private static final int nextLifeStep = 2500;
+  private static final int superCounterStart = 300;
   private int _nextLife = nextLifeStep;
   public int lives;
   // after the player dies there's a brief delay before they 
@@ -21,10 +22,15 @@ public class Player extends Mobile {
   private int deadcounter = 0;
   // once they respawn they can't be damaged for invulncounter more ticks
   private int invulncounter = 0;
+  
   private int maxAmmo = 10;
   private int fireRate = 10;
   private int ammoRegenRate = 30;
   private int bulletSpeed = 6;
+  
+  private boolean isSuper = false;
+  private int superCounter = 0;
+  
   public Player(Input i, Game g) {
     _i = i;
     lives = 3;
@@ -43,12 +49,37 @@ public class Player extends Mobile {
     l.findAndSetLocation(this);
   }
   
+  private Gun preSuperGun;
+  
+  public void superStart() {
+    if (!isSuper) {
+      isSuper = true;
+      superCounter = superCounterStart;
+      preSuperGun = _gun;
+      ThreeGun tg = new ThreeGun(this);
+      tg.infiniteUses();
+      setGun(tg);
+      
+    }
+  }
+  public void superStop() {
+    if (isSuper) {
+      isSuper = false;
+      superCounter = 0;
+      setGun(preSuperGun);
+      preSuperGun = null;
+    }    
+  }
   private void updateStats(long ticks) {}
   public void tick(long ticks) {
     if (score > _nextLife) {
       ++lives;
       _nextLife += nextLifeStep;
     }
+    
+    if (isSuper) --superCounter;
+    if (superCounter <= 0) superStop();
+    
     if (deadcounter == 0) {
       updateStats(ticks);    
       // update our momentum/speed/whatever i'm calling _px and _py today
@@ -58,7 +89,8 @@ public class Player extends Mobile {
       if (_i.left) _px -= 1.0;
       if (_i.up) _py -= 1.0;
       // also shoot maybe.
-      _gun.tick(firing(), ticks);
+      if (isSuper && firing()) _gun.fire();
+      else _gun.tick(firing(), ticks);
       //decrement the invulnerability counter
       if (invulncounter > 0) --invulncounter;
       // and then let the mobile or entity motion code take care of actually
@@ -101,7 +133,7 @@ public class Player extends Mobile {
   
   // take damage, play the sound (unless we're invulnerable)
   public void hurt(Entity cause, int damage, double dir) {
-    if (invulncounter == 0) {
+    if (invulncounter == 0 && !isSuper) {
       _level.play(Sound.hurt);
       super.hurt(cause, damage, dir);
     }
@@ -111,7 +143,7 @@ public class Player extends Mobile {
     // if they're not blinking, or they are and its one of the times we
     // want to draw them, ... do that.
     if (deadcounter == 0 && (invulncounter == 0 || invulncounter % 3 == 0))
-      r.render(_spriteIndex, (int)x, (int)y, getDirection()); 
+      r.render(_spriteIndex, (int)x, (int)y, getDirection(), isSuper ? 1 : 0); 
   }
   
   public void setGun(Gun g) { 
@@ -144,7 +176,8 @@ public class Player extends Mobile {
   public void setAmmoRegenRate(int arr) { ammoRegenRate = arr; _gun.setAmmoRegenRate(arr); }
   public void setFireRate(int fr) { fireRate = fr; _gun.setFireRate(fr); }
   public void setBulletSpeed(int bs) { bulletSpeed = bs; _gun.setBulletSpeed(bs); }
-  
+ 
+
   public int getColor() { return 0xffff6249; }
   public Gun getGun() { return _gun; }
   protected void touched(Entity e) { if (e instanceof Item) ((Item) e).apply(this); }

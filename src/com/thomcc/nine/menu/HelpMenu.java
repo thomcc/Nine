@@ -66,6 +66,8 @@ public class HelpMenu extends Menu {
           r.render(Art.GUN3_INDEX, tempx, tempy, 0);
           tempx += 8;
           r.render(Art.ONEUP_INDEX, tempx, tempy, 0);
+          tempx += 8;
+          r.render(Art.SUPER_INDEX, tempx, tempy, 0);
         }
 
       } else {

@@ -2,7 +2,9 @@ package com.thomcc.nine.entity;
 
 import com.thomcc.nine.Sound;
 import com.thomcc.nine.entity.item.HealthPackItem;
+import com.thomcc.nine.entity.item.Item;
 import com.thomcc.nine.entity.item.OneUpItem;
+import com.thomcc.nine.entity.item.SuperItem;
 import com.thomcc.nine.entity.item.ThreeGunItem;
 import com.thomcc.nine.render.Art;
 import com.thomcc.nine.render.Renderer;
@@ -21,6 +23,7 @@ public class Enemy extends Mobile {
   private int _attack = -1;
   private double _age = 0;
   protected double baseScore;
+  
   public Enemy() {
     health = 1;
     _collisionFriction = 0.3;
@@ -43,14 +46,17 @@ public class Enemy extends Mobile {
   
   
   protected void behave(long ticks) {
+    
     // enemies wander until they see you, at which point they stare intensely.
     // if you move or shoot they lunge towards you.  They sorta suck at hitting 
     // you but can do lots of damage if they succeed.
+    
     switch(_state) {
     case Wandering: wander(ticks); break;
     case Staring: stare(ticks); break;
     case Attacking: attack(ticks); break;
     }
+    
   }
   
   // start staring at the player.
@@ -71,7 +77,8 @@ public class Enemy extends Mobile {
     if (_attack == -1) {
       // they stay interested for about 10 ticks after which they wander off.
       _attack = 30;
-    } else if (_attack > 0) {
+    }
+    if (_attack >= 0) {
       --_attack;
       if (canSee(p)) attackPoint(p.x, p.y, ticks);
     }
@@ -93,13 +100,15 @@ public class Enemy extends Mobile {
       dir += 0.1;
     }
   }
+  
+  
   private void stare(long ticks) {
     Player p = _level.getPlayer();
     if (player_stare_bc < p.getFireCount()) player_stare_bc = p.getFireCount();
     
     if (player_stare_bc != p.getFireCount() || p.x != player_stare_x || p.y != player_stare_y) {
       setState(State.Attacking);
-      attack(ticks);
+      return;
     }
     
     if (!canSee(p)) {
@@ -128,8 +137,6 @@ public class Enemy extends Mobile {
     Player p = _level.getPlayer();
     if (canSee(p)) {
       stareAt(p);
-      // keep behaving?
-      behave(ticks);
       return;
     }
     if (ticks % _moveInterval == 0) {
@@ -158,18 +165,24 @@ public class Enemy extends Mobile {
   }
   public void die() {
     _level.play(Sound.enemyDeath);
-    // drop a healthpack ever 1/3 times
-    if (random.nextInt(3) == 0) 
-      _level.add(new HealthPackItem(getX(), getY()));
-    // drop a 3gun every 1/10 times unless we dropped a health pack
-    else if (random.nextInt(10) == 0) 
-      _level.add(new ThreeGunItem(getX(), getY()));
-    // drop a +1life every 1/15 times unless we dropped something already
-    else if (random.nextInt(15) == 0) {
-      _level.add(new OneUpItem(getX(), getY()));
-    }
+    Item toDrop = chooseItemToDrop();
+    if (toDrop != null) _level.add(toDrop);
     
     super.die();
+  }
+  protected Item chooseItemToDrop() {
+    if (random.nextInt(3) == 0) 
+      return new HealthPackItem(getX(), getY());
+    // drop a 3gun every 1/10 times unless we dropped a health pack
+    else if (random.nextInt(10) == 0) 
+      return new ThreeGunItem(getX(), getY());
+    // drop a +1life every 1/15 times unless we dropped something already
+    else if (random.nextInt(15) == 0) {
+      return new OneUpItem(getX(), getY());
+    } else if (random.nextInt(50) == 0) {
+      return new SuperItem(getX(), getY());
+    }
+    else return null;
   }
   public int getScoreValue() { return (int)(baseScore*(1.0+_age/360.0)); }
   protected void touched(Entity e) { if (e instanceof Player) e.hurt(this, 1, dir); }

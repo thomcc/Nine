@@ -19,7 +19,7 @@ public class StrongEnemy extends Enemy {
 
   protected void attackPoint(double x, double y, long ticks) {
     dir = Math.atan2(y-this.y, x-this.x);
-    if (random.nextInt(3) == 0) _gun.fire();
+    if (ticks % 5 == 0) _gun.fire();
     
   }
   
