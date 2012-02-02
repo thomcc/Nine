@@ -60,6 +60,10 @@ public class Bullet extends Entity {
   public void render(Renderer r) {
     r.render(_spriteIndex, (int)x, (int)y, 0);
   }
-
-  
+  public void setMaxBounces(int mb) {
+    _maxCollisions = mb;
+  }
+  public void setLife(int l) {
+    _life = l;
+  }
 }

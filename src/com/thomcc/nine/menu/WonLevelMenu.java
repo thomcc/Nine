@@ -21,8 +21,8 @@ public class WonLevelMenu extends PauseMenu {
         new MenuItem("More health!", x, y+ch*3),
         new MenuItem("Faster ship!", x, y+ch*4),
         new MenuItem("Faster bullets!", x, y+ch*5),
-        new MenuItem("More lives!", x, y+ch*6),
-        //new MenuItem("Resist bullets!", x, y+ch*7)
+        new MenuItem("Bullets last longer!", x, y+ch*6),
+        new MenuItem("More lives!", x, y+ch*7),
     };
     
   }
@@ -37,6 +37,7 @@ public class WonLevelMenu extends PauseMenu {
     if (!p.canUpgradeH()) items[3].disable();
     if (!p.canUpgradeS()) items[4].disable();
     if (!p.canUpgradeBS()) items[5].disable();
+    
   }
   protected void onSelect(int which) {
     Player p = g.getPlayer();
@@ -63,7 +64,7 @@ public class WonLevelMenu extends PauseMenu {
       p.lives += 3;
       break;
     case 7:
-      p.score += 15000;
+      p.upgradeBL();
       break;
     default:
       return;

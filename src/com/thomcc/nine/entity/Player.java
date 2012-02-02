@@ -22,8 +22,9 @@ public class Player extends Mobile {
   private int deadcounter = 0;
   // once they respawn they can't be damaged for invulncounter more ticks
   private int invulncounter = 0;
-  
-  private int maxAmmo = 10;
+  private int bulletLife = 300;
+  private int bulletBounces = 10;
+  private int maxAmmo = 15;
   private int fireRate = 10;
   private int ammoRegenRate = 30;
   private int bulletSpeed = 6;
@@ -64,6 +65,7 @@ public class Player extends Mobile {
       superCounter = 0;
       setGun(new Gun(this));
       _level.play(Sound.superLose);
+      replenish();
     }    
   }
   private void updateStats(long ticks) {}
@@ -97,15 +99,18 @@ public class Player extends Mobile {
       super.tick(ticks);
     } else {
       if (--deadcounter == 0) {
-        // i'm invincibleeee!
-        invulncounter = 60;
-        // after respawning set health to max, and lose any upgrades
-        health = _maxHealth;
-        setGun(new Gun(this));
+        respawn();
       }
     }
   }
-  
+  public void respawn() {
+    // i'm invincibleeee!
+    invulncounter = 60;
+    // after respawning set health to max, and lose any upgrades
+    health = _maxHealth;
+    setGun(new Gun(this));
+    replenish();
+  }
   public void didShoot() {
     _level.play(Sound.shoot);
     ++shotsFired;
@@ -151,6 +156,9 @@ public class Player extends Mobile {
     g.setAmmoRegenRate(ammoRegenRate);
     g.setBulletSpeed(bulletSpeed);
     g.setFireRate(fireRate);
+    g.setBulletBounces(bulletBounces);
+    g.setBulletLife(bulletLife);
+    g.replenishAmmo();
   }
   
   public boolean appearsOnMinimap() { return true; }
@@ -163,14 +171,14 @@ public class Player extends Mobile {
   public boolean canUpgradeFR() { return fireRate >= 5; }
   public boolean canUpgradeARR() { return ammoRegenRate >= 10; }
   public boolean canUpgradeBS() { return true; }
-  
+  public boolean canUpgradeBL() { return true; }
   public void upgradeS() { _maxSpeed += 0.3; }
   public void upgradeH() { _maxHealth += 5; }
   public void upgradeMA() { setMaxAmmo(maxAmmo+5); }
   public void upgradeFR() { setFireRate(fireRate-3); }
   public void upgradeARR() { setAmmoRegenRate(ammoRegenRate-5); }
   public void upgradeBS() { setBulletSpeed(bulletSpeed+1); }
-  
+  public void upgradeBL() { bulletLife += 50; bulletBounces += 3; } 
   public void setMaxAmmo(int a) { maxAmmo = a; _gun.setMaxAmmo(a); }
   public void setAmmoRegenRate(int arr) { ammoRegenRate = arr; _gun.setAmmoRegenRate(arr); }
   public void setFireRate(int fr) { fireRate = fr; _gun.setFireRate(fr); }

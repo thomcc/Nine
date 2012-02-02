@@ -12,6 +12,8 @@ public class Gun {
   protected int _ammo;
   protected int _ammoRegenRate;
   protected int _bulletSpeed;
+  protected int _bulletLife;
+  protected int _bulletBounces;
   protected boolean _fireNotClicked = true;
   protected int _bulletSpriteIndex;
   public Gun(Mobile m) {
@@ -22,6 +24,8 @@ public class Gun {
     _ammo = _maxAmmo;
     _ammoRegenRate = 30;
     _bulletSpeed = 6;
+    _bulletLife = 300;
+    _bulletBounces = 10;
     _bulletSpriteIndex = Art.BULLET_INDEX;
   }
   
@@ -56,6 +60,8 @@ public class Gun {
   public void fire() {
     Bullet b = new Bullet(_owner, _owner.dir, _bulletSpeed);
     b.setSpriteIndex(_bulletSpriteIndex);
+    b.setLife(_bulletLife);
+    b.setMaxBounces(_bulletBounces);
     _owner._level.add(new Bullet(_owner, _owner.dir, _bulletSpeed));
   }
   
@@ -72,6 +78,8 @@ public class Gun {
   public void replenishAmmo() { _ammo = _maxAmmo; }
   public void setBulletSpeed(int s) { _bulletSpeed = s; }
   public void setFireRate(int r) { _fireRate = r; }
+  public void setBulletLife(int l) { _bulletLife = l; }
+  public void setBulletBounces(int b) { _bulletBounces = b; }
   public String getAmmoString() { return "Ammo: "+_ammo; }
   public void setMaxAmmo(int max) { _maxAmmo = max; } 
   public int getAmmo() { return _ammo; }
