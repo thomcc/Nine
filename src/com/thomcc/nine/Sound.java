@@ -12,6 +12,8 @@ public class Sound {
   public final static Sound scoreUp = new Sound("/scoreup.wav");
   public final static Sound winLevel = new Sound("/winLevel.wav");
   public final static Sound no = new Sound("/no.wav");
+  public final static Sound superGet = new Sound("/superget.wav");
+  public final static Sound superLose = new Sound("/superlose.wav");
   public Sound(String filename) {
     try {
       _ac = Applet.newAudioClip(Sound.class.getResource(filename));

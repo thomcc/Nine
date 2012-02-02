@@ -59,7 +59,7 @@ public class Player extends Mobile {
       ThreeGun tg = new ThreeGun(this);
       tg.infiniteUses();
       setGun(tg);
-      
+      _level.play(Sound.superGet);
     }
   }
   public void superStop() {
@@ -68,6 +68,7 @@ public class Player extends Mobile {
       superCounter = 0;
       setGun(preSuperGun);
       preSuperGun = null;
+      _level.play(Sound.superLose);
     }    
   }
   private void updateStats(long ticks) {}
