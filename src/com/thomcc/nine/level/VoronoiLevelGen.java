@@ -111,7 +111,7 @@ public class VoronoiLevelGen {
     
     VoronoiNoise v = new VoronoiNoise(width, height, points);
     
-    double[][] noise = v.calculate(VoronoiNoise.DISTANCE_CHEBYCHEV);
+    double[][] noise = v.calculate(VoronoiNoise.DistanceMetric.DistanceChebychev);
     
     int[][] level = new int[height][width];
     

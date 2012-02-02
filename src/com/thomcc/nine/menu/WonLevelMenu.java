@@ -22,7 +22,7 @@ public class WonLevelMenu extends PauseMenu {
         new MenuItem("Faster ship!", x, y+ch*4),
         new MenuItem("Faster bullets!", x, y+ch*5),
         new MenuItem("More lives!", x, y+ch*6),
-        new MenuItem("I fight for glory alone! (points)", x, y+ch*7)
+        //new MenuItem("Resist bullets!", x, y+ch*7)
     };
     
   }

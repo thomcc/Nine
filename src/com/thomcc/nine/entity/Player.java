@@ -48,14 +48,10 @@ public class Player extends Mobile {
     super.setLevel(l);
     l.findAndSetLocation(this);
   }
-  
-  private Gun preSuperGun;
-  
   public void superStart() {
     if (!isSuper) {
       isSuper = true;
       superCounter = superCounterStart;
-      preSuperGun = _gun;
       ThreeGun tg = new ThreeGun(this);
       tg.infiniteUses();
       setGun(tg);
@@ -66,8 +62,7 @@ public class Player extends Mobile {
     if (isSuper) {
       isSuper = false;
       superCounter = 0;
-      setGun(preSuperGun);
-      preSuperGun = null;
+      setGun(new Gun(this));
       _level.play(Sound.superLose);
     }    
   }
@@ -90,7 +85,10 @@ public class Player extends Mobile {
       if (_i.left) _px -= 1.0;
       if (_i.up) _py -= 1.0;
       // also shoot maybe.
-      if (isSuper && firing()) _gun.fire();
+      if (isSuper && firing()) {
+        _gun.fire();
+        didShoot();
+      }
       else _gun.tick(firing(), ticks);
       //decrement the invulnerability counter
       if (invulncounter > 0) --invulncounter;

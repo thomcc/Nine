@@ -20,10 +20,9 @@ public class VoronoiNoise {
   public final int pts;
   public ArrayList<Point2D.Double> points;
   private Random _random;
-  public static final int DISTANCE_NORMAL = 0;
-  public static final int DISTANCE_SQUARE = 1;
-  public static final int DISTANCE_CHEBYCHEV = 2;
-  public static final int DISTANCE_MANHATTAN = 3;
+  public enum DistanceMetric {
+    DistanceNormal, DistanceSquare, DistanceChebychev, DistanceManhattan
+  }
   private interface Dist {
     public double calc(Point2D.Double a, Point2D.Double b);
   }
@@ -92,17 +91,17 @@ public class VoronoiNoise {
     return pts;
   }
   
-  public double[][] calculate(int distanceMetric) {
+  public double[][] calculate(DistanceMetric distanceMetric) {
     return calculate(distanceMetric, 2);
   }
   
-  public double[][] calculate(int distanceMetric, int neighbors) {
+  public double[][] calculate(DistanceMetric distanceMetric, int neighbors) {
     Dist d;
     switch (distanceMetric) {
-    case DISTANCE_NORMAL: d = dNormal; break;
-    case DISTANCE_SQUARE: d = dSquare; break;
-    case DISTANCE_MANHATTAN: d = dManhattan; break;
-    case DISTANCE_CHEBYCHEV: d = dChebychev; break;
+    case DistanceNormal: d = dNormal; break;
+    case DistanceSquare: d = dSquare; break;
+    case DistanceManhattan: d = dManhattan; break;
+    case DistanceChebychev: d = dChebychev; break;
     default: throw new IllegalArgumentException("invalid distance metric");
     }
     if (neighbors <= 0) throw new IllegalArgumentException("invalid number of neighbors");
@@ -172,7 +171,7 @@ public class VoronoiNoise {
     int points = 60;
 
     long now = System.nanoTime();
-    double[][] grid = new VoronoiNoise(width, height, points).calculate(DISTANCE_NORMAL);
+    double[][] grid = new VoronoiNoise(width, height, points).calculate(DistanceMetric.DistanceNormal);
     long later = System.nanoTime();
     long t = later-now;
     long millis = t/1000000;
@@ -187,8 +186,8 @@ public class VoronoiNoise {
 
         if (cell < 0.1) v = 0;
         else if (cell < 0.05) v = 0;
-        //else if (cell < 0.50) v = 127;
-       // else if (cell < 0.75) v = 191;
+        // else if (cell < 0.50) v = 127;
+        // else if (cell < 0.75) v = 191;
         else v = 255;
          
         int c = v << 16 | v << 8 | v;

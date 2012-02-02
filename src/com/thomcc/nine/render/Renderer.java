@@ -61,7 +61,7 @@ public class Renderer {
   }
   
   private void generateFloorPattern() {
-    double[][] floorPat = new VoronoiNoise(_patW, _patH, 60).calculate(VoronoiNoise.DISTANCE_NORMAL);
+    double[][] floorPat = new VoronoiNoise(_patW, _patH, 60).calculate(VoronoiNoise.DistanceMetric.DistanceNormal);
     for (int y = 0; y < _patH; ++y) 
       for (int x = 0; x < _patW; ++x) 
         if (floorPat[y][x] < 0.05) _floorPattern[y][x] = true;
