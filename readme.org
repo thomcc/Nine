@@ -13,7 +13,12 @@ For more, see the in-game help menu
 
 *** About
 
+9 was made during the first 3 weeks of the spring 2012 semester.  As I
+mention above, it is my second game ever, my first being W (jeez,
+whats with the one character names, huh?).  It's came out very nicely
+and I feel like it's quite slick.  It also refamiliarized me with
+Java (and how much I dislike it), and allowed me to figure out how
+games are made.  I hope you enjoy it!
 
 (c) 2012 Thom Chiovoloni all rights reserved
 
-    
